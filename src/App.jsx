@@ -1,13 +1,14 @@
+import { Routes, Route } from "react-router-dom";
+import { Toaster } from "./components/ui/sonner";
 
-import { Routes, Route } from "react-router-dom"
-
-import MainLayout from "./components/MainLayout/MainLayout"
-import Home from "./pages/Home/Home"
-import Login from "./pages/Login/Login"
+import MainLayout from "./components/MainLayout/MainLayout";
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
 
 function App() {
-
-
   return (
     <>
       <Routes>
@@ -15,9 +16,13 @@ function App() {
           <Route index element={<Home />} />
         </Route>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="reset-password" element={<ResetPassword />} />
       </Routes>
+      <Toaster position="top-right" richColors />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

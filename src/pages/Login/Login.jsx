@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,53 +8,110 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import axios from "axios";
 
 const Login = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const [formField, setFormField] = useState({ email: "", password: "" });
+
+  const mutation = useMutation({
+    mutationFn: (formData) => axios.post("/user/login", formData),
+    onSuccess: (data) => {
+      queryClient.setQueryData(["user"], data); // Cache the response
+      toast.success("Login successful");
+      navigate("/");
+      localStorage.setItem("token", data.token);
+    },
+    onError: (error) => {
+      console.log("error: ", error);
+      toast.error(error.message || "There was an error logging in");
+    },
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormField({ ...formField, [name]: value });
+  };
+
+  const handleSubmit = async () => {
+    console.log(formField);
+    
+    if (!formField.email || !formField.password) {
+      return toast.warning("Please fill in all fields.");
+    }
+    mutation.mutate(formField);
+  };
   return (
-    <Card className="mx-auto max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
-        <CardDescription>
-          Enter your email below to login to your account
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="m@example.com"
-              required
-            />
-          </div>
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-              <Link href="#" className="ml-auto inline-block text-sm underline">
-                Forgot your password?
-              </Link>
+    <div className="flex w-full h-screen items-center justify-center">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl text-center">Welcome back</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="Enter your email address"
+                onChange={handleInputChange}
+                required
+              />
             </div>
-            <Input id="password" type="password" required />
+            <div className="grid gap-2">
+              <div className="flex items-center">
+                <Label htmlFor="password">Password</Label>
+                <Link
+                 to="/forgot-password"
+                  className="ml-auto inline-block text-sm underline"
+                >
+                  Forgot your password?
+                </Link>
+              </div>
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+                onChange={handleInputChange}
+              />
+            </div>
+            <Button type="submit" className="w-full" onClick={handleSubmit}>
+              {mutation.isLoading ? (
+                <div>
+                  <i>Loading...</i>
+                  <Loader2 className="ml-2 animate-spin" size="20" />
+                </div>
+              ) : (
+                "Login"
+              )}
+            </Button>
+            <Button variant="outline" className="w-full">
+              Login with Google
+            </Button>
           </div>
-          <Button type="submit" className="w-full">
-            Login
-          </Button>
-          <Button variant="outline" className="w-full">
-            Login with Google
-          </Button>
-        </div>
-        <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <Link href="#" className="underline">
-            Sign up
-          </Link>
-        </div>
-      </CardContent>
-    </Card>
+          <div className="mt-4 text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <Link to="/register" className="underline">
+              Sign up
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
