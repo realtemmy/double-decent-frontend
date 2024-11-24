@@ -33,7 +33,7 @@ const Login = () => {
       localStorage.setItem("token", data.token);
     },
     onError: (error) => {
-      console.log("error: ", error);
+      console.log("error: ", error)
       toast.error(error.message || "There was an error logging in");
     },
   });
