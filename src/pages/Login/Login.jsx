@@ -16,7 +16,7 @@ import { Loader2 } from "lucide-react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import axios from "axios";
+import axiosService from "axios";
 
 const Login = () => {
   const queryClient = useQueryClient();
@@ -25,7 +25,7 @@ const Login = () => {
   const [formField, setFormField] = useState({ email: "", password: "" });
 
   const mutation = useMutation({
-    mutationFn: (formData) => axios.post("/user/login", formData),
+    mutationFn: (formData) => axiosService.post("/user/login", formData),
     onSuccess: (data) => {
       queryClient.setQueryData(["user"], data); // Cache the response
       toast.success("Login successful");
@@ -50,6 +50,7 @@ const Login = () => {
       return toast.warning("Please fill in all fields.");
     }
     mutation.mutate(formField);
+    
   };
   return (
     <div className="flex w-full h-screen items-center justify-center">
@@ -90,7 +91,7 @@ const Login = () => {
               />
             </div>
             <Button type="submit" className="w-full" onClick={handleSubmit}>
-              {mutation.isLoading ? (
+              {mutation.isPending ? (
                 <div>
                   <i>Loading...</i>
                   <Loader2 className="ml-2 animate-spin" size="20" />

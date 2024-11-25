@@ -8,12 +8,16 @@ import Register from "./pages/Register/Register";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 
+import ProductList from "./components/product-list/productList";
+
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
+          <Route path="/products" element={<ProductList />} />
+          {/* <Route path="/product/:productId" element={<Product} */}
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
