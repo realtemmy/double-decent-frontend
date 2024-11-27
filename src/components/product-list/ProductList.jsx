@@ -1,23 +1,26 @@
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+
 import axiosService from "@/axios";
 
 import Product from "../Product/Product";
 
-const ProductList = () => {
+const ProductList = ({ title, slug, categoryId }) => {
   const {
     data: products = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["products"],
+    queryKey: ["cateogory products", categoryId],
     queryFn: async () => {
-      const response = await axiosService.get("/products");
+      const response = await axiosService.get(
+        `/category/${categoryId}/product`
+      );
       return response.data;
     },
   });
-
-  console.log(products);
+  
 
   if (isLoading) {
     return (
@@ -33,19 +36,23 @@ const ProductList = () => {
   }
   return (
     <div>
-      <h2 className="text-2xl font-bold tracking-tight text-gray-900 mx-2">
-        Products Catalogue
-      </h2>
+      <div className="flex items-center gap-2">
+        <h2 className="text-xl font-semibold tracking-tight capitalize text-gray-900 mx-2">
+          {title}
+        </h2>
+        <Link
+          className="text-orange-500 font-semibold underline hover:text-orange-400"
+          to={`/${slug}`}
+        >
+          see more
+        </Link>
+      </div>
+
       {/* Horizontal scrolling container */}
       <ScrollArea className="bg-white w-full p-4">
-        <div className="mt- flex space-x-4 overflow-x-auto">
+        <div className="flex items-center gap-2 overflow-x-auto">
           {products.map((product) => (
-            <div
-              key={product._id}
-              className="flex-shrink-0 w-[250px] md:w-[300px]"
-            >
-              <Product product={product} />
-            </div>
+            <Product product={product} key={product._id} />
           ))}
         </div>
         <ScrollBar orientation="horizontal" />

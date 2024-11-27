@@ -9,20 +9,36 @@ import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 
 import ProductList from "./components/product-list/productList";
+import Products from "./pages/Products/Products";
+import ProductPage from "./components/product-page/ProductPage";
+
+import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
+
+  // TO build:
+  //  - Help page
+  //  - Footer
+  //  - Search result + filter by section, category etc
+  //  - Cart
+  //  - Checkout
+  //  - User profile, settings etc
+
   return (
     <>
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route path="/products" element={<ProductList />} />
-          {/* <Route path="/product/:productId" element={<Product} */}
+          <Route path="/products" element={<Products />} />
+          <Route path="/product/:productId" element={<ProductPage />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="reset-password" element={<ResetPassword />} />
+
+        {/* Not found */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster position="top-right" richColors />
     </>
