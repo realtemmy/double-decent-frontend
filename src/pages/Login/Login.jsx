@@ -16,7 +16,7 @@ import { Loader2 } from "lucide-react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import axiosService from "axios";
+import axios from "axios";
 
 const Login = () => {
   const queryClient = useQueryClient();
@@ -25,15 +25,23 @@ const Login = () => {
   const [formField, setFormField] = useState({ email: "", password: "" });
 
   const mutation = useMutation({
-    mutationFn: (formData) => axiosService.post("/user/login", formData),
+    mutationFn: async (formData) => {
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/user/login",
+        formData
+      );
+      console.log(response);
+
+      return response.data;
+    },
     onSuccess: (data) => {
-      queryClient.setQueryData(["user"], data); // Cache the response
+      queryClient.setQueryData(["user"], data.data); // Cache the response
       toast.success("Login successful");
       navigate("/");
       localStorage.setItem("token", data.token);
     },
     onError: (error) => {
-      console.log("error: ", error)
+      console.log("error: ", error);
       toast.error(error.message || "There was an error logging in");
     },
   });
@@ -45,12 +53,11 @@ const Login = () => {
 
   const handleSubmit = async () => {
     console.log(formField);
-    
+
     if (!formField.email || !formField.password) {
       return toast.warning("Please fill in all fields.");
     }
     mutation.mutate(formField);
-    
   };
   return (
     <div className="flex w-full h-screen items-center justify-center">
@@ -75,7 +82,7 @@ const Login = () => {
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <Link
-                 to="/forgot-password"
+                  to="/forgot-password"
                   className="ml-auto inline-block text-sm underline"
                 >
                   Forgot your password?
