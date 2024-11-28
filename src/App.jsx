@@ -8,14 +8,14 @@ import Register from "./pages/Register/Register";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 
-import ProductList from "./components/product-list/productList";
 import Products from "./pages/Products/Products";
 import ProductPage from "./components/product-page/ProductPage";
+
+import User from "./pages/User/User";
 
 import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
-
   // TO build:
   //  - Help page
   //  - Footer
@@ -23,6 +23,7 @@ function App() {
   //  - Cart
   //  - Checkout
   //  - User profile, settings etc
+  //  - Get coordinates in address submission.. use google maps api
 
   return (
     <>
@@ -31,11 +32,12 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/product/:productId" element={<ProductPage />} />
+          <Route path="/user" element={<User />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="reset-password" element={<ResetPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Not found */}
         <Route path="*" element={<NotFound />} />

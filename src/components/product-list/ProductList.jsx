@@ -42,7 +42,7 @@ const ProductList = ({ title, slug, categoryId }) => {
         </h2>
         <Link
           className="text-orange-500 font-semibold underline hover:text-orange-400"
-          to={`/${slug}`}
+          to={slug}
         >
           see more
         </Link>
