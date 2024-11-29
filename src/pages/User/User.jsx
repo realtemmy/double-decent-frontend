@@ -1,4 +1,14 @@
-import { House, LogOut, Settings, ShoppingBasket, User2 } from "lucide-react";
+import {
+  Ellipsis,
+  Eye,
+  House,
+  LogOut,
+  RefreshCcw,
+  Settings,
+  ShoppingBasket,
+  Trash2,
+  User2,
+} from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,11 +34,88 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { commaSeparatedPrice } from "@/utils/helperFunctions";
+import OrderDetails from "@/components/order-details/OrderDetails";
 
 const User = () => {
+  const invoices = [
+    {
+      invoice: "INV001",
+      paymentStatus: "Paid",
+      totalAmount: "$250.00",
+      paymentMethod: "Credit Card",
+    },
+    {
+      invoice: "INV002",
+      paymentStatus: "Pending",
+      totalAmount: "$150.00",
+      paymentMethod: "PayPal",
+    },
+    {
+      invoice: "INV003",
+      paymentStatus: "Unpaid",
+      totalAmount: "$350.00",
+      paymentMethod: "Bank Transfer",
+    },
+    {
+      invoice: "INV004",
+      paymentStatus: "Paid",
+      totalAmount: "$450.00",
+      paymentMethod: "Credit Card",
+    },
+    {
+      invoice: "INV005",
+      paymentStatus: "Paid",
+      totalAmount: "$550.00",
+      paymentMethod: "PayPal",
+    },
+    {
+      invoice: "INV006",
+      paymentStatus: "Pending",
+      totalAmount: "$200.00",
+      paymentMethod: "Bank Transfer",
+    },
+    {
+      invoice: "INV007",
+      paymentStatus: "Unpaid",
+      totalAmount: "$300.00",
+      paymentMethod: "Credit Card",
+    },
+  ];
+
   return (
     <div className="grid grid-cols-3 px-2 gap-4">
       <Card className="w-full max-w-sm col-span-3 md:col-span-1">
@@ -184,6 +271,86 @@ const User = () => {
             </Card>
           </TabsContent>
         </Tabs>
+      </section>
+      <section className="col-span-3">
+        <ScrollArea className="w-full whitespace-nowrap rounded-md border">
+          <Table>
+            <TableCaption>A list of your recent invoices.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="">OrderID</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Status</TableHead>
+                {/* <TableHead className="text-right"></TableHead> */}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {invoices.map((invoice) => (
+                <TableRow key={invoice.invoice}>
+                  <TableCell className="font-medium">
+                    {invoice.invoice}
+                  </TableCell>
+                  <TableCell>{invoice.paymentStatus}</TableCell>
+                  <TableCell>
+                    {commaSeparatedPrice(invoice.totalAmount)}
+                  </TableCell>
+                  <TableCell>{invoice.totalAmount}</TableCell>
+                  <TableCell className="text-right">
+                    <Dialog>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          <Ellipsis className="inline-block text-gray-500 cursor-pointer" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="p-2 me-2">
+                          <DropdownMenuItem className="font-semibold text-slate-600">
+                            <RefreshCcw /> <span>Order again</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="font-semibold text-slate-600">
+                            <DialogTrigger className="flex items-center bg-transparent gap-1">
+                              <Eye /> <span>Order details</span>
+                            </DialogTrigger>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="font-semibold">
+                            <Trash2 color="red" />{" "}
+                            <span className="text-red-500">Cancel order</span>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                      <DialogContent className="px-1 sm:p-6">
+                        <DialogHeader>
+                          <DialogTitle>Order details</DialogTitle>
+                          <DialogDescription>
+                            <ScrollArea className="h-[calc(100dvh-100px)]">
+                              <OrderDetails />
+                            </ScrollArea>
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter className="sm:justify-start">
+                          <DialogClose asChild>
+                            <Button type="button" variant="secondary">
+                              Close
+                            </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={4} className="font-semibold">
+                  Total
+                </TableCell>
+                {/* Adjust colspan */}
+                <TableCell className="text-right">$2,500.00</TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </section>
     </div>
   );
