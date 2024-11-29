@@ -11,6 +11,8 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import Products from "./pages/Products/Products";
 import ProductPage from "./components/product-page/ProductPage";
 
+import Orders from "./pages/Orders/Orders";
+
 import User from "./pages/User/User";
 
 import NotFound from "./pages/NotFound/NotFound";
@@ -33,6 +35,7 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/user" element={<User />} />
+          <Route path="/orders" element={<Orders />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
