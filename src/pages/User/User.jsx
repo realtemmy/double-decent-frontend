@@ -10,6 +10,9 @@ import {
   User2,
 } from "lucide-react";
 
+import { useState } from "react";
+
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
@@ -68,53 +71,85 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { commaSeparatedPrice } from "@/utils/helperFunctions";
+import { toast } from "sonner";
+
+import axiosService from "@/axios";
 import OrderDetails from "@/components/order-details/OrderDetails";
 
 const User = () => {
-  const invoices = [
-    {
-      invoice: "INV001",
-      paymentStatus: "Paid",
-      totalAmount: "$250.00",
-      paymentMethod: "Credit Card",
+  // Get all orders
+  const {
+    data: orders,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["orders"],
+    queryFn: async () => {
+      const response = await axiosService.get("/order");
+      return response.data;
     },
-    {
-      invoice: "INV002",
-      paymentStatus: "Pending",
-      totalAmount: "$150.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV003",
-      paymentStatus: "Unpaid",
-      totalAmount: "$350.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV004",
-      paymentStatus: "Paid",
-      totalAmount: "$450.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-  ];
+  });
+
+  console.log(orders);
+
+  const mutation = useMutation({
+    mutationFn: async (passwordField) =>
+      axiosService.post("/updateMyPassword", passwordField),
+  });
+
+  const [passwordField, setPasswordField] = useState({
+    password: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
+
+  const [addressField, setAddressField] = useState({
+    alias: "",
+    street: "",
+    state: "",
+    lga: "",
+    address: "",
+  });
+
+  const handlePasswordReset = (event) => {
+    const { name, value } = event.target;
+    setPasswordField({ ...passwordField, [name]: value });
+  };
+
+  const handleSetAddress = (event) => {
+    const { name, value } = event.target;
+    setAddressField({ ...addressField, [name]: value });
+  };
+
+  const handleAddressSubmit = () => {
+    if (
+      addressField.alias === "" ||
+      addressField.street === "" ||
+      addressField.state === "" ||
+      addressField.lga === "" ||
+      addressField.address === ""
+    ) {
+      return toast.warning("All fields are required");
+    }
+    mutation.mutate(addressField);
+  };
+
+  const handlePasswordSubmit = () => {
+    if (
+      passwordField.password === "" ||
+      passwordField.newPassword === "" ||
+      passwordField.confirmNewPassword === ""
+    ) {
+      return toast.warning("All fields are required");
+    }
+    if (passwordField.newPassword !== passwordField.confirmNewPassword) {
+      return toast.error("Passwords do not match");
+    }
+    mutation.mutate(passwordField);
+  };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="grid grid-cols-3 px-2 gap-4">
@@ -199,15 +234,37 @@ const User = () => {
               <CardContent className="space-y-2">
                 <div className="space-y-1">
                   <Label htmlFor="current">Current password</Label>
-                  <Input id="current" type="password" />
+                  <Input
+                    id="current"
+                    type="password"
+                    name="password"
+                    onChange={handlePasswordReset}
+                    value={passwordField.password}
+                  />
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="new">New password</Label>
-                  <Input id="new" type="password" />
+                  <Input
+                    id="new"
+                    type="password"
+                    name="newPassword"
+                    value={passwordField.newPassword}
+                    onChange={handlePasswordReset}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="confirmNew">Confirm New password</Label>
+                  <Input
+                    id="confirmNew"
+                    type="password"
+                    name="confirmNewPassword"
+                    onChange={handlePasswordReset}
+                    value={passwordField.confirmNewPassword}
+                  />
                 </div>
               </CardContent>
               <CardFooter>
-                <Button>Save password</Button>
+                <Button onClick={handlePasswordSubmit}>Save password</Button>
               </CardFooter>
             </Card>
           </TabsContent>
@@ -223,21 +280,37 @@ const User = () => {
               <CardContent className="grid grid-cols-2 items-baseline gap-2 space-y-2">
                 <div className="space-y-1 col-span-2 md:col-span-1">
                   <Label htmlFor="alias">Alias</Label>
-                  <Input id="alias" placeholder="eg Home, Work etc" />
+                  <Input
+                    id="alias"
+                    placeholder="eg Home, Work etc"
+                    name="alias"
+                    onChange={handleSetAddress}
+                    value={addressField.alias}
+                  />
                 </div>
                 <div className="space-y-1 col-span-2 md:col-span-1">
                   <Label htmlFor="street">Street</Label>
-                  <Input id="street" defaultValue="123 Main St" />
+                  <Input
+                    id="street"
+                    defaultValue="123 Main St"
+                    name="street"
+                    onChange={handleSetAddress}
+                    value={addressField.street}
+                  />
                 </div>
                 <div className="space-y-1 col-span-2 md:col-span-1">
-                  <Select>
+                  <Select
+                    onValueChange={handleSetAddress}
+                    name="state"
+                    value={addressField.state}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select state" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>States</SelectLabel>
-                        <SelectItem value="Lagos" selected>
+                        <SelectItem value="lagos" selected>
                           Lagos state
                         </SelectItem>
                       </SelectGroup>
@@ -245,7 +318,7 @@ const User = () => {
                   </Select>
                 </div>
                 <div className="space-y-1 col-span-2 md:col-span-1">
-                  <Select>
+                  <Select onValueChange={handleSetAddress} name="lga">
                     <SelectTrigger>
                       <SelectValue placeholder="Choose LGA" />
                     </SelectTrigger>
@@ -262,11 +335,14 @@ const User = () => {
                   <Textarea
                     id="address"
                     placeholder="9, NBC road, Ebute, Ikorodu, Lagos State."
+                    name="address"
+                    onChange={handleSetAddress}
+                    value={addressField.address}
                   />
                 </div>
               </CardContent>
               <CardFooter>
-                <Button>Save address</Button>
+                <Button onClick={handleAddressSubmit}>Save address</Button>
               </CardFooter>
             </Card>
           </TabsContent>
@@ -278,24 +354,21 @@ const User = () => {
             <TableCaption>A list of your recent invoices.</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="">OrderID</TableHead>
+                <TableHead>OrderID</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Price</TableHead>
                 <TableHead>Status</TableHead>
-                {/* <TableHead className="text-right"></TableHead> */}
               </TableRow>
             </TableHeader>
             <TableBody>
-              {invoices.map((invoice) => (
-                <TableRow key={invoice.invoice}>
-                  <TableCell className="font-medium">
-                    {invoice.invoice}
-                  </TableCell>
-                  <TableCell>{invoice.paymentStatus}</TableCell>
+              {orders.map((order, index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{order._id}</TableCell>
+                  <TableCell>12th of June, 2024</TableCell>
                   <TableCell>
-                    {commaSeparatedPrice(invoice.totalAmount)}
+                    {commaSeparatedPrice(order.totalAmount)}
                   </TableCell>
-                  <TableCell>{invoice.totalAmount}</TableCell>
+                  <TableCell className={`capitalize ${order.status === "paid" ? "bg-blue-50 text-blue-500" : order.status === "cancelled" ? "bg-red-50 text-red-500" : "bg-green-50 text-green-500"} `}>{order.status}</TableCell>
                   <TableCell className="text-right">
                     <Dialog>
                       <DropdownMenu>
@@ -312,7 +385,7 @@ const User = () => {
                             </DialogTrigger>
                           </DropdownMenuItem>
                           <DropdownMenuItem className="font-semibold">
-                            <Trash2 color="red" />{" "}
+                            <Trash2 color="red" />
                             <span className="text-red-500">Cancel order</span>
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -322,15 +395,13 @@ const User = () => {
                           <DialogTitle>Order details</DialogTitle>
                           <DialogDescription>
                             <ScrollArea className="h-[calc(100dvh-100px)]">
-                              <OrderDetails />
+                              <OrderDetails order={order} />
                             </ScrollArea>
                           </DialogDescription>
                         </DialogHeader>
                         <DialogFooter className="sm:justify-start">
                           <DialogClose asChild>
-                            <Button type="button" variant="secondary">
-                              Close
-                            </Button>
+                            <Button type="button">Close</Button>
                           </DialogClose>
                         </DialogFooter>
                       </DialogContent>
