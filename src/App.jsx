@@ -26,6 +26,9 @@ function App() {
   //  - Checkout
   //  - User profile, settings etc
   //  - Get coordinates in address submission.. use google maps api
+  //  - Find a way to separate delivery fee
+  //  - Add and product to cart
+  //  - Find a way to separate delivery fee from total amount
 
   return (
     <>
