@@ -15,6 +15,7 @@ import Orders from "./pages/Orders/Orders";
 
 import User from "./pages/User/User";
 import Cart from "./pages/Cart/Cart";
+import Checkout from "./pages/Checkout/Checkout";
 
 import NotFound from "./pages/NotFound/NotFound";
 
@@ -30,6 +31,7 @@ function App() {
   //  - Find a way to separate delivery fee
   //  - Add and product to cart
   //  - Find a way to separate delivery fee from total amount
+  //  - Make alias unique to each user
 
   return (
     <>
@@ -41,6 +43,7 @@ function App() {
           <Route path="/user" element={<User />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
