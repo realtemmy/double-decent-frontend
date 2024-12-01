@@ -22,4 +22,4 @@
  - Cancelled(red) - Order was cancelled due to some reasons
 
 
- alias, state, address, street, LGA, coordinates
+- Checkout design by [Readymadeui](https://readymadeui.com/)
