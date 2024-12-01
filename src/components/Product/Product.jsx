@@ -1,9 +1,17 @@
 import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/redux/cart/cartSlice";
 import { commaSeparatedPrice } from "@/utils/helperFunctions";
-import PropTypes from "prop-types";
+import { toast } from "sonner";
 
+import PropTypes from "prop-types";
 const Product = ({ product }) => {
+  const dispatch = useDispatch();
+  const handleAddToCart = () => {
+    dispatch(addToCart(product));
+    toast.success(`${product.name} added to cart`);
+  }
   return (
     <div className="group relative w-40">
       <Link to={`/product/${product._id}`}>
@@ -25,7 +33,7 @@ const Product = ({ product }) => {
           </p>
         </div>
         <p className="text-sm font-medium text-gray-900 cursor-pointer">
-          <ShoppingCart color="orange" />
+          <ShoppingCart color="orange" onClick={handleAddToCart} />
         </p>
       </div>
     </div>

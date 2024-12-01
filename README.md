@@ -22,4 +22,8 @@
  - Cancelled(red) - Order was cancelled due to some reasons
 
 
+### Data management
+- Redux/redux-toolkit for Cart items
+- React Query - User details, products, etc
+
 - Checkout design by [Readymadeui](https://readymadeui.com/)
