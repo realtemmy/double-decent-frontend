@@ -14,6 +14,7 @@ import ProductPage from "./components/product-page/ProductPage";
 import Orders from "./pages/Orders/Orders";
 
 import User from "./pages/User/User";
+import Cart from "./pages/Cart/Cart";
 
 import NotFound from "./pages/NotFound/NotFound";
 
@@ -39,6 +40,7 @@ function App() {
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/user" element={<User />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/cart" element={<Cart />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

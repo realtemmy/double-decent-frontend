@@ -214,7 +214,7 @@ const User = () => {
           </Button>
         </CardContent>
       </Card>
-      <section className="col-span-3 md:col-span-2">
+      <section>
         {display === "tabs" ? (
           <Tabs defaultValue="account">
             <TabsList className="grid w-full grid-cols-3 gap-1">
@@ -377,7 +377,7 @@ const User = () => {
               order history
             </h4>
             <Table>
-              <TableCaption>A list of your recent invoices.</TableCaption>
+              <TableCaption>A list of your order history.</TableCaption>
               <TableHeader>
                 <TableRow>
                   <TableHead>OrderID</TableHead>
@@ -395,24 +395,24 @@ const User = () => {
                       {commaSeparatedPrice(order.totalAmount)}
                     </TableCell>
                     <TableCell
-                      className={`capitalize w-fit m-auto flex items-center ${
+                      className={`capitalize w-fit m-auto rounded flex items-center ${
                         order.status === "paid"
-                          ? "bg-yellow-50 text-yellow-500"
+                          ? "bg-blue-50 text-blue-500"
                           : order.status === "cancelled"
                           ? "bg-red-50 text-red-500"
                           : order.status === "delivered"
-                          ? "bg-blue-50 text-blue-500"
-                          : "bg-green-50 text-green-500"
+                          ? "bg-green-50 text-green-500"
+                          : "bg-yellow-50 text-yellow-500"
                       } `}
                     >
                       {order.status === "paid" ? (
                         <Hourglass size={15} />
                       ) : order.status === "delivered" ? (
-                        <Truck  size={15}/>
+                        <Check  size={15}/>
                       ) : (
-                        order.status === "cancelled" ? <X /> : <Check />
+                        order.status === "cancelled" ? <X /> : <Truck size={15} />
                       )}
-                      <span>{order.status}</span>
+                      <span className="ms-1">{order.status}</span>
                     </TableCell>
                     <TableCell className="text-right">
                       <Dialog>
@@ -455,21 +455,19 @@ const User = () => {
                   </TableRow>
                 ))}
               </TableBody>
-              <TableFooter>
+              {/* <TableFooter>
                 <TableRow>
                   <TableCell colSpan={4} className="font-semibold">
                     Total
                   </TableCell>
-                  {/* Adjust colspan */}
                   <TableCell className="text-right">$2,500.00</TableCell>
                 </TableRow>
-              </TableFooter>
+              </TableFooter> */}
             </Table>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         )}
       </section>
-      <section className="col-span-3"></section>
     </div>
   );
 };
