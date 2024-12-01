@@ -52,17 +52,16 @@ const Cart = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Product</TableHead>
-                  <TableHead>Quantity</TableHead>
-                  <TableHead className="text-right">Price</TableHead>
-                  {/* <TableHead>Actions</TableHead> */}
+                  <TableHead className="w-auto">Product</TableHead>
+                  <TableHead className="w-24 text-center">Quantity</TableHead>
+                  <TableHead className="text-right w-28">Price</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody className="grid-cols-[1fr,1fr,1fr,100px] border w-full">
+              <TableBody>
                 {products.map((product) => (
                   <TableRow key={product._id}>
-                    <TableCell className="border w-fit">
-                      <div className="flex items-center gap-4 ">
+                    <TableCell className="border whitespace-nowrap">
+                      <div className="flex items-center gap-4">
                         <Link to={`/product/${product._id}`}>
                           <img
                             src={product.image}
@@ -75,22 +74,26 @@ const Cart = () => {
                             to={`/product/${product._id}`}
                             className="text-sm font-medium hover:underline"
                           >
-                            {product.name} Lorem, ipsum dolor sit amet ?
+                            {product.name}
                           </Link>
                           <div className="flex items-center cursor-pointer">
-                            <span className="text-xs text-red-500">Remove</span>{" "}
+                            <span className="text-xs text-red-500">Remove</span>
                             <Trash2 size={15} className="inline" color="red" />
                           </div>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="border">
-                      <button>-</button>
-                      {`x${product.quantity}`} <button>+</button>
+                    <TableCell className="border text-center whitespace-nowrap">
+                      <button className="px-2 py-1 text-sm font-medium">
+                        -
+                      </button>
+                      {` x${product.quantity} `}
+                      <button className="px-2 py-1 text-sm font-medium">
+                        +
+                      </button>
                     </TableCell>
-                    <TableCell className="text-right font-bold">{`₦${product.price.toLocaleString()}`}</TableCell>
-                    <TableCell className="text-right w-0 hidden">
-                      <Trash2 className="inline-block text-gray-500 cursor-pointer" />
+                    <TableCell className="text-right font-bold whitespace-nowrap">
+                      {`₦${product.price.toLocaleString()}`}
                     </TableCell>
                   </TableRow>
                 ))}
