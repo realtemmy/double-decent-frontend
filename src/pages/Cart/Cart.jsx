@@ -1,7 +1,5 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -12,9 +10,13 @@ import {
 } from "@/components/ui/table";
 import { Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
-import { Trash, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
+
+import { commaSeparatedPrice } from "@/utils/helperFunctions";
+import ProductList from "@/components/product-list/ProductList";
 
 const Cart = () => {
+  const navigate = useNavigate();
   const products = [
     {
       _id: 1,
@@ -48,7 +50,7 @@ const Cart = () => {
 
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
           {/* Cart Items */}
-          <div className="lg:col-span-2 border">
+          <div className="lg:col-span-2 border rounded">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -60,13 +62,13 @@ const Cart = () => {
               <TableBody>
                 {products.map((product) => (
                   <TableRow key={product._id}>
-                    <TableCell className="border whitespace-nowrap">
-                      <div className="flex items-center gap-4">
+                    <TableCell className="whitespace-nowr">
+                      <div className="flex items-center gap-1 md:gap-4">
                         <Link to={`/product/${product._id}`}>
                           <img
                             src={product.image}
                             alt={product.name}
-                            className="h-10 w-10 rounded-md"
+                            className="h-10 w-10 min-w-10 rounded-md"
                           />
                         </Link>
                         <div>
@@ -83,17 +85,31 @@ const Cart = () => {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="border text-center whitespace-nowrap">
-                      <button className="px-2 py-1 text-sm font-medium">
-                        -
-                      </button>
-                      {` x${product.quantity} `}
-                      <button className="px-2 py-1 text-sm font-medium">
-                        +
-                      </button>
+                    <TableCell>
+                      <div className="flex text-center whitespace-nowrap">
+                        <button className="px-2 py-1 font-medium border rounded rounded-tr-none rounded-br-none">
+                          -
+                        </button>
+                        <span className="px-2 py-1 border">
+                          {product.quantity}
+                        </span>
+                        <button className="px-2 py-1 border rounded-tl-none rounded-bl-none rounded font-medium">
+                          +
+                        </button>
+                      </div>
                     </TableCell>
                     <TableCell className="text-right font-bold whitespace-nowrap">
-                      {`₦${product.price.toLocaleString()}`}
+                      <div>{commaSeparatedPrice(product.price)}</div>
+                      <div
+                        style={{
+                          fontSize: "0.625rem",
+                          color: "#6b7280",
+                        }}
+                        className="font-normal"
+                      >
+                        {commaSeparatedPrice(product.price)} x{" "}
+                        {product.quantity}
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -112,7 +128,7 @@ const Cart = () => {
                 Delivery price will be added after your delivery address is
                 filled at the checkout
               </p>
-              <Button className="w-full">Proceed to Checkout</Button>
+              <Button className="w-full" onClick={() => navigate("/checkout")}>Proceed to Checkout</Button>
               <p className="mt-4 text-center text-sm text-gray-500">
                 or
                 <Link
@@ -126,6 +142,9 @@ const Cart = () => {
           </div>
         </div>
       </div>
+      <section className="mt-10 mx-4">
+        <ProductList title={"Similar products"} categoryId=""/>
+      </section>
     </section>
   );
 };

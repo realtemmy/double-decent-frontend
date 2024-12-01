@@ -7,20 +7,16 @@ import axiosService from "@/axios";
 import Product from "../Product/Product";
 
 const ProductList = ({ title, slug, categoryId }) => {
-  const {
-    data: products = [],
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["cateogory products", categoryId],
+  const { data: products = [], isLoading, error } = useQuery({
+    queryKey: categoryId ? ["category products", categoryId] : ["products"],
     queryFn: async () => {
-      const response = await axiosService.get(
-        `/category/${categoryId}/product`
-      );
+      const endpoint = categoryId
+        ? `/category/${categoryId}/product`
+        : "/products";
+      const response = await axiosService.get(endpoint);
       return response.data;
     },
   });
-  
 
   if (isLoading) {
     return (
@@ -40,12 +36,14 @@ const ProductList = ({ title, slug, categoryId }) => {
         <h2 className="text-xl font-semibold tracking-tight capitalize text-gray-900 mx-2">
           {title}
         </h2>
-        <Link
-          className="text-orange-500 font-semibold underline hover:text-orange-400"
-          to={slug}
-        >
-          see more
-        </Link>
+        {slug && (
+          <Link
+            className="text-orange-500 font-semibold underline hover:text-orange-400"
+            to={slug}
+          >
+            see more
+          </Link>
+        )}
       </div>
 
       {/* Horizontal scrolling container */}

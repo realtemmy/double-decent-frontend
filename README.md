@@ -20,3 +20,6 @@
  - Confirmed(yellow) - Order has been confirmed by the store, and has been / about to be sent out for delivery
  - Delivered(green) - User has gotten delivery
  - Cancelled(red) - Order was cancelled due to some reasons
+
+
+ alias, state, address, street, LGA, coordinates
