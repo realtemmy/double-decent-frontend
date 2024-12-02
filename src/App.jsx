@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "./components/ui/sonner";
+import { calculateTotal } from "./redux/cart/cartSlice";
 
 import MainLayout from "./components/MainLayout/MainLayout";
 import Home from "./pages/Home/Home";
@@ -18,8 +20,10 @@ import Cart from "./pages/Cart/Cart";
 import Checkout from "./pages/Checkout/Checkout";
 
 import NotFound from "./pages/NotFound/NotFound";
+import { useSelector, useDispatch } from "react-redux";
 
 function App() {
+  const dispatch = useDispatch();
   // TO build:
   //  - Help page
   //  - Footer
@@ -32,6 +36,12 @@ function App() {
   //  - Add and product to cart
   //  - Find a way to separate delivery fee from total amount
   //  - Make alias unique to each user
+
+  const cartItems = useSelector((state) => state.cart.cartItems);
+
+  useEffect(() => {
+    dispatch(calculateTotal());
+  }, [cartItems, dispatch]);
 
   return (
     <>

@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -13,34 +15,30 @@ import { Separator } from "@/components/ui/separator";
 import { Trash2 } from "lucide-react";
 
 import { commaSeparatedPrice } from "@/utils/helperFunctions";
+
+import {
+  removeFromCart,
+  incrementCount,
+  decrementCount,
+} from "@/redux/cart/cartSlice";
+
 import ProductList from "@/components/product-list/ProductList";
 
 const Cart = () => {
   const navigate = useNavigate();
-  const products = [
-    {
-      _id: 1,
-      name: "Product 1",
-      quantity: 2,
-      price: 1000,
-      image: "https://via.placeholder.com/150",
-      totalAmount: 2000,
-    },
-    {
-      _id: 2,
-      name: "Product 2",
-      quantity: 1,
-      price: 500,
-      image: "https://via.placeholder.com/150",
-      totalAmount: 500,
-    },
-  ];
+  const dispatch = useDispatch();
 
-  const totalAmount = products.reduce(
-    (acc, product) => acc + product.totalAmount,
-    0
-  );
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
+  const handleRemoveFromCart = (itemId) => {
+    dispatch(removeFromCart(itemId));
+  };
+  const handleIncrementCount = (itemId) => {
+    dispatch(incrementCount(itemId));
+  };
+  const handleDecrementCount = (itemId) => {
+    dispatch(decrementCount(itemId));
+  };
   return (
     <section className="bg-white py-6 dark:bg-gray-900">
       <div className="container mx-auto px-4">
@@ -60,25 +58,28 @@ const Cart = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {products.map((product) => (
-                  <TableRow key={product._id}>
+                {cartItems.map((item) => (
+                  <TableRow key={item._id}>
                     <TableCell className="whitespace-nowr">
                       <div className="flex items-center gap-1 md:gap-4">
-                        <Link to={`/product/${product._id}`}>
+                        <Link to={`/product/${item._id}`}>
                           <img
-                            src={product.image}
-                            alt={product.name}
+                            src={item.image}
+                            alt={item.name}
                             className="h-10 w-10 min-w-10 rounded-md"
                           />
                         </Link>
                         <div>
                           <Link
-                            to={`/product/${product._id}`}
-                            className="text-sm font-medium hover:underline"
+                            to={`/product/${item._id}`}
+                            className="text-sm font-medium hover:underline capitalize"
                           >
-                            {product.name}
+                            {item.name}
                           </Link>
-                          <div className="flex items-center cursor-pointer">
+                          <div
+                            className="flex items-center cursor-pointer"
+                            onClick={() => handleRemoveFromCart(item._id)}
+                          >
                             <span className="text-xs text-red-500">Remove</span>
                             <Trash2 size={15} className="inline" color="red" />
                           </div>
@@ -87,19 +88,25 @@ const Cart = () => {
                     </TableCell>
                     <TableCell>
                       <div className="flex text-center whitespace-nowrap">
-                        <button className="px-2 py-1 font-medium border rounded rounded-tr-none rounded-br-none">
+                        <button
+                          className="px-2 py-1 font-medium border rounded rounded-tr-none rounded-br-none"
+                          onClick={() => handleDecrementCount(item._id)}
+                        >
                           -
                         </button>
                         <span className="px-2 py-1 border">
-                          {product.quantity}
+                          {item.quantity}
                         </span>
-                        <button className="px-2 py-1 border rounded-tl-none rounded-bl-none rounded font-medium">
+                        <button
+                          className="px-2 py-1 border rounded-tl-none rounded-bl-none rounded font-medium"
+                          onClick={() => handleIncrementCount(item._id)}
+                        >
                           +
                         </button>
                       </div>
                     </TableCell>
                     <TableCell className="text-right font-bold whitespace-nowrap">
-                      <div>{commaSeparatedPrice(product.price)}</div>
+                      <div>{commaSeparatedPrice(item.price)}</div>
                       <div
                         style={{
                           fontSize: "0.625rem",
@@ -107,13 +114,18 @@ const Cart = () => {
                         }}
                         className="font-normal"
                       >
-                        {commaSeparatedPrice(product.price)} x{" "}
-                        {product.quantity}
+                        {commaSeparatedPrice(item.price)} x {item.quantity}
                       </div>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
+              <TableFooter className="bg-transparent">
+                <TableRow>
+                  <TableCell colSpan={2}>Total</TableCell>
+                  <TableCell className="text-right">$2,500.00</TableCell>
+                </TableRow>
+              </TableFooter>
             </Table>
 
             <Separator className="my-6" />
@@ -128,11 +140,13 @@ const Cart = () => {
                 Delivery price will be added after your delivery address is
                 filled at the checkout
               </p>
-              <Button className="w-full" onClick={() => navigate("/checkout")}>Proceed to Checkout</Button>
+              <Button className="w-full" onClick={() => navigate("/checkout")}>
+                Proceed to Checkout
+              </Button>
               <p className="mt-4 text-center text-sm text-gray-500">
                 or
                 <Link
-                  to="/shop"
+                  to="/"
                   className="font-medium text-blue-600 hover:underline dark:text-blue-500"
                 >
                   Continue Shopping
@@ -143,7 +157,7 @@ const Cart = () => {
         </div>
       </div>
       <section className="mt-10 mx-4">
-        <ProductList title={"Similar products"} categoryId=""/>
+        <ProductList title={"Similar products"} categoryId="" />
       </section>
     </section>
   );
