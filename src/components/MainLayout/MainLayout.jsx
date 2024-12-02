@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { CircleHelp, Search } from "lucide-react";
-import { Outlet, Link } from "react-router-dom";
+import { ChevronRight, CircleHelp, Search, ShoppingCart } from "lucide-react";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
 
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -13,10 +14,22 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import useUser from "@/hooks/use-user";
 import axiosService from "@/axios";
 
 function MainLayout() {
+  const navigate = useNavigate("");
+  const { cartCount } = useSelector((state) => state.cart);
   const [categoryId, setCategoryId] = useState("");
+
+  const {
+    data: user = null,
+    error: userError,
+    isLoading: userLoading,
+  } = useUser();
+
+  // console.log("User: ", user);
+
   const {
     isLoading,
     error,
@@ -47,7 +60,10 @@ function MainLayout() {
   const handleChange = (value) => {
     setCategoryId(value);
   };
-  if (isLoading || secLoading) {
+  const handleCartNavigate = () => {
+    navigate("/cart");
+  };
+  if (isLoading) {
     return <div>Loading...</div>;
   }
   if (error || secError) {
@@ -63,27 +79,103 @@ function MainLayout() {
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left">
+          <div className="flex gap-4 lg:hidden">
+            {user ? (
+              <div>My profile</div>
+            ) : (
+              <Link
+                to="/login"
+                className="text-slate-700 font-semibold hover:text-slate-600 hover:underline"
+              >
+                Login
+              </Link>
+            )}
+
+            <div
+              className="relative cursor-pointer"
+              onClick={handleCartNavigate}
+            >
+              <ShoppingCart color="orange" />{" "}
+              <sup className="absolute -top-1 -right-1 text-white font-semibold bg-orange-500 border p-1 py-2 rounded-full">
+                {cartCount}
+              </sup>
+            </div>
+          </div>
+
+          <SheetContent side="left" className="px-0">
             <Link to="/" className="mr-6 hidden lg:flex">
               <MountainIcon className="h-6 w-6" />
               <span className="sr-only">Acme Inc</span>
             </Link>
-            <div className="grid gap-2 py-6 w-full">
-              <Accordion type="single" collapsible onValueChange={handleChange}>
+
+            {user && (
+              <div className="grid gap-2 py-6 w-full">
+                <h4
+                  className="text-white px-3 font-semibold text-lg py-1 capitalize"
+                  style={{
+                    backgroundColor: "#C74E00",
+                  }}
+                >
+                  {user.name}&#39;s account
+                </h4>
+                <div className="ms-4">
+                  <Link className="block hover:underline hover:text-slate-700 text-slate-900">
+                    User profile
+                  </Link>
+                  <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900">
+                    {" "}
+                    <span>Order history</span>
+                    <ChevronRight />
+                  </Link>
+                  <Link className="block">Security settings</Link>
+                </div>
+              </div>
+            )}
+
+            <div className="grid gap-2 py- w-full">
+              <h4
+                className="text-white px-1 font-semibold text-xl py-1"
+                style={{
+                  backgroundColor: "#C74E00",
+                }}
+              >
+                Categories
+              </h4>
+              <Accordion
+                type="single"
+                collapsible
+                onValueChange={handleChange}
+                className="px-3 m-0"
+              >
                 {categories.map((category, index) => (
                   <AccordionItem value={category.id} key={index}>
                     <AccordionTrigger className="capitalize">
                       {category.name}
                     </AccordionTrigger>
                     <AccordionContent>
-                      {sections.map((section, index) => (
-                        <Link key={index}>{section.name}</Link>
-                      ))}
+                      {secLoading ? (
+                        <div>Loading...</div>
+                      ) : sections.length === 0 ? (
+                        <div>No section under category</div>
+                      ) : (
+                        sections.map((section) => (
+                          <Link
+                            key={section._id}
+                            to={`/section/${section._id}`}
+                            className="hover:underline hover:text-slate-600 capitalize block py-1"
+                          >
+                            {section.name}
+                          </Link>
+                        ))
+                      )}
                     </AccordionContent>
                   </AccordionItem>
                 ))}
               </Accordion>
             </div>
+            <div>Help</div>
+            <div>FAQ</div>
+            <div>Contact us</div>
           </SheetContent>
         </Sheet>
         <Link to="/" className="mr-6 hidden lg:flex">
