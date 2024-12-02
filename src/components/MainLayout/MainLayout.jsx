@@ -1,12 +1,58 @@
-import { Outlet } from "react-router-dom";
+import { useState } from "react";
+import { CircleHelp, Search } from "lucide-react";
+import { Outlet, Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { CircleHelp, Search } from "lucide-react";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import axiosService from "@/axios";
 
 function MainLayout() {
+  const [categoryId, setCategoryId] = useState("");
+  const {
+    isLoading,
+    error,
+    data: categories = [],
+  } = useQuery({
+    queryKey: ["category"],
+    queryFn: async () => {
+      const response = await axiosService.get("/category");
+      return response.data;
+    },
+  });
+
+  const {
+    data: sections = [],
+    isLoading: secLoading,
+    error: secError,
+  } = useQuery({
+    queryKey: ["category sections", categoryId],
+    queryFn: async () => {
+      const response = await axiosService.get(
+        `/category/${categoryId}/section`
+      );
+      return response.data;
+    },
+    enabled: !!categoryId,
+  });
+
+  const handleChange = (value) => {
+    setCategoryId(value);
+  };
+  if (isLoading || secLoading) {
+    return <div>Loading...</div>;
+  }
+  if (error || secError) {
+    return <div>There was an error fetching data</div>;
+  }
   return (
     <>
       <header className="flex justify-between h-20 w-full shrink-0 items-center px-4 md:px-6">
@@ -18,35 +64,25 @@ function MainLayout() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left">
-            <Link href="#" className="mr-6 hidden lg:flex">
+            <Link to="/" className="mr-6 hidden lg:flex">
               <MountainIcon className="h-6 w-6" />
               <span className="sr-only">Acme Inc</span>
             </Link>
-            <div className="grid gap-2 py-6">
-              <Link
-                href="#"
-                className="flex w-full items-center py-2 text-lg font-semibold"
-              >
-                Home
-              </Link>
-              <Link
-                href="#"
-                className="flex w-full items-center py-2 text-lg font-semibold"
-              >
-                About
-              </Link>
-              <Link
-                href="#"
-                className="flex w-full items-center py-2 text-lg font-semibold"
-              >
-                Services
-              </Link>
-              <Link
-                href="#"
-                className="flex w-full items-center py-2 text-lg font-semibold"
-              >
-                Contact
-              </Link>
+            <div className="grid gap-2 py-6 w-full">
+              <Accordion type="single" collapsible onValueChange={handleChange}>
+                {categories.map((category, index) => (
+                  <AccordionItem value={category.id} key={index}>
+                    <AccordionTrigger className="capitalize">
+                      {category.name}
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      {sections.map((section, index) => (
+                        <Link key={index}>{section.name}</Link>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
             </div>
           </SheetContent>
         </Sheet>

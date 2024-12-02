@@ -1,3 +1,4 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,24 +18,27 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { commaSeparatedPrice } from "@/utils/helperFunctions";
 
 const Checkout = () => {
+  const { cartItems, totalPrice } = useSelector((state) => state.cart);
   // Use google map for current location?
   const addresses = [
     {
-        alias: "Home",
-        street: "Omobolanle Adebowale avenue",
-        state: "Lagos",
-        lga: "Ikorodu",
-        address: "3, Omobolanle Adebowale avenue, Lagoon view estate, Ikorodu."
-    },{
-        alias: "Work",
-        street: "Teacher's estate",
-        state: "Ogun",
-        lga: "Obafemi owode",
-        address: "3, road 102, Teacher's estate, Obafemi owode."
-    }
-  ]
+      alias: "Home",
+      street: "Omobolanle Adebowale avenue",
+      state: "Lagos",
+      lga: "Ikorodu",
+      address: "3, Omobolanle Adebowale avenue, Lagoon view estate, Ikorodu.",
+    },
+    {
+      alias: "Work",
+      street: "Teacher's estate",
+      state: "Ogun",
+      lga: "Obafemi owode",
+      address: "3, road 102, Teacher's estate, Obafemi owode.",
+    },
+  ];
   return (
     <div className="font-[sans-serif] bg-white">
       <div className="flex max-sm:flex-col gap-12 max-lg:gap-4 h-full">
@@ -42,103 +46,42 @@ const Checkout = () => {
           <div className="relative h-full">
             <ScrollArea className="px-4 py-8 sm:overflow-auto sm:h-[calc(100vh-60px)]">
               <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-3 shrink-0 bg-gray-300 rounded-md">
-                    <img
-                      src="https://readymadeui.com/images/product10.webp"
-                      className="w-full object-contain"
-                    />
+                {cartItems.map((item, index) => (
+                  <div className="flex items-start gap-4" key={index}>
+                    <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-3 shrink-0 bg-gray-300 rounded-md">
+                      <img src={item.image} className="w-full object-contain" />
+                    </div>
+                    <div className="w-full">
+                      <h3 className="text-base text-white capitalize">
+                        {item.name}
+                      </h3>
+                      <ul className="text-xs text-gray-300 space-y-2 mt-2">
+                        <li>
+                          Price{" "}
+                          <span className="float-right">
+                            {commaSeparatedPrice(item.price)}
+                          </span>
+                        </li>
+                        <li>
+                          Quantity{" "}
+                          <span className="float-right">{item.quantity}</span>
+                        </li>
+                        <li>
+                          Total Price{" "}
+                          <span className="float-right">
+                            {commaSeparatedPrice(item.price * item.quantity)}
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
-                  <div className="w-full">
-                    <h3 className="text-base text-white">Split Sneakers</h3>
-                    <ul className="text-xs text-gray-300 space-y-2 mt-2">
-                      <li className="flex flex-wrap gap-4">
-                        Size <span className="ml-auto">37</span>
-                      </li>
-                      <li className="flex flex-wrap gap-4">
-                        Quantity <span className="ml-auto">2</span>
-                      </li>
-                      <li className="flex flex-wrap gap-4">
-                        Total Price <span className="ml-auto">$40</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-3 shrink-0 bg-gray-300 rounded-md">
-                    <img
-                      src="https://readymadeui.com/images/product11.webp"
-                      className="w-full object-contain"
-                    />
-                  </div>
-                  <div className="w-full">
-                    <h3 className="text-base text-white">Velvet Boots</h3>
-                    <ul className="text-xs text-gray-300 space-y-2 mt-2">
-                      <li>
-                        Size <span className="float-right">37</span>
-                      </li>
-                      <li>
-                        Quantity <span className="float-right">2</span>
-                      </li>
-                      <li>
-                        Total Price <span className="float-right">$40</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-3 shrink-0 bg-gray-300 rounded-md">
-                    <img
-                      src="https://readymadeui.com/images/product14.webp"
-                      className="w-full object-contain"
-                    />
-                  </div>
-                  <div className="w-full">
-                    <h3 className="text-base text-white">Echo Elegance</h3>
-                    <ul className="text-xs text-gray-300 space-y-2 mt-2">
-                      <li>
-                        Size <span className="float-right">37</span>
-                      </li>
-                      <li>
-                        Quantity <span className="float-right">2</span>
-                      </li>
-                      <li>
-                        Total Price <span className="float-right">$40</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-3 shrink-0 bg-gray-300 rounded-md">
-                    <img
-                      src="https://readymadeui.com/images/product13.webp"
-                      className="w-full object-contain"
-                    />
-                  </div>
-                  <div className="w-full">
-                    <h3 className="text-base text-white">Pumps</h3>
-                    <ul className="text-xs text-gray-300 space-y-2 mt-2">
-                      <li>
-                        Size <span className="float-right">37</span>
-                      </li>
-                      <li>
-                        Quantity <span className="float-right">2</span>
-                      </li>
-                      <li>
-                        Total Price <span className="float-right">$40</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                ))}
               </div>
             </ScrollArea>
 
             <div className="md:absolute md:left-0 md:bottom-0 bg-gray-800 w-full p-4">
               <h4 className="flex flex-wrap gap-4 text-base text-white">
-                Total <span className="ml-auto">$84.00</span>
+                Total <span className="ml-auto">{commaSeparatedPrice(totalPrice)}</span>
               </h4>
             </div>
           </div>

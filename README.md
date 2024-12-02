@@ -26,4 +26,9 @@
 - Redux/redux-toolkit for Cart items
 - React Query - User details, products, etc
 
+
+### Designs and reference
+- Figma 
 - Checkout design by [Readymadeui](https://readymadeui.com/)
+- Flowbite
+- Shadcn
