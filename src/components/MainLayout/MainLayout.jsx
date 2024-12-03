@@ -119,15 +119,18 @@ function MainLayout() {
                   {user.name}&#39;s account
                 </h4>
                 <div className="ms-4">
-                  <Link className="block hover:underline hover:text-slate-700 text-slate-900">
-                    User profile
+                  <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1">
+                    <span>User profile</span>
+                    <ChevronRight size={20} />
                   </Link>
-                  <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900">
-                    {" "}
+                  <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1">
                     <span>Order history</span>
-                    <ChevronRight />
+                    <ChevronRight size={20} />
                   </Link>
-                  <Link className="block">Security settings</Link>
+                  <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1">
+                    <span>Security Settings</span>
+                    <ChevronRight size={20} />
+                  </Link>
                 </div>
               </div>
             )}
