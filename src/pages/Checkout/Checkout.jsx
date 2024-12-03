@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/textarea";
@@ -35,7 +35,9 @@ import useUser from "@/hooks/use-user";
 
 import { toast } from "sonner";
 import axios from "axios";
-import { Loader2 } from "lucide-react";
+import { Loader2, MoveLeft } from "lucide-react";
+import { Link } from "react-router-dom";
+import axiosService from "@/axios";
 
 const Checkout = () => {
   const { cartItems, totalPrice } = useSelector((state) => state.cart);
@@ -43,22 +45,7 @@ const Checkout = () => {
   // Use google map for current location?
   const { data: user, isLoading: userLoading, error } = useUser();
 
-  const addresses = [
-    {
-      alias: "Home",
-      street: "Omobolanle Adebowale avenue",
-      state: "Lagos",
-      lga: "Ikorodu",
-      address: "3, Omobolanle Adebowale avenue, Lagoon view estate, Ikorodu.",
-    },
-    {
-      alias: "Work",
-      street: "Teacher's estate",
-      state: "Ogun",
-      lga: "Obafemi owode",
-      address: "3, road 102, Teacher's estate, Obafemi owode.",
-    },
-  ];
+  const address = user.location;
 
   const {
     data: mapAddress,
@@ -104,6 +91,25 @@ const Checkout = () => {
       toast.error("Geolocation is not supported by your browser.");
     }
   };
+
+
+  const mutation = useMutation({
+    mutationFn: async (data) => {
+      const response = await axiosService.post("/order/paystack-checkout", data);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      window.location.href = data.url;
+    }
+  });
+
+  const handleCheckout = () => {
+    if(user.email || !mapAddress.address) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+    mutation.mutate({cartItems, phone: user.phone, email: user.email, address: mapAddress.address});
+  }
 
   return (
     <div className="font-[sans-serif] bg-white">
@@ -170,6 +176,7 @@ const Checkout = () => {
                     placeholder="First Name"
                     className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                     value={user?.name}
+                    disabled
                   />
                 </div>
 
@@ -189,10 +196,8 @@ const Checkout = () => {
                     placeholder="Phone No."
                     className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                     value={user?.phone}
+                    disabled
                   />
-                </div>
-                <div className="text-right">
-                  <Button type="button">Submit</Button>
                 </div>
               </div>
             </div>
@@ -264,32 +269,59 @@ const Checkout = () => {
               </div>
 
               <section>
-                <RadioGroup defaultValue={addresses[0].alias}>
-                  {addresses.map((address, index) => (
-                    <div
-                      className="flex items-baseline space-x-2 rounded-md border p-2"
-                      key={index}
-                    >
-                      <RadioGroupItem
-                        value={address.alias}
-                        id={`option-${index}`}
-                      />
-                      <Label htmlFor={`option-${index}`} className="text-base">
-                        <h5 className="font-semibold text-slate-600">
-                          {address.alias} - {address.street}
-                        </h5>
-                        <p>{address.address}</p>
-                        <p className="text-sm text-slate-500">
-                          {address.state}, {address.lga}
-                        </p>
-                      </Label>
+                <RadioGroup defaultValue={address[0]?.alias}>
+                  {address.length === 0 ? (
+                    <div className="text-center pb-2">
+                      No address set yet, set address
+                      <Link
+                        to="/user"
+                        variant="link"
+                        className="p-1 text-orange-500 hover:underline hover:text-orange-400"
+                      >
+                        here
+                      </Link>{" "}
+                      or use{" "}
+                      <Button
+                        variant="secondary"
+                        className="rounded border"
+                        type="button"
+                        size="sm"
+                        onClick={getCurrentLocation}
+                      >
+                        Use current location?
+                      </Button>
+                      .
                     </div>
-                  ))}
+                  ) : (
+                    address.map((address, index) => (
+                      <div
+                        className="flex items-baseline space-x-2 rounded-md border p-2"
+                        key={index}
+                      >
+                        <RadioGroupItem
+                          value={address.alias}
+                          id={`option-${index}`}
+                        />
+                        <Label
+                          htmlFor={`option-${index}`}
+                          className="text-base"
+                        >
+                          <h5 className="font-semibold text-slate-600">
+                            {address.alias} - {address.street}
+                          </h5>
+                          <p>{address.address}</p>
+                          <p className="text-sm text-slate-500">
+                            {address.state}, {address.lga}
+                          </p>
+                        </Label>
+                      </div>
+                    ))
+                  )}
                 </RadioGroup>
               </section>
               <Accordion type="single" collapsible>
                 <AccordionItem value="item-1">
-                  <AccordionTrigger className="text-base font-semibold text-slate-700">
+                  <AccordionTrigger className="text-base font-semibold text-slate-700 px-2">
                     Add new delivery Information
                   </AccordionTrigger>
                   <AccordionContent>
@@ -360,11 +392,13 @@ const Checkout = () => {
                   className="rounded-md px-6 py-3 w-full text-sm tracking-wide max-md:order-1"
                   variant="secondary"
                 >
-                  Cancel
+                  <MoveLeft />
+                  Return to Cart
                 </Button>
                 <Button
                   type="button"
                   className="rounded-md px-6 py-3 w-full text-sm tracking-wide"
+                  onClick={handleCheckout}
                 >
                   Complete Purchase
                 </Button>

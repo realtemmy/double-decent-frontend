@@ -1,10 +1,13 @@
 import {
   Check,
+  Edit,
   Ellipsis,
   Eye,
   Hourglass,
   House,
+  Loader,
   LogOut,
+  Plus,
   RefreshCcw,
   Settings,
   ShoppingBasket,
@@ -14,9 +17,9 @@ import {
   X,
 } from "lucide-react";
 
-import { useState } from "react";
-
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
@@ -70,18 +73,46 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { commaSeparatedPrice } from "@/utils/helperFunctions";
 import { toast } from "sonner";
+import useUser from "@/hooks/use-user";
 
 import axiosService from "@/axios";
 import OrderDetails from "@/components/order-details/OrderDetails";
 
 const User = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { data: user = null } = useUser();
+  const [state, setState] = useState("");
+  const [lga, setLga] = useState("");
   const [display, setDisplay] = useState("tabs");
+  const [profile, setProfile] = useState({
+    name: user?.name || "",
+    email: user?.email || "",
+  });
+  const [address, setAddress] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      setProfile({
+        name: user.name,
+        email: user.email,
+      });
+      setAddress(user.location);
+    }
+  }, [user]);
+
   // Get all orders
   const {
     data: orders,
@@ -95,17 +126,48 @@ const User = () => {
     },
   });
 
-  console.log(orders);
+  const passwordMutation = useMutation({
+    mutationFn: async (passwordField) => {
+      console.log(passwordField);
 
-  const mutation = useMutation({
-    mutationFn: async (passwordField) =>
-      axiosService.post("/updateMyPassword", passwordField),
+      await axiosService.patch("/user/update-password", passwordField);
+    },
+
+    onSuccess: () => {
+      toast.success("Password updated successfully");
+      localStorage.removeItem("token");
+      navigate("/login");
+      queryClient.invalidateQueries();
+    },
+  });
+
+  const addressMutation = useMutation({
+    mutationFn: async (fields) => {
+      const response = await axiosService.post("/user/address", fields);
+      console.log(response.data);
+
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("Address successfully added");
+      queryClient.invalidateQueries(["user"]);
+    },
+  });
+
+  const deleteAddressMutation = useMutation({
+    mutationFn: async (addressId) => {
+      await axiosService.delete(`/user/address/${addressId}`);
+    },
+    onSuccess: () => {
+      toast.success("Address deleted successfully.");
+      queryClient.invalidateQueries(["user"]);
+    },
   });
 
   const [passwordField, setPasswordField] = useState({
+    currentPassword: "",
     password: "",
-    newPassword: "",
-    confirmNewPassword: "",
+    confirmPassword: "",
   });
 
   const [addressField, setAddressField] = useState({
@@ -130,27 +192,37 @@ const User = () => {
     if (
       addressField.alias === "" ||
       addressField.street === "" ||
-      addressField.state === "" ||
-      addressField.lga === "" ||
+      state === "" ||
+      lga === "" ||
       addressField.address === ""
     ) {
       return toast.warning("All fields are required");
     }
-    mutation.mutate(addressField);
+    addressMutation.mutate({ ...addressField, lga, state });
+  };
+
+  const handleProfileChange = (event) => {
+    const { name, value } = event.target;
+    setProfile({ ...profile, [name]: value });
   };
 
   const handlePasswordSubmit = () => {
     if (
+      passwordField.currentPassword === "" ||
       passwordField.password === "" ||
-      passwordField.newPassword === "" ||
-      passwordField.confirmNewPassword === ""
+      passwordField.confirmPassword === ""
     ) {
       return toast.warning("All fields are required");
     }
-    if (passwordField.newPassword !== passwordField.confirmNewPassword) {
+    if (passwordField.password !== passwordField.confirmPassword) {
       return toast.error("Passwords do not match");
     }
-    mutation.mutate(passwordField);
+    passwordMutation.mutate(passwordField);
+  };
+
+  const handleAddressDelete = (addressId) => {
+    if (!addressId) return;
+    deleteAddressMutation.mutate(addressId);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -158,18 +230,18 @@ const User = () => {
 
   return (
     <div className="grid grid-cols-[300px_1fr] px-2 gap-4">
-      <Card className="w-full max-w-sm col-span-3 md:col-span-1 h-[calc(100svh-150px)]">
+      <Card className="w-full col-span-3 sm:col-span-1 h-[calc(100svh-150px)]">
         <CardHeader>
           <CardTitle>
             <center>
               <Avatar className="h-20 w-20">
                 <AvatarImage
-                  src="https://github.com/shadcn.png"
+                  src={user.image || "https://github.com/shadcn.png"}
                   alt="@shadcn"
                 />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
-              <h4 className="mt-2">Tunde Badmus</h4>
+              <h4 className="mt-2 capitalize">{user.name}</h4>
             </center>
           </CardTitle>
         </CardHeader>
@@ -234,11 +306,21 @@ const User = () => {
                 <CardContent className="space-y-2">
                   <div className="space-y-1">
                     <Label htmlFor="name">Name</Label>
-                    <Input id="name" defaultValue="Pedro Duarte" />
+                    <Input
+                      id="name"
+                      name="name"
+                      value={profile.name}
+                      onChange={handleProfileChange}
+                    />
                   </div>
                   <div className="space-y-1">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" defaultValue="@pedroduarte@mail.io" />
+                    <Input
+                      id="email"
+                      name="email"
+                      value={profile.email}
+                      onChange={handleProfileChange}
+                    />
                   </div>
                 </CardContent>
                 <CardFooter>
@@ -261,9 +343,9 @@ const User = () => {
                     <Input
                       id="current"
                       type="password"
-                      name="password"
+                      name="currentPassword"
                       onChange={handlePasswordReset}
-                      value={passwordField.password}
+                      value={passwordField.currentPassword}
                     />
                   </div>
                   <div className="space-y-1">
@@ -271,8 +353,8 @@ const User = () => {
                     <Input
                       id="new"
                       type="password"
-                      name="newPassword"
-                      value={passwordField.newPassword}
+                      name="password"
+                      value={passwordField.password}
                       onChange={handlePasswordReset}
                     />
                   </div>
@@ -281,9 +363,9 @@ const User = () => {
                     <Input
                       id="confirmNew"
                       type="password"
-                      name="confirmNewPassword"
+                      name="confirmPassword"
                       onChange={handlePasswordReset}
-                      value={passwordField.confirmNewPassword}
+                      value={passwordField.confirmPassword}
                     />
                   </div>
                 </CardContent>
@@ -296,78 +378,199 @@ const User = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>Address</CardTitle>
-                  <CardDescription>
-                    Update your delivery address here. Click save when you're
-                    done.
+                  <CardDescription className="flex justify-between items-center">
+                    <div>
+                      Update your delivery address here. Click save when you're
+                      done.
+                    </div>
+                    <Dialog>
+                      <DialogTrigger>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              {" "}
+                              <Button size="sm" type="button">
+                                <Plus />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Add address</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Add address</DialogTitle>
+                          <DialogDescription className="text-start">
+                            <section className="grid grid-cols-2 items-baseline gap-2 space-y-2">
+                              <div className="space-y-1 col-span-2 md:col-span-1">
+                                <Label htmlFor="alias">Alias</Label>
+                                <Input
+                                  id="alias"
+                                  placeholder="eg Home, Work etc"
+                                  name="alias"
+                                  onChange={handleSetAddress}
+                                  value={addressField.alias}
+                                />
+                              </div>
+                              <div className="space-y-1 col-span-2 md:col-span-1">
+                                <Label htmlFor="street">Street</Label>
+                                <Input
+                                  id="street"
+                                  defaultValue="123 Main St"
+                                  name="street"
+                                  onChange={handleSetAddress}
+                                  value={addressField.street}
+                                />
+                              </div>
+                              <div className="space-y-1 col-span-2 md:col-span-1">
+                                <Select
+                                  onValueChange={(value) => setState(value)}
+                                  name="state"
+                                  value={state}
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select state" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectGroup>
+                                      <SelectLabel>States</SelectLabel>
+                                      <SelectItem value="lagos" selected>
+                                        Lagos state
+                                      </SelectItem>
+                                    </SelectGroup>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div className="space-y-1 col-span-2 md:col-span-1">
+                                <Select
+                                  onValueChange={(lga) => setLga(lga)}
+                                  name="lga"
+                                  value={lga}
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Choose LGA" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectGroup>
+                                      <SelectLabel>LGA</SelectLabel>
+                                      <SelectItem value="ikorodu">
+                                        Ikorodu
+                                      </SelectItem>
+                                    </SelectGroup>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div className="space-y-1 col-span-2">
+                                <Label htmlFor="address">Full address</Label>
+                                <Textarea
+                                  id="address"
+                                  placeholder="9, NBC road, Ebute, Ikorodu, Lagos State."
+                                  name="address"
+                                  onChange={handleSetAddress}
+                                  value={addressField.address}
+                                />
+                              </div>
+                            </section>
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <Button type="submit" onClick={handleAddressSubmit}>
+                            {addressMutation.isPending ? (
+                              <div className="flex items-center">
+                                <Loader /> <i>Loading...</i>
+                              </div>
+                            ) : (
+                              "Save Address"
+                            )}
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="grid grid-cols-2 items-baseline gap-2 space-y-2">
-                  <div className="space-y-1 col-span-2 md:col-span-1">
-                    <Label htmlFor="alias">Alias</Label>
-                    <Input
-                      id="alias"
-                      placeholder="eg Home, Work etc"
-                      name="alias"
-                      onChange={handleSetAddress}
-                      value={addressField.alias}
-                    />
-                  </div>
-                  <div className="space-y-1 col-span-2 md:col-span-1">
-                    <Label htmlFor="street">Street</Label>
-                    <Input
-                      id="street"
-                      defaultValue="123 Main St"
-                      name="street"
-                      onChange={handleSetAddress}
-                      value={addressField.street}
-                    />
-                  </div>
-                  <div className="space-y-1 col-span-2 md:col-span-1">
-                    <Select
-                      onValueChange={handleSetAddress}
-                      name="state"
-                      value={addressField.state}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select state" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>States</SelectLabel>
-                          <SelectItem value="lagos" selected>
-                            Lagos state
-                          </SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-1 col-span-2 md:col-span-1">
-                    <Select onValueChange={handleSetAddress} name="lga">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Choose LGA" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>LGA</SelectLabel>
-                          <SelectItem value="ikorodu">Ikorodu</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-1 col-span-2">
-                    <Label htmlFor="address">Full address</Label>
-                    <Textarea
-                      id="address"
-                      placeholder="9, NBC road, Ebute, Ikorodu, Lagos State."
-                      name="address"
-                      onChange={handleSetAddress}
-                      value={addressField.address}
-                    />
-                  </div>
+                <CardContent>
+                  {/* <ScrollArea className="whitespace-nowrap rounded-md"> */}
+                  {address.length === 0 ? (
+                    <div className="flex items-center justify-center">
+                      <p className="text-lg font-semibold text-slate-700">
+                        No location is set yet!
+                      </p>
+                    </div>
+                  ) : (
+                    <section className="flex gap-4 flex-wrap">
+                      {address.map((add, index) => (
+                        <div
+                          className="border p-2 rounded relative max-w-sm min-w-[200px]"
+                          key={index}
+                        >
+                          <span className="absolute right-2 cursor-pointer flex gap-2 items-center">
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <Edit size={18} color="orange" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Edit Address</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <Trash2
+                                    size={18}
+                                    color="red"
+                                    onClick={() => handleAddressDelete(add._id)}
+                                  />
+                                </TooltipTrigger>
+                                <TooltipContent className="bg-red-500">
+                                  <p>Delete Address</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </span>
+                          <h5 className="capitalize">
+                            <span className="font-semibold text-slate-700">
+                              Alias
+                            </span>
+                            : {add.alias}
+                          </h5>
+                          <div className="capitalize">
+                            <span className="font-semibold text-slate-700">
+                              Street
+                            </span>{" "}
+                            : {add.street}
+                          </div>
+                          <div className="capitalize">
+                            <span className="font-semibold text-slate-700">
+                              LGA
+                            </span>
+                            : {add.lga}
+                          </div>
+                          <div className="capitalize">
+                            <span className="font-semibold text-slate-700">
+                              State
+                            </span>
+                            : {add.state} state
+                          </div>
+                          <div className="capitalize">
+                            <span className="font-semibold text-slate-700">
+                              Full address
+                            </span>
+                            : {add.address}
+                          </div>
+                        </div>
+                      ))}
+                    </section>
+                  )}
+                  {/* <ScrollBar orientation="horizontal" />
+                  </ScrollArea> */}
                 </CardContent>
-                <CardFooter>
+                {/* <CardFooter>
                   <Button onClick={handleAddressSubmit}>Save address</Button>
-                </CardFooter>
+                </CardFooter> */}
               </Card>
             </TabsContent>
           </Tabs>
@@ -408,9 +611,11 @@ const User = () => {
                       {order.status === "paid" ? (
                         <Hourglass size={15} />
                       ) : order.status === "delivered" ? (
-                        <Check  size={15}/>
+                        <Check size={15} />
+                      ) : order.status === "cancelled" ? (
+                        <X />
                       ) : (
-                        order.status === "cancelled" ? <X /> : <Truck size={15} />
+                        <Truck size={15} />
                       )}
                       <span className="ms-1">{order.status}</span>
                     </TableCell>
