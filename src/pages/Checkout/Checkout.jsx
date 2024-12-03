@@ -1,4 +1,6 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,11 +20,29 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 import { commaSeparatedPrice } from "@/utils/helperFunctions";
+import useUser from "@/hooks/use-user";
+
+import { toast } from "sonner";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
 
 const Checkout = () => {
   const { cartItems, totalPrice } = useSelector((state) => state.cart);
+  const [coords, setCoords] = useState(null);
   // Use google map for current location?
+  const { data: user, isLoading: userLoading, error } = useUser();
+
   const addresses = [
     {
       alias: "Home",
@@ -39,6 +59,52 @@ const Checkout = () => {
       address: "3, road 102, Teacher's estate, Obafemi owode.",
     },
   ];
+
+  const {
+    data: mapAddress,
+    isLoading: addressLoading,
+    error: errorAddress,
+  } = useQuery({
+    queryKey: coords ? ["address", coords.latitude, coords.longitude] : null,
+    queryFn: async () => {
+      const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords.latitude}&lon=${coords.longitude}`;
+      const { data } = await axios.get(url);
+
+      return {
+        address: data.display_name,
+        latitude: data.lat,
+        longitude: data.lon,
+        state: data.address.state,
+        lga: data.address.county,
+        street: data.address.road,
+      };
+    },
+    enabled: !!coords, // Only fetch when coords is available
+    onError: (error) => {
+      console.error("Error fetching address:", error);
+      toast.error("Failed to retrieve the address.");
+    },
+  });
+
+  const getCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log("Latitude and Longitude:", latitude, longitude);
+          setCoords({ latitude, longitude }); // Trigger React Query
+        },
+        (error) => {
+          toast.error(
+            "Unable to retrieve your location. Please allow location access."
+          );
+        }
+      );
+    } else {
+      toast.error("Geolocation is not supported by your browser.");
+    }
+  };
+
   return (
     <div className="font-[sans-serif] bg-white">
       <div className="flex max-sm:flex-col gap-12 max-lg:gap-4 h-full">
@@ -57,7 +123,7 @@ const Checkout = () => {
                       </h3>
                       <ul className="text-xs text-gray-300 space-y-2 mt-2">
                         <li>
-                          Price{" "}
+                          Price
                           <span className="float-right">
                             {commaSeparatedPrice(item.price)}
                           </span>
@@ -81,7 +147,10 @@ const Checkout = () => {
 
             <div className="md:absolute md:left-0 md:bottom-0 bg-gray-800 w-full p-4">
               <h4 className="flex flex-wrap gap-4 text-base text-white">
-                Total <span className="ml-auto">{commaSeparatedPrice(totalPrice)}</span>
+                Total{" "}
+                <span className="ml-auto">
+                  {commaSeparatedPrice(totalPrice)}
+                </span>
               </h4>
             </div>
           </div>
@@ -100,14 +169,7 @@ const Checkout = () => {
                     type="text"
                     placeholder="First Name"
                     className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
-                  />
-                </div>
-
-                <div>
-                  <Input
-                    type="text"
-                    placeholder="Last Name"
-                    className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
+                    value={user?.name}
                   />
                 </div>
 
@@ -116,6 +178,8 @@ const Checkout = () => {
                     type="email"
                     placeholder="Email"
                     className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
+                    value={user?.email}
+                    disabled
                   />
                 </div>
 
@@ -124,13 +188,80 @@ const Checkout = () => {
                     type="number"
                     placeholder="Phone No."
                     className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
+                    value={user?.phone}
                   />
+                </div>
+                <div className="text-right">
+                  <Button type="button">Submit</Button>
                 </div>
               </div>
             </div>
 
             <div className="mt-8">
-              <h3 className="text-base text-gray-800 mb-4">Shipping Address</h3>
+              <div className="flex justify-between items-baseline">
+                <h3 className="text-base text-gray-800 mb-4">
+                  Shipping Address
+                </h3>
+
+                <Dialog>
+                  <DialogTrigger>
+                    <Button
+                      variant="secondary"
+                      className="rounded border"
+                      type="button"
+                      onClick={getCurrentLocation}
+                    >
+                      Use current location?
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Are you absolutely sure?</DialogTitle>
+                      <DialogDescription>
+                        {addressLoading ? (
+                          <div className="text-center flex items-center justify-center h-full">
+                            <Loader2 />
+                          </div>
+                        ) : errorAddress ? (
+                          <div>There was an error: {errorAddress.message}</div>
+                        ) : (
+                          <div>
+                            <div>
+                              <span className="font-semibold text-slate-700">
+                                Street
+                              </span>
+                              : {mapAddress?.street}
+                            </div>
+                            <div>
+                              <span className="font-semibold text-slate-700">
+                                LGA
+                              </span>
+                              : {mapAddress?.lga}
+                            </div>
+                            <div>
+                              <span className="font-semibold text-slate-700">
+                                State
+                              </span>
+                              : {mapAddress?.state}
+                            </div>
+                            <div>
+                              <span className="font-semibold text-slate-700">
+                                Full address
+                              </span>
+                              : {mapAddress?.address}
+                            </div>
+                          </div>
+                        )}
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button type="submit" size="sm">
+                        Use address
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
 
               <section>
                 <RadioGroup defaultValue={addresses[0].alias}>
