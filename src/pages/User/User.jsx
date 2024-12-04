@@ -122,6 +122,7 @@ const User = () => {
     queryKey: ["orders"],
     queryFn: async () => {
       const response = await axiosService.get("/order");
+      console.log(response.data);
       return response.data;
     },
   });
@@ -250,6 +251,7 @@ const User = () => {
           <Button
             className="justify-start w-full rounded-none hover:bg-orange-100 hover:text-orange-500"
             variant="secondary"
+            onClick={() => setDisplay("tabs")}
           >
             <User2 size={24} />
             <span className="ms-2">User and settings</span>

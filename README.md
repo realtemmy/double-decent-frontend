@@ -28,7 +28,7 @@
 
 
 ### Designs and reference
-- Figma 
+- Figma: [Double decent](https://www.figma.com/design/fFXluVYjVEUwXhuiC09vgO/Double-Descent-store?node-id=22-10&node-type=canvas&t=sQe3tKEVLbEb3PFP-0)
 - Checkout design by [Readymadeui](https://readymadeui.com/)
 - Flowbite
 - Shadcn
