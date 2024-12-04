@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { ChevronRight, CircleHelp, Search, ShoppingCart } from "lucide-react";
+import {
+  ChevronRight,
+  CircleHelp,
+  Search,
+  ShoppingCart,
+  User,
+} from "lucide-react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
@@ -7,6 +13,7 @@ import { useSelector } from "react-redux";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "../ui/input";
+import { ScrollArea } from "../ui/scroll-area";
 
 import {
   Accordion,
@@ -14,6 +21,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 import useUser from "@/hooks/use-user";
 import axiosService from "@/axios";
 
@@ -81,7 +97,27 @@ function MainLayout() {
           </SheetTrigger>
           <div className="flex gap-4 lg:hidden">
             {user ? (
-              <div>My profile</div>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="border-none outline-none">
+                  <Button
+                    className="capitalize border-none"
+                    variant="secondary"
+                  >
+                    <User />
+                    {user.name}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="cursor-pointer">
+                    User
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer">
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <Link
                 to="/login"
@@ -103,82 +139,108 @@ function MainLayout() {
           </div>
 
           <SheetContent side="left" className="px-0">
-            <Link to="/" className="mr-6 hidden lg:flex">
-              <MountainIcon className="h-6 w-6" />
-              <span className="sr-only">Acme Inc</span>
-            </Link>
+            <ScrollArea className="h-[calc(100vh-20px)] rounded-md mt-1 pb-3">
+              <Link to="/" className="mr-6 hidden lg:flex">
+                <MountainIcon className="h-6 w-6" />
+                <span className="sr-only">Acme Inc</span>
+              </Link>
 
-            {user && (
-              <div className="grid gap-2 py-6 w-full">
+              {user && (
+                <div className="grid gap-2 py-6 w-full">
+                  <h4
+                    className="text-white px-3 font-semibold text-lg py-1 capitalize hover:cursor-pointer"
+                    style={{
+                      backgroundColor: "#C74E00",
+                    }}
+                  >
+                    {user.name}&#39;s account
+                  </h4>
+                  <div className="ms-4">
+                    <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1">
+                      <span>User profile</span>
+                      <ChevronRight size={20} />
+                    </Link>
+                    <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1">
+                      <span>Order history</span>
+                      <ChevronRight size={20} />
+                    </Link>
+                    <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1">
+                      <span>Security Settings</span>
+                      <ChevronRight size={20} />
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              <div className="grid gap-2 py- w-full">
                 <h4
-                  className="text-white px-3 font-semibold text-lg py-1 capitalize"
+                  className="text-white px-1 font-semibold text-xl py-1 hover:cursor-pointer"
                   style={{
                     backgroundColor: "#C74E00",
                   }}
                 >
-                  {user.name}&#39;s account
+                  Categories
                 </h4>
-                <div className="ms-4">
-                  <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1">
-                    <span>User profile</span>
-                    <ChevronRight size={20} />
-                  </Link>
-                  <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1">
-                    <span>Order history</span>
-                    <ChevronRight size={20} />
-                  </Link>
-                  <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1">
-                    <span>Security Settings</span>
-                    <ChevronRight size={20} />
-                  </Link>
-                </div>
+                <Accordion
+                  type="single"
+                  collapsible
+                  onValueChange={handleChange}
+                  className="px-3 m-0"
+                >
+                  {categories.map((category, index) => (
+                    <AccordionItem value={category.id} key={index}>
+                      <AccordionTrigger className="capitalize">
+                        {category.name}
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        {secLoading ? (
+                          <div>Loading...</div>
+                        ) : sections.length === 0 ? (
+                          <div>No section under category</div>
+                        ) : (
+                          sections.map((section) => (
+                            <Link
+                              key={section._id}
+                              to={`/section/${section._id}`}
+                              className="hover:underline hover:text-slate-600 capitalize block py-1"
+                            >
+                              {section.name}
+                            </Link>
+                          ))
+                        )}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
               </div>
-            )}
-
-            <div className="grid gap-2 py- w-full">
-              <h4
-                className="text-white px-1 font-semibold text-xl py-1"
+              <Link
+                to="/help"
+                className="px-3 font-semibold my-2 text-lg py-1 capitalize block hover:cursor-pointer text-white hover:text-white"
                 style={{
                   backgroundColor: "#C74E00",
                 }}
               >
-                Categories
-              </h4>
-              <Accordion
-                type="single"
-                collapsible
-                onValueChange={handleChange}
-                className="px-3 m-0"
+                Help
+              </Link>
+              <Link
+                to="/help"
+                className="px-3 font-semibold my-2 text-lg py-1 capitalize block hover:cursor-pointer text-white hover:text-white"
+                style={{
+                  backgroundColor: "#C74E00",
+                }}
               >
-                {categories.map((category, index) => (
-                  <AccordionItem value={category.id} key={index}>
-                    <AccordionTrigger className="capitalize">
-                      {category.name}
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      {secLoading ? (
-                        <div>Loading...</div>
-                      ) : sections.length === 0 ? (
-                        <div>No section under category</div>
-                      ) : (
-                        sections.map((section) => (
-                          <Link
-                            key={section._id}
-                            to={`/section/${section._id}`}
-                            className="hover:underline hover:text-slate-600 capitalize block py-1"
-                          >
-                            {section.name}
-                          </Link>
-                        ))
-                      )}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-            <div>Help</div>
-            <div>FAQ</div>
-            <div>Contact us</div>
+                FAQ
+              </Link>
+              <Link
+                to="/help"
+                className="px-3 font-semibold my-2 text-lg py-1 capitalize block hover:cursor-pointer text-white hover:text-white"
+                style={{
+                  backgroundColor: "#C74E00",
+                }}
+              >
+                Contact us
+              </Link>
+            </ScrollArea>
           </SheetContent>
         </Sheet>
         <Link to="/" className="mr-6 hidden lg:flex">
