@@ -28,7 +28,7 @@ const Cart = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  const {cartItems, totalPrice} = useSelector((state) => state.cart);
 
   const handleRemoveFromCart = (itemId) => {
     dispatch(removeFromCart(itemId));
@@ -123,7 +123,7 @@ const Cart = () => {
               <TableFooter className="bg-transparent">
                 <TableRow>
                   <TableCell colSpan={2}>Total</TableCell>
-                  <TableCell className="text-right">$2,500.00</TableCell>
+                  <TableCell className="text-right">{commaSeparatedPrice(totalPrice)}</TableCell>
                 </TableRow>
               </TableFooter>
             </Table>

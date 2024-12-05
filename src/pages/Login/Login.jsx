@@ -99,9 +99,9 @@ const Login = () => {
             </div>
             <Button type="submit" className="w-full" onClick={handleSubmit}>
               {mutation.isPending ? (
-                <div>
-                  <i>Loading...</i>
+                <div className="flex items-center">
                   <Loader2 className="ml-2 animate-spin" size="20" />
+                  <i>Loading...</i>
                 </div>
               ) : (
                 "Login"

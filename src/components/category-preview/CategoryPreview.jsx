@@ -63,7 +63,7 @@ const CategoryPreview = () => {
           <ProductList
             categoryId={category._id}
             key={index}
-            slug={`/category/${category.slug}`}
+            slug={`/category/${category._id}`}
             title={category.name}
           />
         ))}
