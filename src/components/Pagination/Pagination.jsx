@@ -1,64 +1,32 @@
-import PaginationButton from "../pagination-button/PaginationButton";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
-
-const Pagination = ({ currentPage, totalDocs, onPageChange }) => {
-  // console.log(currentPage);
-  const totalPages = Math.ceil(totalDocs / 20);
-  // console.log("total pages: ", totalPages);
-  const handlePrevClick = () => {
-    if (currentPage > 1) {
-      onPageChange(currentPage - 1);
-    }
-  };
-
-  const handleNextClick = () => {
-    if (currentPage < totalPages) {
-      onPageChange(++currentPage);
-    }
-  };
-
-  const handleNumberClick = (pageNumber) => {
-    onPageChange(pageNumber);
-  };
-
-  const renderPageNumbers = () => {
-    const pages = [];
-    let start = currentPage - 2;
-    if (currentPage < 3) {
-      start = 1;
-    }
-    for (let i = start; i <= Math.min(start + 4, totalPages); i++) {
-      pages.push(
-        <PaginationButton
-          key={i}
-          label={i}
-          onClick={() => handleNumberClick(i)}
-          disabled={i === currentPage}
-        />
-      );
-    }
-    return pages;
-  };
+const PaginationButton = ({ currentPage, totalDocs, onPageChange }) => {
 
   return (
-    <div className={totalPages > 2 ? "pagination-container" : "d-none"}>
-      {/* Previous Button */}
-      <PaginationButton
-        label="Previous"
-        onClick={handlePrevClick}
-        disabled={currentPage === 1}
-      />
-
-      {/* Numbered Pages */}
-      {renderPageNumbers()}
-
-      {/* Next Button */}
-      <PaginationButton
-        label="Next"
-        onClick={handleNextClick}
-        disabled={currentPage === totalPages}
-      />
-    </div>
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious href="#" />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink href="#">1</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationEllipsis />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationNext href="#" />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
   );
 };
 
@@ -99,5 +67,4 @@ const Pagination = ({ currentPage, totalDocs, onPageChange }) => {
 //   }
 // }
 
-
-export default Pagination;
+export default PaginationButton;
