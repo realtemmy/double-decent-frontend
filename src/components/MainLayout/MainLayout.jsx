@@ -30,6 +30,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import Footer from "../Footer/Footer";
 import useUser from "@/hooks/use-user";
 import axiosService from "@/axios";
 
@@ -243,39 +244,86 @@ function MainLayout() {
             </ScrollArea>
           </SheetContent>
         </Sheet>
-        <Link to="/" className="mr-6 hidden lg:flex">
-          <MountainIcon className="h-6 w-6" />
-          <span className="sr-only">Acme Inc</span>
-        </Link>
-        <nav className="hidden lg:flex items-center w-full">
+
+        <nav className="hidden lg:grid grid-cols-[150px_1fr_1fr] w-full">
+          <Link to="/" className="mr-6 hidden lg:flex">
+            <MountainIcon className="h-6 w-6" />
+            <span className="sr-only">Acme Inc</span>
+          </Link>
           <div className="relative w-full flex-1">
-            <Input type="search" className="w-full" />
+            <Input
+              type="search"
+              className="w-full"
+              placeholder="Search for groceries, accessories and more..."
+            />
             <Search className="absolute top-3 right-2" size={15} />
           </div>
-          <div className="flex items-center justify-center flex-1">
-            <Link
-              to="/help"
-              className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-            >
-              <CircleHelp size={20} /> Help
-            </Link>
+          {user ? (
+            <div className="text-right flex items-center gap-4 justify-end">
+              <Link
+                to="/faq"
+                className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+              >
+                <CircleHelp size={20} /> FAQ
+              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="border-none outline-none">
+                  <Button
+                    className="capitalize border-none"
+                    variant="secondary"
+                  >
+                    <User />
+                    {user.name}&#39;s Account
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="cursor-pointer">
+                    User
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer">
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <div
+                className="relative cursor-pointer"
+                onClick={handleCartNavigate}
+              >
+                <ShoppingCart color="orange" />{" "}
+                <sup className="absolute -top-1 -right-1 text-white font-semibold bg-orange-500 border p-1 py-2 rounded-full">
+                  {cartCount}
+                </sup>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center flex-1">
+              <Link
+                to="/faq"
+                className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+              >
+                <CircleHelp size={20} /> FAQ
+              </Link>
 
-            <Link
-              to="/login"
-              className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-            >
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-            >
-              Sign up
-            </Link>
-          </div>
+              <Link
+                to="/login"
+                className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+              >
+                Sign up
+              </Link>
+            </div>
+          )}
         </nav>
       </header>
       <Outlet />
+      <Footer />
     </>
   );
 }

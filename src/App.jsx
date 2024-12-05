@@ -12,6 +12,8 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword";
 
 import Products from "./pages/Products/Products";
 import ProductPage from "./components/product-page/ProductPage";
+import Category from "./pages/Category/Category";
+import Section from "./pages/Section/Section";
 
 import Orders from "./pages/Orders/Orders";
 
@@ -20,6 +22,7 @@ import Cart from "./pages/Cart/Cart";
 import Checkout from "./pages/Checkout/Checkout";
 
 import NotFound from "./pages/NotFound/NotFound";
+import FAQ from "./pages/FAQ/FAQ";
 import { useSelector, useDispatch } from "react-redux";
 
 function App() {
@@ -36,6 +39,8 @@ function App() {
   //  - Add and product to cart
   //  - Find a way to separate delivery fee from total amount
   //  - Make alias unique to each user
+  //  - Use tinymce for product description setup
+  //  - Keep track and use product's quantity in product page, instead of cartCount
 
   const cartItems = useSelector((state) => state.cart.cartItems);
 
@@ -50,10 +55,13 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/product/:productId" element={<ProductPage />} />
+          <Route path="/category/:categoryId" element={<Category />} />
+          <Route path="/section/:sectionId" element={<Section />} />
           <Route path="/user" element={<User />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/faq" element={<FAQ />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
