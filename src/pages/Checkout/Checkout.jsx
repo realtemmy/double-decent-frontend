@@ -152,6 +152,7 @@ const Checkout = () => {
             </ScrollArea>
 
             <div className="md:absolute md:left-0 md:bottom-0 bg-gray-800 w-full p-4">
+              <p className="text-white">Delivery Fee:</p>
               <h4 className="flex flex-wrap gap-4 text-base text-white">
                 Total{" "}
                 <span className="ml-auto">

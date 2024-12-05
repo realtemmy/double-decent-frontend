@@ -27,7 +27,7 @@ const Hero = () => {
           <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight dark:text-white md:max-w-2xl md:text-5xl xl:text-6xl">
             Limited Time Offer!
             <br />
-            Up to 50% OFF!
+            Up to 50% OFF for delivery!
           </h1>
           <p className="max-w-2xl text-gray-500 dark:text-gray-400 md:mb-12 md:text-lg mb-3 lg:mb-5 lg:text-xl">
             Don&apos;t Wait - Limited Stock at Unbeatable Prices!
