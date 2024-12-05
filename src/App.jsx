@@ -26,6 +26,7 @@ import FAQ from "./pages/FAQ/FAQ";
 import { useSelector, useDispatch } from "react-redux";
 
 function App() {
+  // Github pages configuration completed
   const dispatch = useDispatch();
   // TO build:
   //  - Help page
