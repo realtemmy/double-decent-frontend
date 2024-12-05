@@ -13,6 +13,7 @@
  - Checkout
  - User: prodile, settings, etc
  - Order history etc
+ - Pagination
 
 
 ### Status for delivery
