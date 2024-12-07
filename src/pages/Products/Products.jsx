@@ -1,15 +1,8 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import PaginationButton from "@/components/Pagination/Pagination";
 
 import axiosService from "@/axios";
 
@@ -18,17 +11,20 @@ import axiosService from "@/axios";
 import Product from "@/components/Product/Product";
 
 const Products = () => {
+  const [currentPage, setCurrentPage] = useState(1);
   const {
-    data: products = [],
+    data = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const res = await axiosService.get("/products");
-      return res.data;
-    },
+    queryKey: ["products", currentPage],
+    queryFn: async () =>
+      await axiosService.get(`/products?page=${currentPage}`),
   });
+
+  const handlePageChange = (currentPage) => {
+    setCurrentPage(currentPage);
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -36,6 +32,9 @@ const Products = () => {
   if (error) {
     return <div>There was an error fetching products: {error.message}</div>;
   }
+
+  console.log(data);
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -43,27 +42,12 @@ const Products = () => {
           Products catalogue
         </h2>
         <div className="flex gap-4">
-          {products.map((product, index) => (
+          {data.data.map((product, index) => (
             <Product product={product} key={index} />
           ))}
         </div>
       </div>
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      <PaginationButton data={data} onPageChange={handlePageChange} />
     </div>
   );
 };
