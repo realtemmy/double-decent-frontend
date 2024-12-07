@@ -7,64 +7,102 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import PropTypes from "prop-types";
 
-const PaginationButton = ({ currentPage, totalDocs, onPageChange }) => {
+const PaginationButton = ({ data, onPageChange }) => {
+  const { currentPage, totalPages, hasPrevPage, hasNextPage, totalItems } =
+    data;
+
+  // Generate the page numbers dynamically
+  const getPageNumbers = () => {
+    const range = 2; // Number of pages before and after the current page
+    const pages = [];
+    const start = Math.max(1, currentPage - range);
+    const end = Math.min(totalPages, currentPage + range);
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
 
   return (
     <Pagination>
       <PaginationContent>
+        {/* Previous Button */}
         <PaginationItem>
-          <PaginationPrevious href="#" />
+          <PaginationPrevious
+            aria-label="Go to previous page"
+            disabled={!hasPrevPage}
+            onClick={() => hasPrevPage && onPageChange(currentPage - 1)}
+            className={hasPrevPage ? "cursor-pointer" : "cursor-not-allowed"}
+          />
         </PaginationItem>
+
+        {/* Page Numbers */}
+        {getPageNumbers().map((page) => (
+          <PaginationItem key={page}>
+            <PaginationLink
+              isActive={page === currentPage}
+              onClick={() => onPageChange(page)}
+            >
+              {page}
+            </PaginationLink>
+          </PaginationItem>
+        ))}
+
+        {/* Ellipsis and Last Page */}
+        {currentPage < totalPages - 2 && (
+          <>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                isActive={totalPages === currentPage}
+                onClick={() => onPageChange(totalPages)}
+              >
+                {totalItems}
+              </PaginationLink>
+            </PaginationItem>
+          </>
+        )}
+
+        {/* Next Button */}
         <PaginationItem>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext href="#" />
+          <PaginationNext
+            aria-label="Go to next page"
+            disabled={!hasNextPage}
+            onClick={() => hasNextPage && onPageChange(currentPage + 1)}
+            className={hasNextPage ? "cursor-pointer" : "cursor-not-allowed"}
+          />
         </PaginationItem>
       </PaginationContent>
     </Pagination>
   );
 };
 
-// Pagination.scss
+// PropTypes for validation
+PaginationButton.propTypes = {
+  data: PropTypes.shape({
+    currentPage: PropTypes.number.isRequired,
+    totalPages: PropTypes.number.isRequired,
+    hasPrevPage: PropTypes.bool.isRequired,
+    hasNextPage: PropTypes.bool.isRequired,
+    totalItems: PropTypes.number.isRequired,
+  }).isRequired,
+  onPageChange: PropTypes.func.isRequired, // Callback function for handling page changes
+};
 
-// .pagination-container {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   margin-top: 20px;
-// }
-
-// .pagination-button {
-//   padding: 8px 16px;
-//   margin: 4px;
-//   font-size: 14px;
-//   border: 1px solid #ccc;
-//   background-color: #fff;
-//   cursor: pointer;
-
-//   &:hover {
-//     background-color: #f0f0f0;
-//   }
-
-//   &:disabled {
-//     cursor: not-allowed;
-//     background-color: #ddd;
-//     color: #888;
-//     border: 1px solid #ccc;
-//   }
-// }
-
-// @media (max-width: 480px) {
-//   .pagination-button{
-//     padding: 6px 10px;
-//     font-size: 12px;
-//     overflow-x: scroll;
-//   }
-// }
+// Default props in case data is optional
+PaginationButton.defaultProps = {
+  data: {
+    currentPage: 1,
+    totalPages: 1,
+    hasPrevPage: false,
+    hasNextPage: false,
+    totalItems: 0,
+  },
+};
 
 export default PaginationButton;
