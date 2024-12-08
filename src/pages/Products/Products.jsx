@@ -39,6 +39,8 @@ import axiosService from "@/axios";
 
 import Product from "@/components/Product/Product";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button } from "@/components/ui/button";
 
 const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -52,7 +54,9 @@ const Products = () => {
   } = useQuery({
     queryKey: ["products", currentPage, categories],
     queryFn: async () =>
-      await axiosService.get(`/products?page=${currentPage}`),
+      await axiosService.get(
+        `/products?page=${currentPage}&category=${categories.join(",")}`
+      ),
   });
 
   const {
@@ -79,10 +83,13 @@ const Products = () => {
       return updatedCategories; // Return the new state
     });
   };
-  
 
   if (isLoading || catLoading) {
-    return <div><Loader /> Loading...</div>;
+    return (
+      <div>
+        <Loader /> Loading...
+      </div>
+    );
   }
   if (error || catError) {
     return (
@@ -96,12 +103,15 @@ const Products = () => {
 
   return (
     <div className="bg-white grid grid-cols-1 md:grid-cols-[300px_1fr] items-start">
+      <div className="md:hidden px-2 my-2">
+        <Button variant="secondary">Filter</Button>
+      </div>
       <Card className="h-fit w-full mx-2">
         {/* <CardHeader>
           <CardTitle>Card Title</CardTitle>
           <CardDescription>Card Description</CardDescription>
         </CardHeader> */}
-        <CardContent className="px-3">
+        <CardContent className="px-3 hidden md:block">
           <Accordion
             type="single"
             collapsible
@@ -140,22 +150,55 @@ const Products = () => {
                 )}
               </AccordionContent>
             </AccordionItem>
+            <AccordionItem value="item-2">
+              <AccordionTrigger className="bg-white hover:no-underline">
+                Price
+              </AccordionTrigger>
+              <AccordionContent>
+                <RadioGroup defaultValue="prices">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="1000" id="r1" />
+                    <Label htmlFor="r1">Less than &#8358;1,000</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="5000" id="r2" />
+                    <Label htmlFor="r2"> &#8358;1,000 to &#8358;5,000</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="20000" id="r3" />
+                    <Label htmlFor="r3"> &#8358;5,000 to &#8358;20,000</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="50000" id="r4" />
+                    <Label htmlFor="r4"> &#8358;20,000 to &#8358;50,000</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="100000" id="r5" />
+                    <Label htmlFor="r5"> &#8358;50,000 to &#8358;100,000</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="compact" id="r6" />
+                    <Label htmlFor="r6">Over &#8358;100,000</Label>
+                  </div>
+                </RadioGroup>
+              </AccordionContent>
+            </AccordionItem>
           </Accordion>
-
-          <p>Lets talk</p>
         </CardContent>
       </Card>
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8 border">
         <h2 className="text-2xl font-bold tracking-tight text-gray-900 mb-4">
           Products catalogue
         </h2>
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-wrap">
           {data.data?.map((product, index) => (
             <Product product={product} key={index} />
           ))}
         </div>
       </div>
-      <PaginationButton data={data} onPageChange={handlePageChange} />
+      <div className="my-4 col-span-2">
+        <PaginationButton data={data} onPageChange={handlePageChange} />
+      </div>
     </div>
   );
 };
