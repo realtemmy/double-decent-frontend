@@ -286,7 +286,10 @@ function MainLayout() {
                 <DropdownMenuContent>
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer">
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => navigate("/user")}
+                  >
                     User
                   </DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer">

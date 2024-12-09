@@ -122,7 +122,6 @@ const User = () => {
     queryKey: ["orders"],
     queryFn: async () => {
       const response = await axiosService.get("/order");
-      console.log(response.data);
       return response.data;
     },
   });
@@ -230,7 +229,7 @@ const User = () => {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="grid grid-cols-[300px_1fr] px-2 gap-4">
+    <div className="grid grid-cols-[200px_1fr] px-2 gap-4">
       <Card className="w-full col-span-3 sm:col-span-1 h-[calc(100svh-150px)]">
         <CardHeader>
           <CardTitle>
@@ -288,7 +287,7 @@ const User = () => {
           </Button>
         </CardContent>
       </Card>
-      <section>
+      <section className="col-span-2 sm:col-span-1 min-w-[300px]">
         {display === "tabs" ? (
           <Tabs defaultValue="account">
             <TabsList className="grid w-full grid-cols-3 gap-1">
