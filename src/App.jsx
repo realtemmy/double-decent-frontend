@@ -56,8 +56,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/product/:productId" element={<ProductPage />} />
-          <Route path="/category/:categoryId" element={<Category />} />
-          <Route path="/section/:sectionId" element={<Section />} />
+          <Route path="/category/:categoryName" element={<Category />} />
+          <Route path="/section/:sectionName" element={<Section />} />
           <Route path="/user" element={<User />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/cart" element={<Cart />} />
