@@ -1,8 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useQuery } from "@tanstack/react-query";
 import axiosService from "@/axios";
+
+
 const Hero = () => {
+  let navigate = useNavigate();
   const {
     isLoading,
     error,
@@ -33,7 +36,7 @@ const Hero = () => {
             Don&apos;t Wait - Limited Stock at Unbeatable Prices!
           </p>
           <Button
-          // className="inline-block rounded-lg bg-primary-700 px-6 py-3.5 text-center font-medium hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          onClick={() => navigate("/products")}
           >
             Shop Now
           </Button>

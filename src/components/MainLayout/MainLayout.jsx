@@ -34,10 +34,15 @@ import Footer from "../Footer/Footer";
 import useUser from "@/hooks/use-user";
 import axiosService from "@/axios";
 
+import Spinner from "../Spinner/Spinner";
+
 function MainLayout() {
   const navigate = useNavigate("");
+  const [open, setOpen] = useState(false);
   const { cartCount } = useSelector((state) => state.cart);
   const [categoryId, setCategoryId] = useState("");
+
+  const handleClose = () => setOpen(false);
 
   const {
     data: user = null,
@@ -88,8 +93,9 @@ function MainLayout() {
   }
   return (
     <>
+      {isLoading && <Spinner />}
       <header className="flex justify-between h-20 w-full shrink-0 items-center px-4 md:px-6">
-        <Sheet>
+        <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="lg:hidden">
               <MenuIcon className="h-6 w-6" />
@@ -203,6 +209,7 @@ function MainLayout() {
                             <Link
                               key={section._id}
                               to={`/section/${section.slug}`}
+                              onClick={handleClose}
                               className="hover:underline hover:text-slate-600 capitalize block py-1"
                             >
                               {section.name}
@@ -241,6 +248,7 @@ function MainLayout() {
               >
                 Contact us
               </Link>
+              <Button>Close</Button>
             </ScrollArea>
           </SheetContent>
         </Sheet>

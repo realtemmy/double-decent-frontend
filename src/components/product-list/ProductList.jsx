@@ -48,9 +48,11 @@ const ProductList = ({ title, slug, categoryId }) => {
 
       {/* Horizontal scrolling container */}
       <ScrollArea className="bg-white w-full p-4">
-        <div className="flex items-center gap-2 overflow-x-auto">
+        <div className="flex justify- gap-2">
           {products.map((product) => (
-            <Product product={product} key={product._id} />
+            <div key={product._id}  className="w-32">
+              <Product product={product} />
+            </div>
           ))}
         </div>
         <ScrollBar orientation="horizontal" />
