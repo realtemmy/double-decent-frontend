@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { Toaster } from "./components/ui/sonner";
 import { calculateTotal } from "./redux/cart/cartSlice";
 
@@ -23,7 +24,9 @@ import Checkout from "./pages/Checkout/Checkout";
 
 import NotFound from "./pages/NotFound/NotFound";
 import FAQ from "./pages/FAQ/FAQ";
-import { useSelector, useDispatch } from "react-redux";
+
+
+import Spinner from "./components/Spinner/Spinner";
 
 function App() {
   // Github pages configuration completed
@@ -42,6 +45,7 @@ function App() {
   //  - Make alias unique to each user
   //  - Use tinymce for product description setup
   //  - Keep track and use product's quantity in product page, instead of cartCount
+  //  - Set max width for display of the entire app
 
   const cartItems = useSelector((state) => state.cart.cartItems);
 
@@ -51,27 +55,30 @@ function App() {
 
   return (
     <>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/product/:productId" element={<ProductPage />} />
-          <Route path="/category/:categoryName" element={<Category />} />
-          <Route path="/section/:sectionName" element={<Section />} />
-          <Route path="/user" element={<User />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/faq" element={<FAQ />} />
-        </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+      <Suspense fallback={<Spinner />}>
+        <Routes>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/product/:productId" element={<ProductPage />} />
+            <Route path="/category/:categoryName" element={<Category />} />
+            <Route path="/section/:sectionName" element={<Section />} />
+            <Route path="/user" element={<User />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/faq" element={<FAQ />} />
+          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* Not found */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          {/* Not found */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+
       <Toaster position="top-right" richColors />
     </>
   );

@@ -13,7 +13,7 @@ const Product = ({ product }) => {
     toast.success(`${product.name} added to cart`);
   }
   return (
-    <div className="group relative w-40">
+    <div className="group relative">
       <Link to={`/product/${product._id}`}>
         <img
           alt={product.name}

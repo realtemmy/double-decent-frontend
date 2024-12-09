@@ -56,7 +56,7 @@ const Products = () => {
     queryKey: ["products", currentPage, categories],
     queryFn: async () =>
       await axiosService.get(
-        `/products?page=${currentPage}&category=${categories.join(",")}`
+        `/products?page=${currentPage}&category=${categories.join(",")}&limit=20`
       ),
   });
 
@@ -96,14 +96,12 @@ const Products = () => {
   // console.log(cats);
 
   return (
-    <div className="bg-white grid grid-cols-1 md:grid-cols-[300px_1fr] items-start">
-      {
-        (isLoading || catLoading) && (<Spinner />)
-      }
-      <div className="md:hidden px-2 my-2">
+    <div className="bg-white grid grid-cols-1 md:grid-cols-[300px_1fr] gap- mx-2">
+      {(isLoading || catLoading) && <Spinner />}
+      <div className="md:hidden border w-full">
         <Button variant="secondary">Filter</Button>
       </div>
-      <Card className="h-fit w-full mx-2">
+      <Card className="h-fit mx-2">
         {/* <CardHeader>
           <CardTitle>Card Title</CardTitle>
           <CardDescription>Card Description</CardDescription>
@@ -183,14 +181,20 @@ const Products = () => {
           </Accordion>
         </CardContent>
       </Card>
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8 border">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900 mb-4">
+      <div>
+        <h2 className="text-2xl font-bold tracking-tight text-slate-800 mb-8">
           Products catalogue
         </h2>
-        <div className="flex gap-4 flex-wrap">
-          {data.data?.map((product, index) => (
-            <Product product={product} key={index} />
-          ))}
+        <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(120px,1fr))] m-auto px-2">
+          {data.data?.length === 0 ? (
+            <div className="flex items-center justify-center w-full h-96">
+              No products available.
+            </div>
+          ) : (
+            data.data?.map((product, index) => (
+              <Product product={product} key={index} />
+            ))
+          )}
         </div>
       </div>
       <div className="my-4 col-span-2">

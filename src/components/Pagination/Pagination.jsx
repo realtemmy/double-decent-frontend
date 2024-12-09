@@ -7,6 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import PropTypes from "prop-types";
 
 const PaginationButton = ({ data, onPageChange }) => {
@@ -15,7 +16,7 @@ const PaginationButton = ({ data, onPageChange }) => {
 
   // Generate the page numbers dynamically
   const getPageNumbers = () => {
-    const range = 2; // Number of pages before and after the current page
+    const range = 1; // Number of pages before and after the current page
     const pages = [];
     const start = Math.max(1, currentPage - range);
     const end = Math.min(totalPages, currentPage + range);
@@ -27,58 +28,61 @@ const PaginationButton = ({ data, onPageChange }) => {
   };
 
   return (
-    <Pagination>
-      <PaginationContent>
-        {/* Previous Button */}
-        <PaginationItem>
-          <PaginationPrevious
-            aria-label="Go to previous page"
-            disabled={!hasPrevPage}
-            onClick={() => hasPrevPage && onPageChange(currentPage - 1)}
-            className={hasPrevPage ? "cursor-pointer" : "cursor-not-allowed"}
-          />
-        </PaginationItem>
-
-        {/* Page Numbers */}
-        {getPageNumbers().map((page) => (
-          <PaginationItem key={page}>
-            <PaginationLink
-              isActive={page === currentPage}
-              onClick={() => onPageChange(page)}
-            >
-              {page}
-            </PaginationLink>
+    <ScrollArea className="w-full whitespace-nowrap rounded-md my-4">
+      <Pagination>
+        <PaginationContent>
+          {/* Previous Button */}
+          <PaginationItem>
+            <PaginationPrevious
+              aria-label="Go to previous page"
+              disabled={!hasPrevPage}
+              onClick={() => hasPrevPage && onPageChange(currentPage - 1)}
+              className={hasPrevPage ? "cursor-pointer" : "cursor-not-allowed"}
+            />
           </PaginationItem>
-        ))}
 
-        {/* Ellipsis and Last Page */}
-        {currentPage < totalPages - 2 && (
-          <>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
+          {/* Page Numbers */}
+          {getPageNumbers().map((page) => (
+            <PaginationItem key={page}>
               <PaginationLink
-                isActive={totalPages === currentPage}
-                onClick={() => onPageChange(totalPages)}
+                isActive={page === currentPage}
+                onClick={() => onPageChange(page)}
               >
-                {totalPages}
+                {page}
               </PaginationLink>
             </PaginationItem>
-          </>
-        )}
+          ))}
 
-        {/* Next Button */}
-        <PaginationItem>
-          <PaginationNext
-            aria-label="Go to next page"
-            disabled={!hasNextPage}
-            onClick={() => hasNextPage && onPageChange(currentPage + 1)}
-            className={hasNextPage ? "cursor-pointer" : "cursor-not-allowed"}
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
+          {/* Ellipsis and Last Page */}
+          {currentPage < totalPages - 2 && (
+            <>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink
+                  isActive={totalPages === currentPage}
+                  onClick={() => onPageChange(totalPages)}
+                >
+                  {totalPages}
+                </PaginationLink>
+              </PaginationItem>
+            </>
+          )}
+
+          {/* Next Button */}
+          <PaginationItem>
+            <PaginationNext
+              aria-label="Go to next page"
+              disabled={!hasNextPage}
+              onClick={() => hasNextPage && onPageChange(currentPage + 1)}
+              className={hasNextPage ? "cursor-pointer" : "cursor-not-allowed"}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
   );
 };
 
