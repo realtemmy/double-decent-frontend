@@ -11,7 +11,8 @@ const Category = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["category", categoryId, currentPage],
     queryFn: async () =>
-      await axiosService.get(`/category/${categoryId}/product?page=${currentPage}`),
+      // await axiosService.get(`/category/${categoryId}/product?page=${currentPage}`),
+    await axiosService.get(`/products/category/${categoryId}`),
   });
 
   const handlePageChange = (currentPage) => {
@@ -34,7 +35,7 @@ const Category = () => {
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
         <h2 className="text-3xl font-bold tracking-tight text-slate-700 text-center mb-4">
-          {data.data[0].category.name}
+          {/* {data.data[0].category.name} */}
         </h2>
         <div className="flex gap-4">
           {data.data.map((product, index) => (
