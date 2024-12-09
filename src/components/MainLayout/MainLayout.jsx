@@ -202,7 +202,7 @@ function MainLayout() {
                           sections.map((section) => (
                             <Link
                               key={section._id}
-                              to={`/section/${section._id}`}
+                              to={`/section/${section.slug}`}
                               className="hover:underline hover:text-slate-600 capitalize block py-1"
                             >
                               {section.name}
