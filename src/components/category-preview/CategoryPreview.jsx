@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import Spinner from "../Spinner/Spinner";
 import axiosService from "@/axios";
 
 import ProductList from "../product-list/ProductList";
@@ -18,15 +19,15 @@ const CategoryPreview = () => {
     },
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
   if (error) {
     return <div>Error loading categories: {error.message}</div>;
   }
   return (
     <div>
       <div className="mx-auto max-w-7xl">
+        {
+          isLoading && <Spinner />
+        }
         <div className="mx-auto">
           <h2 className="text-xl font-semibold my-2 text-gray-900">
             Shop from our collections -

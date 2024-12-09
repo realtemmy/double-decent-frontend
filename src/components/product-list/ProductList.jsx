@@ -11,8 +11,8 @@ const ProductList = ({ title, slug, categoryId }) => {
     queryKey: categoryId ? ["category products", categoryId] : ["products"],
     queryFn: async () => {
       const endpoint = categoryId
-        ? `/category/${categoryId}/product`
-        : "/products";
+        ? `/category/${categoryId}/product?limit=5`
+        : "/products?limit=5";
       const response = await axiosService.get(endpoint);
       return response.data;
     },
