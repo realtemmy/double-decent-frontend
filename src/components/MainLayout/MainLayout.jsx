@@ -248,7 +248,6 @@ function MainLayout() {
               >
                 Contact us
               </Link>
-              <Button>Close</Button>
             </ScrollArea>
           </SheetContent>
         </Sheet>
