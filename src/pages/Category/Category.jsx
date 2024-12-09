@@ -15,7 +15,9 @@ const Category = () => {
     queryKey: ["category", categoryName, currentPage],
     queryFn: async () =>
       // await axiosService.get(`/category/${categoryId}/product?page=${currentPage}`),
-    await axiosService.get(`/products/category/${categoryName}?page=${currentPage}`),
+      await axiosService.get(
+        `/products/category/${categoryName}?page=${currentPage}`
+      ),
   });
 
   const handlePageChange = (currentPage) => {
@@ -41,9 +43,15 @@ const Category = () => {
           {slugTitleToString(categoryName)}
         </h2>
         <div className="flex gap-4">
-          {data.data.map((product, index) => (
-            <Product product={product} key={index} />
-          ))}
+          {data.data.length === 0 ? (
+            <div className="text-center w-full">
+              No products found in this category
+            </div>
+          ) : (
+            data.data.map((product, index) => (
+              <Product product={product} key={index} />
+            ))
+          )}
         </div>
       </div>
       <PaginationButton data={data} onPageChange={handlePageChange} />

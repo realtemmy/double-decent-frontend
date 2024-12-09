@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/accordion";
 
 import { Loader } from "lucide-react";
+import Spinner from "@/components/Spinner/Spinner";
 import PaginationButton from "@/components/Pagination/Pagination";
 
 import axiosService from "@/axios";
@@ -84,13 +85,6 @@ const Products = () => {
     });
   };
 
-  if (isLoading || catLoading) {
-    return (
-      <div>
-        <Loader /> Loading...
-      </div>
-    );
-  }
   if (error || catError) {
     return (
       <div>
@@ -103,6 +97,9 @@ const Products = () => {
 
   return (
     <div className="bg-white grid grid-cols-1 md:grid-cols-[300px_1fr] items-start">
+      {
+        (isLoading || catLoading) && (<Spinner />)
+      }
       <div className="md:hidden px-2 my-2">
         <Button variant="secondary">Filter</Button>
       </div>

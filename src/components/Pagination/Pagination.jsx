@@ -62,7 +62,7 @@ const PaginationButton = ({ data, onPageChange }) => {
                 isActive={totalPages === currentPage}
                 onClick={() => onPageChange(totalPages)}
               >
-                {totalItems}
+                {totalPages}
               </PaginationLink>
             </PaginationItem>
           </>

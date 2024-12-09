@@ -36,9 +36,15 @@ const Section = () => {
           {slugTitleToString(sectionName)}
         </h2>
         <div className="flex gap-4">
-          {data.data.map((product, index) => (
-            <Product product={product} key={index} />
-          ))}
+          {data.data.length === 0 ? (
+            <div className="text-center w-full">
+              No products found in this section
+            </div>
+          ) : (
+            data.data.map((product, index) => (
+              <Product product={product} key={index} />
+            ))
+          )}
         </div>
       </div>
       <PaginationButton data={data} onPageChange={handlePageChange} />
