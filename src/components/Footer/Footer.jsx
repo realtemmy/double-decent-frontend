@@ -34,7 +34,7 @@ const Footer = () => {
             </svg>
           </a>
           <a
-          target="_blank"
+            target="_blank"
             href="https://x.com/realtemmy_?t=5aEU9qx7sO_GlMIL2hEMEw&s=09"
             className="me-6 [&>svg]:h-4 [&>svg]:w-4 "
           >
@@ -167,7 +167,9 @@ const Footer = () => {
                   <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
                 </svg>
               </span>
-              temiloluwaOgunti8@gmail.com
+              <a href="mailto: temiloluwaogunti8@gmail.com">
+                temiloluwaOgunti8@gmail.com
+              </a>
             </p>
             <p className="mb-4 flex items-center justify-center md:justify-start">
               <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">
@@ -183,7 +185,7 @@ const Footer = () => {
                   />
                 </svg>
               </span>
-              + 234 806 677 1553
+              <a href="tel:+12348066771553">08066771553</a>
             </p>
             <p className="flex items-center justify-center md:justify-start">
               <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">
@@ -207,7 +209,11 @@ const Footer = () => {
 
       <div className="bg-black/5 p-6 text-center">
         <span>© 2023 Copyright: </span>
-        <a className="font-semibold" target="_blank" href="https://github.com/realtemmy">
+        <a
+          className="font-semibold"
+          target="_blank"
+          href="https://github.com/realtemmy"
+        >
           Temiloluwa (Github)
         </a>
       </div>
