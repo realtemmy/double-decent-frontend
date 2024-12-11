@@ -21,7 +21,7 @@ const ForgotPassword = () => {
   const mutation = useMutation({
     mutationFn: async (email) => {
       const response = await axios.post(
-        "https://double-decent-server.onrender.com/v1/user/forgotPassword",
+        "https://double-decent-server.onrender.com/api/v1/user/forgotPassword",
         // "http://localhost:5000/api/v1/user/forgotPassword",
         email
       );

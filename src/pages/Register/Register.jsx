@@ -27,7 +27,7 @@ const Register = () => {
   const mutation = useMutation({
     mutationFn: async (formFields) => {
       const response = await axios.post(
-        "https://double-decent-server.onrender.com/v1/user/signup",
+        "https://double-decent-server.onrender.com/api/v1/user/signup",
         formFields
       );
       return response.data;

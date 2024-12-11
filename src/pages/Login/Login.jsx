@@ -27,7 +27,7 @@ const Login = () => {
   const mutation = useMutation({
     mutationFn: async (formData) => {
       const response = await axios.post(
-        "https://double-decent-server.onrender.com/v1/user/login",
+        "https://double-decent-server.onrender.com/api/v1/user/login",
         formData
       );
       return response.data;
