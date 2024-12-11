@@ -28,7 +28,7 @@ const Cart = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {cartItems, totalPrice} = useSelector((state) => state.cart);
+  const { cartItems, totalPrice } = useSelector((state) => state.cart);
 
   const handleRemoveFromCart = (itemId) => {
     dispatch(removeFromCart(itemId));
@@ -48,7 +48,7 @@ const Cart = () => {
 
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
           {/* Cart Items */}
-          <div className="lg:col-span-2 border rounded">
+          <div className="lg:col-span-2 border h-fit rounded">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -57,78 +57,96 @@ const Cart = () => {
                   <TableHead className="text-right w-28">Price</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {cartItems.map((item) => (
-                  <TableRow key={item._id}>
-                    <TableCell className="whitespace-nowr">
-                      <div className="flex items-center gap-1 md:gap-4">
-                        <Link to={`/product/${item._id}`}>
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="h-10 w-10 min-w-10 rounded-md"
-                          />
-                        </Link>
-                        <div>
-                          <Link
-                            to={`/product/${item._id}`}
-                            className="text-sm font-medium hover:underline capitalize"
-                          >
-                            {item.name}
+              {cartItems.length === 0 ? (
+                <TableCell
+                  colSpan={3}
+                  className="text-center border col-span-full w-full p-4 text-xl italic"
+                >
+                  No item in cart yet, <Link to="/products" className="text-lg underline">continue shopping</Link>
+                </TableCell>
+              ) : (
+                <TableBody>
+                  {cartItems.map((item, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="whitespace-nowr">
+                        <div className="flex items-center gap-1 md:gap-4">
+                          <Link to={`/product/${item._id}`}>
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="h-10 w-10 min-w-10 rounded-md"
+                            />
                           </Link>
-                          <div
-                            className="flex items-center cursor-pointer"
-                            onClick={() => handleRemoveFromCart(item._id)}
-                          >
-                            <span className="text-xs text-red-500">Remove</span>
-                            <Trash2 size={15} className="inline" color="red" />
+                          <div>
+                            <Link
+                              to={`/product/${item._id}`}
+                              className="text-xs sm:text-sm lg:text-base font-medium hover:underline capitalize"
+                            >
+                              {item.name}
+                            </Link>
+                            <div
+                              className="flex items-center cursor-pointer"
+                              onClick={() => handleRemoveFromCart(item._id)}
+                            >
+                              <span className="text-xs text-red-500">
+                                Remove
+                              </span>
+                              <Trash2
+                                size={15}
+                                className="inline"
+                                color="red"
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex text-center whitespace-nowrap">
-                        <button
-                          className="px-2 py-1 font-medium border rounded rounded-tr-none rounded-br-none"
-                          onClick={() => handleDecrementCount(item._id)}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex text-center whitespace-nowrap">
+                          <button
+                            className="px-2 py-1 font-medium border rounded rounded-tr-none rounded-br-none"
+                            onClick={() => handleDecrementCount(item._id)}
+                          >
+                            -
+                          </button>
+                          <span className="px-2 py-1 border">
+                            {item.quantity}
+                          </span>
+                          <button
+                            className="px-2 py-1 border rounded-tl-none rounded-bl-none rounded font-medium"
+                            onClick={() => handleIncrementCount(item._id)}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right font-bold whitespace-nowrap">
+                        <div>{commaSeparatedPrice(item.price)}</div>
+                        <div
+                          style={{
+                            fontSize: "0.625rem",
+                            color: "#6b7280",
+                          }}
+                          className="font-normal"
                         >
-                          -
-                        </button>
-                        <span className="px-2 py-1 border">
-                          {item.quantity}
-                        </span>
-                        <button
-                          className="px-2 py-1 border rounded-tl-none rounded-bl-none rounded font-medium"
-                          onClick={() => handleIncrementCount(item._id)}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right font-bold whitespace-nowrap">
-                      <div>{commaSeparatedPrice(item.price)}</div>
-                      <div
-                        style={{
-                          fontSize: "0.625rem",
-                          color: "#6b7280",
-                        }}
-                        className="font-normal"
-                      >
-                        {commaSeparatedPrice(item.price)} x {item.quantity}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+                          {commaSeparatedPrice(item.price)} x {item.quantity}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              )}
+
               <TableFooter className="bg-transparent">
                 <TableRow>
                   <TableCell colSpan={2}>Total</TableCell>
-                  <TableCell className="text-right">{commaSeparatedPrice(totalPrice)}</TableCell>
+                  <TableCell className="text-right">
+                    {commaSeparatedPrice(totalPrice)}
+                  </TableCell>
                 </TableRow>
               </TableFooter>
             </Table>
 
-            <Separator className="my-6" />
+            {/* <Separator className="my-6" /> */}
           </div>
 
           {/* Checkout and Voucher Section */}
@@ -157,7 +175,7 @@ const Cart = () => {
         </div>
       </div>
       <section className="mt-10 mx-4">
-        <ProductList title={"Similar products"} categoryId="" />
+        <ProductList title={"Similar products"} categoryId={cartItems[0]?.category}/>
       </section>
     </section>
   );

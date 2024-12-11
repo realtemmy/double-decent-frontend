@@ -30,7 +30,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { Loader } from "lucide-react";
 import Spinner from "@/components/Spinner/Spinner";
 import PaginationButton from "@/components/Pagination/Pagination";
 
@@ -42,11 +41,15 @@ import Product from "@/components/Product/Product";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
+import { ListFilter } from "lucide-react";
 
 const Products = () => {
+  const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [categories, setCategories] = useState([]);
   const [openAccordion, setOpenAccordion] = useState("category");
+
+  const handleOpen = () => setOpen(!open);
 
   const {
     data = [],
@@ -56,7 +59,9 @@ const Products = () => {
     queryKey: ["products", currentPage, categories],
     queryFn: async () =>
       await axiosService.get(
-        `/products?page=${currentPage}&category=${categories.join(",")}&limit=20`
+        `/products?page=${currentPage}&category=${categories.join(
+          ","
+        )}&limit=20`
       ),
   });
 
@@ -98,8 +103,106 @@ const Products = () => {
   return (
     <div className="bg-white grid grid-cols-1 md:grid-cols-[300px_1fr] gap- mx-2">
       {(isLoading || catLoading) && <Spinner />}
-      <div className="md:hidden border w-full">
-        <Button variant="secondary">Filter</Button>
+      <div className="md:hidden w-full">
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger className="my-1">
+            <Button className="flex ">
+              <span>Filter</span> <ListFilter />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side={"left"}>
+            <SheetHeader>
+              <SheetTitle>Are you absolutely sure?</SheetTitle>
+              <SheetDescription>
+                <Accordion
+                  type="single"
+                  collapsible
+                  className="w-full"
+                  value={openAccordion}
+                  onValueChange={(value) => setOpenAccordion(value)}
+                >
+                  <AccordionItem value="category">
+                    <AccordionTrigger className="bg-white hover:no-underline">
+                      Category
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      {catLoading ? (
+                        <p>Loading categories...</p>
+                      ) : (
+                        cats.map((cat, index) => (
+                          <div
+                            className="flex items-center space-x-2 my-1"
+                            key={index}
+                            onClick={handleOpen}
+                          >
+                            <Checkbox
+                              id={cat.id}
+                              checked={categories.includes(cat.id)}
+                              onCheckedChange={(checked) =>
+                                handleCategoryChange(checked, cat.id)
+                              }
+                            />
+                            <Label
+                              htmlFor={cat.id}
+                              className="capitalize text-gray-700"
+                            >
+                              {cat.name}
+                            </Label>
+                          </div>
+                        ))
+                      )}
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-2">
+                    <AccordionTrigger className="bg-white hover:no-underline">
+                      Price
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <RadioGroup defaultValue="prices">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="1000" id="r1" />
+                          <Label htmlFor="r1">Less than &#8358;1,000</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="5000" id="r2" />
+                          <Label htmlFor="r2">
+                            {" "}
+                            &#8358;1,000 to &#8358;5,000
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="20000" id="r3" />
+                          <Label htmlFor="r3">
+                            {" "}
+                            &#8358;5,000 to &#8358;20,000
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="50000" id="r4" />
+                          <Label htmlFor="r4">
+                            {" "}
+                            &#8358;20,000 to &#8358;50,000
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="100000" id="r5" />
+                          <Label htmlFor="r5">
+                            {" "}
+                            &#8358;50,000 to &#8358;100,000
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="compact" id="r6" />
+                          <Label htmlFor="r6">Over &#8358;100,000</Label>
+                        </div>
+                      </RadioGroup>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </SheetDescription>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
       </div>
       <Card className="h-fit mx-2">
         {/* <CardHeader>

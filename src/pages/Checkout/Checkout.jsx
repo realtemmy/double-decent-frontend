@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -38,6 +37,7 @@ import axios from "axios";
 import { Loader2, MoveLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import axiosService from "@/axios";
+import { Input } from "@/components/ui/input";
 
 const Checkout = () => {
   const { cartItems, totalPrice } = useSelector((state) => state.cart);
@@ -45,7 +45,7 @@ const Checkout = () => {
   // Use google map for current location?
   const { data: user, isLoading: userLoading, error } = useUser();
 
-  const address = user.location;
+  const address = user?.location;
 
   const {
     data: mapAddress,
@@ -109,6 +109,14 @@ const Checkout = () => {
       return;
     }
     mutation.mutate({cartItems, phone: user.phone, email: user.email, address: mapAddress.address});
+  }
+
+  if(userLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 />
+      </div>
+    );
   }
 
   return (
