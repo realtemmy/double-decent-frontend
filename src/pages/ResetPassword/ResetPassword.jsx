@@ -23,7 +23,7 @@ const ResetPassword = () => {
   const mutation = useMutation({
     mutationFn: async (fields) => {
       const response = await axios.patch(
-        `https://double-decent-server.onrender.com/v1/user/resetPassword/${token}`,
+        `https://double-decent-server.onrender.com/api/v1/user/resetPassword/${token}`,
         // `http://localhost:5000/api/v1/user/resetPassword/${token}`,
         fields
       );
