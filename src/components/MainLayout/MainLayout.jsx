@@ -110,36 +110,61 @@ function MainLayout() {
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
-          <div className="flex gap-4 lg:hidden">
+          <div className="flex items-center gap-1 md:gap-4 lg:hidden w-full">
             {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger className="border-none outline-none">
-                  <Button
-                    className="capitalize border-none"
-                    variant="secondary"
-                  >
-                    <User />
-                    {user.name}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer">
-                    User
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer">
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <>
+                <div className="relative w-full flex-1 ms-2 sm:m-auto">
+                  <Input
+                    type="text"
+                    className="w-full text-xs max-w-md m-auto"
+                    placeholder="Search for groceries, accessories and more..."
+                    onChange={(event) => setSearch(event.target.value)}
+                    onKeyDown={handleKeyDown}
+                    style={{}}
+                  />
+                </div>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="border-none outline-none">
+                    <Button
+                      className="capitalize border-none"
+                      variant="secondary"
+                    >
+                      <User />
+                      {user.name}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="cursor-pointer">
+                      User
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : (
-              <Link
-                to="/login"
-                className="text-slate-700 font-semibold hover:text-slate-600 hover:underline"
-              >
-                Login
-              </Link>
+              <>
+                <div className="relative w-full flex-1 ms-2 sm:m-auto">
+                  <Input
+                    type="text"
+                    className="w-full text-xs max-w-md m-auto"
+                    placeholder="Search for groceries, accessories and more..."
+                    onChange={(event) => setSearch(event.target.value)}
+                    onKeyDown={handleKeyDown}
+                    style={{}}
+                  />
+                </div>
+                <Link
+                  to="/login"
+                  className="text-slate-700 font-semibold hover:text-slate-600 hover:underline"
+                >
+                  Login
+                </Link>
+              </>
             )}
 
             <div

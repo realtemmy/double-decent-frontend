@@ -31,16 +31,14 @@ import Spinner from "./components/Spinner/Spinner";
 function App() {
   // Github pages configuration completed
   const dispatch = useDispatch();
-  // TO build:
-  //  - Search result + filter by section, category etc
-  //  - Cart
-  //  - Checkout
+  // TO do:
   //  - User profile, settings etc
-  //  - Find a way to separate delivery fee from total amount
+  //  - Find a way to separate delivery fee from total amount ie set delivery fee's
   //  - Make alias unique to each user
   //  - Use tinymce for product description setup
   //  - Keep track and use product's quantity in product page, instead of cartCount
   //  - Set max width for display of the entire app
+  //  - Google sign up and login
 
   const cartItems = useSelector((state) => state.cart.cartItems);
 
