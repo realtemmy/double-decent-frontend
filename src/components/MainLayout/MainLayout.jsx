@@ -41,6 +41,7 @@ function MainLayout() {
   const [open, setOpen] = useState(false);
   const { cartCount } = useSelector((state) => state.cart);
   const [categoryId, setCategoryId] = useState("");
+  const [search, setSearch] = useState("");
 
   const handleClose = () => setOpen(false);
 
@@ -85,6 +86,13 @@ function MainLayout() {
   const handleCartNavigate = () => {
     navigate("/cart");
   };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      navigate(`/products?search=${search.replace(" ", "-")}`);
+    }
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -259,9 +267,11 @@ function MainLayout() {
           </Link>
           <div className="relative w-full flex-1">
             <Input
-              type="search"
+              type="text"
               className="w-full"
               placeholder="Search for groceries, accessories and more..."
+              onChange={(event) => setSearch(event.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <Search className="absolute top-3 right-2" size={15} />
           </div>
@@ -338,8 +348,6 @@ function MainLayout() {
   );
 }
 
-export default MainLayout;
-
 function MenuIcon(props) {
   return (
     <svg
@@ -379,3 +387,5 @@ function MountainIcon(props) {
     </svg>
   );
 }
+
+export default MainLayout;

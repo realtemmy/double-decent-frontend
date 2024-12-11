@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import { Checkbox } from "@/components/ui/checkbox";
@@ -48,6 +49,8 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [categories, setCategories] = useState([]);
   const [openAccordion, setOpenAccordion] = useState("category");
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search");
 
   const handleOpen = () => setOpen(!open);
 
@@ -56,12 +59,12 @@ const Products = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["products", currentPage, categories],
+    queryKey: ["products", currentPage, categories, search],
     queryFn: async () =>
       await axiosService.get(
         `/products?page=${currentPage}&category=${categories.join(
           ","
-        )}&limit=20`
+        )}&limit=20&search=${search}`
       ),
   });
 
@@ -289,7 +292,16 @@ const Products = () => {
           Products catalogue
         </h2>
         <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(120px,1fr))] m-auto px-2">
-          {data.data?.length === 0 ? (
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {Array.from({ length: 4 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="bg-gray-200 animate-pulse h-40 w-full"
+                />
+              ))}
+            </div>
+          ) : data.data?.length === 0 ? (
             <div className="flex items-center justify-center w-full h-96">
               No products available.
             </div>
