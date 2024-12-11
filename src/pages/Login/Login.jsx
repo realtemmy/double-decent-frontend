@@ -27,11 +27,9 @@ const Login = () => {
   const mutation = useMutation({
     mutationFn: async (formData) => {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/user/login",
+        "https://double-decent-server.onrender.com/v1/user/login",
         formData
       );
-      console.log(response);
-
       return response.data;
     },
     onSuccess: (data) => {
@@ -52,8 +50,6 @@ const Login = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(formField);
-
     if (!formField.email || !formField.password) {
       return toast.warning("Please fill in all fields.");
     }

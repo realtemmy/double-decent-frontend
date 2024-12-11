@@ -240,7 +240,7 @@ function MainLayout() {
                 FAQ
               </Link>
               <Link
-                to="/help"
+                to="/contact-us"
                 className="px-3 font-semibold my-2 text-lg py-1 capitalize block hover:cursor-pointer text-white hover:text-white"
                 style={{
                   backgroundColor: "#C74E00",

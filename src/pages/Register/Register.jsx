@@ -4,13 +4,7 @@ import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
@@ -33,7 +27,7 @@ const Register = () => {
   const mutation = useMutation({
     mutationFn: async (formFields) => {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/user/signup",
+        "https://double-decent-server.onrender.com/v1/user/signup",
         formFields
       );
       return response.data;
@@ -46,7 +40,7 @@ const Register = () => {
       console.log(data);
     },
     onError: (error) => {
-      console.log("error: ", error);
+      // console.log("error: ", error);
       toast.error(error.message || "There was an error logging in");
     },
   });

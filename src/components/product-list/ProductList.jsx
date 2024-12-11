@@ -34,7 +34,7 @@ const ProductList = ({ title, slug, categoryId }) => {
     <div>
       <div className="flex items-center gap-2">
         <h2 className="text-xl font-semibold tracking-tight capitalize text-gray-900 mx-2">
-          {title}
+          {title && categoryId ? title: "Other products"}
         </h2>
         {slug && (
           <Link

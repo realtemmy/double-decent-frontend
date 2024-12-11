@@ -111,6 +111,14 @@ const Checkout = () => {
     mutation.mutate({cartItems, phone: user.phone, email: user.email, address: mapAddress.address});
   }
 
+  if(userLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 />
+      </div>
+    );
+  }
+
   return (
     <div className="font-[sans-serif] bg-white">
       <div className="flex max-sm:flex-col gap-12 max-lg:gap-4 h-full">

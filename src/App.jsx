@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Toaster } from "./components/ui/sonner";
 import { calculateTotal } from "./redux/cart/cartSlice";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 import MainLayout from "./components/MainLayout/MainLayout";
 import Home from "./pages/Home/Home";
@@ -25,22 +26,16 @@ import Checkout from "./pages/Checkout/Checkout";
 import NotFound from "./pages/NotFound/NotFound";
 import FAQ from "./pages/FAQ/FAQ";
 
-
 import Spinner from "./components/Spinner/Spinner";
 
 function App() {
   // Github pages configuration completed
   const dispatch = useDispatch();
   // TO build:
-  //  - Help page
-  //  - Footer
   //  - Search result + filter by section, category etc
   //  - Cart
   //  - Checkout
   //  - User profile, settings etc
-  //  - Get coordinates in address submission.. use google maps api
-  //  - Find a way to separate delivery fee
-  //  - Add and product to cart
   //  - Find a way to separate delivery fee from total amount
   //  - Make alias unique to each user
   //  - Use tinymce for product description setup
@@ -63,16 +58,37 @@ function App() {
             <Route path="/product/:productId" element={<ProductPage />} />
             <Route path="/category/:categoryName" element={<Category />} />
             <Route path="/section/:sectionName" element={<Section />} />
-            <Route path="/user" element={<User />} />
-            <Route path="/orders" element={<Orders />} />
+            <Route
+              path="/user"
+              element={
+                <ProtectedRoute>
+                  <User />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                <ProtectedRoute>
+                  <Orders />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
+            <Route
+              path="/checkout"
+              element={
+                <ProtectedRoute>
+                  <Checkout />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/faq" element={<FAQ />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
 
           {/* Not found */}
           <Route path="*" element={<NotFound />} />
