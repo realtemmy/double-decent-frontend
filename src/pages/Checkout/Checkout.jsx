@@ -45,7 +45,7 @@ const Checkout = () => {
   // Use google map for current location?
   const { data: user, isLoading: userLoading, error } = useUser();
 
-  const address = user?.location;
+  const [address, setAddress] = useState(user.location[0]);
 
   const {
     data: mapAddress,
@@ -92,32 +92,46 @@ const Checkout = () => {
     }
   };
 
-
   const mutation = useMutation({
     mutationFn: async (data) => {
-      const response = await axiosService.post("/order/paystack-checkout", data);
-      return response.data;
+      const response = await axiosService.post(
+        "/order/paystack-checkout",
+        data
+      );
+      console.log(response);
+      return response;
     },
     onSuccess: (data) => {
       window.location.href = data.url;
-    }
+    },
   });
 
   const handleCheckout = () => {
-    if(user.email || !mapAddress.address) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
-    mutation.mutate({cartItems, phone: user.phone, email: user.email, address: mapAddress.address});
-  }
+    if (!user.email || !(address || mapAddress?.address) || !user.phone) {
+      console.log(user.email, address, mapAddress?.address, user.phone);
 
-  if(userLoading) {
+      return toast.warning("Please fill in all required fields");
+    }
+    mutation.mutate({
+      cartItems,
+      phone: user.phone,
+      email: user.email,
+      address: address || mapAddress.address,
+      deliveryFee: 700,
+    });
+  };
+
+  if (userLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <Loader2 />
       </div>
     );
   }
+
+  const handleAddressChange = (value) => {
+    setAddress(value);
+  };
 
   return (
     <div className="font-[sans-serif] bg-white">
@@ -278,8 +292,11 @@ const Checkout = () => {
               </div>
 
               <section>
-                <RadioGroup defaultValue={address[0]?.alias}>
-                  {address.length === 0 ? (
+                <RadioGroup
+                  defaultValue={user.location[0]}
+                  onValueChange={handleAddressChange}
+                >
+                  {user.location.length === 0 ? (
                     <div className="text-center pb-2">
                       No address set yet, set address
                       <Link
@@ -302,13 +319,13 @@ const Checkout = () => {
                       .
                     </div>
                   ) : (
-                    address.map((address, index) => (
+                    user.location.map((location, index) => (
                       <div
                         className="flex items-baseline space-x-2 rounded-md border p-2"
                         key={index}
                       >
                         <RadioGroupItem
-                          value={address.alias}
+                          value={location}
                           id={`option-${index}`}
                         />
                         <Label
@@ -316,11 +333,11 @@ const Checkout = () => {
                           className="text-base"
                         >
                           <h5 className="font-semibold text-slate-600">
-                            {address.alias} - {address.street}
+                            {location.alias} - {location.street}
                           </h5>
-                          <p>{address.address}</p>
+                          <p>{location.address}</p>
                           <p className="text-sm text-slate-500">
-                            {address.state}, {address.lga}
+                            {location.state}, {location.lga}
                           </p>
                         </Label>
                       </div>
@@ -409,7 +426,11 @@ const Checkout = () => {
                   className="rounded-md px-6 py-3 w-full text-sm tracking-wide"
                   onClick={handleCheckout}
                 >
-                  Complete Purchase
+                  {mutation.isPending ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Complete Purchase"
+                  )}
                 </Button>
               </div>
             </div>
