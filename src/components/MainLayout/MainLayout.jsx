@@ -138,8 +138,10 @@ function MainLayout() {
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="cursor-pointer">
-                      User
+                      Profile
                     </DropdownMenuItem>
+                    <DropdownMenuItem>Orders</DropdownMenuItem>
+                    <DropdownMenuItem>Delivery address</DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">
                       Logout
                     </DropdownMenuItem>
@@ -155,7 +157,7 @@ function MainLayout() {
                     placeholder="Search for groceries, accessories and more..."
                     onChange={(event) => setSearch(event.target.value)}
                     onKeyDown={handleKeyDown}
-                    style={{}}
+                    // style={{}}
                   />
                 </div>
                 <Link
@@ -196,16 +198,28 @@ function MainLayout() {
                     {user.name}&#39;s account
                   </h4>
                   <div className="ms-4">
-                    <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1">
+                    <Link
+                      to="/user/profile"
+                      className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1"
+                      onClick={() => setOpen(false)}
+                    >
                       <span>User profile</span>
                       <ChevronRight size={20} />
                     </Link>
-                    <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1">
+                    <Link
+                      to="/user/orders"
+                      className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1"
+                      onClick={() => setOpen(false)}
+                    >
                       <span>Order history</span>
                       <ChevronRight size={20} />
                     </Link>
-                    <Link className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1">
-                      <span>Security Settings</span>
+                    <Link
+                      to="/user/address"
+                      className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1"
+                      onClick={() => setOpen(false)}
+                    >
+                      <span>Delivery address</span>
                       <ChevronRight size={20} />
                     </Link>
                   </div>

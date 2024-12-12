@@ -27,6 +27,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import FAQ from "./pages/FAQ/FAQ";
 
 import Spinner from "./components/Spinner/Spinner";
+import CheckoutSuccess from "./components/checkout-success/CheckoutSuccess";
 
 function App() {
   // Github pages configuration completed
@@ -39,6 +40,8 @@ function App() {
   //  - Keep track and use product's quantity in product page, instead of cartCount
   //  - Set max width for display of the entire app
   //  - Google sign up and login
+  //  - In user's, if there was an error getting user from hook, display error messageor just keep loading
+  //  - Pagination for orders
 
   const cartItems = useSelector((state) => state.cart.cartItems);
 
@@ -57,7 +60,7 @@ function App() {
             <Route path="/category/:categoryName" element={<Category />} />
             <Route path="/section/:sectionName" element={<Section />} />
             <Route
-              path="/user"
+              path="user/*"
               element={
                 <ProtectedRoute>
                   <User />
@@ -83,6 +86,7 @@ function App() {
             />
             <Route path="/faq" element={<FAQ />} />
           </Route>
+          <Route path="/checkout-success" element={<CheckoutSuccess />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
