@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Button } from "../ui/button";
 
+
 const CheckoutSuccess = () => {
     // Clear the cart after a successful order
     const cartItems = useSelector(state => state.cart.cartItems)
@@ -77,6 +78,7 @@ const CheckoutSuccess = () => {
           >
             Return to shopping
           </Link>
+
         </div>
       </div>
     </section>
