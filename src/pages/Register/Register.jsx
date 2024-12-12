@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -59,6 +60,30 @@ const Register = () => {
     }
     mutation.mutate(formFields);
   };
+
+
+
+
+  const responseMessage = async (response) => {
+    console.log(response);
+    if (response.credential) {
+      const { data } = await axios.post(
+        "https://double-decent-server.onrender.com/api/v1/user/google",
+        { token: response.credential } // Send token to the server
+      );
+      queryClient.setQueryData(["user"], data.data);
+      toast.success("Login successful");
+      localStorage.setItem("token", data.token);
+      navigate("/");
+      console.log(data);
+    } else {
+      console.error("No credential found in response.");
+    }
+  };
+  const errorMessage = (error) => {
+    toast.error(error.message || "There was an error signing with google.");
+  };
+
   return (
     <div className="flex w-full h-screen items-center justify-center">
       <Card className="w-full max-w-md">
@@ -120,9 +145,11 @@ const Register = () => {
             <Button type="submit" className="w-full" onClick={handleSubmit}>
               Create account
             </Button>
-            <Button variant="outline" className="w-full">
-              Sign up with google
-            </Button>
+            <GoogleLogin
+              onSuccess={responseMessage}
+              onError={errorMessage}
+              text="signup_with"
+            />
           </div>
           <div className="mt-4 text-center text-sm">
             Already have an account?

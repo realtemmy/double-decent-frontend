@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
+import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 
 const Login = () => {
@@ -54,6 +54,24 @@ const Login = () => {
       return toast.warning("Please fill in all fields.");
     }
     mutation.mutate(formField);
+  };
+  const responseMessage = async (response) => {
+    if (response.credential) {
+      const { data } = await axios.post(
+        "https://double-decent-server.onrender.com/api/v1/user/google",
+        { token: response.credential } // Send token to the server
+      );
+      queryClient.setQueryData(["user"], data.data);
+      toast.success("Login successful");
+      localStorage.setItem("token", data.token);
+      navigate("/");
+      console.log(data);
+    } else {
+      console.error("No credential found in response.");
+    }
+  };
+  const errorMessage = (error) => {
+    toast.error(error.message || "There was an error signing with google.");
   };
   return (
     <div className="flex w-full h-screen items-center justify-center">
@@ -103,9 +121,7 @@ const Login = () => {
                 "Login"
               )}
             </Button>
-            <Button variant="outline" className="w-full">
-              Login with Google
-            </Button>
+            <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
           </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
