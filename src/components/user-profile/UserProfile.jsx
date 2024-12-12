@@ -1,30 +1,10 @@
-import {
-  Check,
-  Edit,
-  Ellipsis,
-  Eye,
-  Hourglass,
-  House,
-  Loader,
-  LogOut,
-  Plus,
-  RefreshCcw,
-  Settings,
-  ShoppingBasket,
-  Trash2,
-  Truck,
-  User2,
-  X,
-} from "lucide-react";
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+
 import {
   Card,
   CardContent,
@@ -34,67 +14,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { commaSeparatedPrice } from "@/utils/helperFunctions";
 import { toast } from "sonner";
 import useUser from "@/hooks/use-user";
 
 import axiosService from "@/axios";
-import OrderDetails from "@/components/order-details/OrderDetails";
 
 const UserProfile = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { data: user = null } = useUser();
-  const [display, setDisplay] = useState("tabs");
   const [profile, setProfile] = useState({
     name: user?.name || "",
     email: user?.email || "",
@@ -109,18 +39,6 @@ const UserProfile = () => {
     }
   }, [user]);
 
-  // Get all orders
-  const {
-    data: orders,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["orders"],
-    queryFn: async () => {
-      const response = await axiosService.get("/order");
-      return response.data;
-    },
-  });
 
   const passwordMutation = useMutation({
     mutationFn: async (passwordField) => {
@@ -167,8 +85,6 @@ const UserProfile = () => {
     passwordMutation.mutate(passwordField);
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="px-2">
