@@ -33,15 +33,14 @@ function App() {
   // Github pages configuration completed
   const dispatch = useDispatch();
   // TO do:
-  //  - User profile, settings etc
   //  - Find a way to separate delivery fee from total amount ie set delivery fee's
   //  - Make alias unique to each user
   //  - Use tinymce for product description setup
   //  - Keep track and use product's quantity in product page, instead of cartCount
   //  - Set max width for display of the entire app
-  //  - Google sign up and login
   //  - In user's, if there was an error getting user from hook, display error messageor just keep loading
   //  - Pagination for orders
+  //  - Sign up link in homepage foor user's not logged in
 
   const cartItems = useSelector((state) => state.cart.cartItems);
 
@@ -64,14 +63,6 @@ function App() {
               element={
                 <ProtectedRoute>
                   <User />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/orders"
-              element={
-                <ProtectedRoute>
-                  <Orders />
                 </ProtectedRoute>
               }
             />

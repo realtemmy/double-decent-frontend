@@ -4,3 +4,15 @@ export const commaSeparatedPrice = (price) =>
     : "";
 
 export const slugTitleToString = (slug) => slug.replace(/-/g, " ");
+
+export const getPriceByLga = (lga) => {
+  let price = 0;
+  if (lga === "ikorodu") {
+    price = 500;
+  } else if (lga === "yaba") {
+    price = 800;
+  } else {
+    price = 1000;
+  }
+  return commaSeparatedPrice(price);
+};

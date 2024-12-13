@@ -29,7 +29,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { commaSeparatedPrice } from "@/utils/helperFunctions";
+import { commaSeparatedPrice, getPriceByLga } from "@/utils/helperFunctions";
 import useUser from "@/hooks/use-user";
 
 import { toast } from "sonner";
@@ -59,8 +59,6 @@ const Checkout = () => {
 
       return {
         address: data.display_name,
-        latitude: data.lat,
-        longitude: data.lon,
         state: data.address.state,
         lga: data.address.county,
         street: data.address.road,
@@ -283,7 +281,15 @@ const Checkout = () => {
                       </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                      <Button type="submit" size="sm">
+                      <Button
+                        type="submit"
+                        size="sm"
+                        onClick={() => {
+                          setAddress({
+                            ...mapAddress,
+                          });
+                        }}
+                      >
                         Use address
                       </Button>
                     </DialogFooter>
@@ -411,7 +417,7 @@ const Checkout = () => {
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
-
+              <div>Delivery Fee: {getPriceByLga(address.lga)}</div>
               <div className="flex gap-4 max-md:flex-col mt-8">
                 <Button
                   type="button"
