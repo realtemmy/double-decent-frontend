@@ -120,7 +120,6 @@ function MainLayout() {
                     placeholder="Search for groceries, accessories and more..."
                     onChange={(event) => setSearch(event.target.value)}
                     onKeyDown={handleKeyDown}
-                    style={{}}
                   />
                 </div>
 
