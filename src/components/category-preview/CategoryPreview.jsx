@@ -34,7 +34,7 @@ const CategoryPreview = () => {
           </h2>
 
           <ScrollArea className="w-full whitespace-nowrap rounded-md px-4 sm:px-6 lg:px-8 bg-gray-100">
-            <div className="flex justify-between flex-wrap max-w-2xl py-10 sm:py-16 lg:max-w-none lg:py-20">
+            <div className="flex justify-between gap-1 flex-wrap max-w-2xl py-10 sm:py-16 lg:max-w-none lg:py-20">
               {categories.map((category, index) => (
                 <div key={index} className="group relative">
                   <img
@@ -45,7 +45,7 @@ const CategoryPreview = () => {
                   <h3 className="mt-6 text-sm text-gray-500 text-center">
                     <Link
                       to={`/category/${category.slug}`}
-                      className="hover:text-gray-700"
+                      className="hover:text-gray-700 capitalize"
                     >
                       <span className="absolute inset-0" />
                       {category.name}

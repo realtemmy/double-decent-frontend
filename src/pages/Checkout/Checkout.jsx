@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -41,6 +42,7 @@ import { Input } from "@/components/ui/input";
 
 const Checkout = () => {
   const { cartItems, totalPrice } = useSelector((state) => state.cart);
+  const navigate = useNavigate();
   const [coords, setCoords] = useState(null);
   // Use google map for current location?
   const { data: user, isLoading: userLoading, error } = useUser();
@@ -115,7 +117,7 @@ const Checkout = () => {
       phone: user.phone,
       email: user.email,
       address: address || mapAddress.address,
-      deliveryFee: 700,
+      deliveryFee: getPriceByLga(address.lga),
     });
   };
 
@@ -136,43 +138,58 @@ const Checkout = () => {
       <div className="flex max-sm:flex-col gap-12 max-lg:gap-4 h-full">
         <div className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 sm:h-screen sm:sticky sm:top-0 lg:min-w-[370px] sm:min-w-[300px]">
           <div className="relative h-full">
-            <ScrollArea className="px-4 py-8 sm:overflow-auto sm:h-[calc(100vh-60px)]">
+            <ScrollArea className="px-4 py-8 sm:overflow-auto sm:max-h-[calc(100vh-60px)]">
               <div className="space-y-4">
-                {cartItems.map((item, index) => (
-                  <div className="flex items-start gap-4" key={index}>
-                    <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-3 shrink-0 bg-gray-300 rounded-md">
-                      <img src={item.image} className="w-full object-contain" />
-                    </div>
-                    <div className="w-full">
-                      <h3 className="text-base text-white capitalize">
-                        {item.name}
-                      </h3>
-                      <ul className="text-xs text-gray-300 space-y-2 mt-2">
-                        <li>
-                          Price
-                          <span className="float-right">
-                            {commaSeparatedPrice(item.price)}
-                          </span>
-                        </li>
-                        <li>
-                          Quantity{" "}
-                          <span className="float-right">{item.quantity}</span>
-                        </li>
-                        <li>
-                          Total Price{" "}
-                          <span className="float-right">
-                            {commaSeparatedPrice(item.price * item.quantity)}
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
+                {cartItems.length === 0 ? (
+                  <div className="text-white">
+                    No item in cart yet,{" "}
+                    <Link to="/products" className="text-lg underline">
+                      continue shopping
+                    </Link>
                   </div>
-                ))}
+                ) : (
+                  cartItems.map((item, index) => (
+                    <div className="flex items-start gap-4" key={index}>
+                      <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-3 shrink-0 bg-gray-300 rounded-md">
+                        <img
+                          src={item.image}
+                          className="w-full object-contain"
+                        />
+                      </div>
+                      <div className="w-full">
+                        <h3 className="text-base text-white capitalize">
+                          {item.name}
+                        </h3>
+                        <ul className="text-xs text-gray-300 space-y-2 mt-2">
+                          <li>
+                            Price
+                            <span className="float-right">
+                              {commaSeparatedPrice(item.price)}
+                            </span>
+                          </li>
+                          <li>
+                            Quantity{" "}
+                            <span className="float-right">{item.quantity}</span>
+                          </li>
+                          <li>
+                            Total Price{" "}
+                            <span className="float-right">
+                              {commaSeparatedPrice(item.price * item.quantity)}
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </ScrollArea>
 
             <div className="md:absolute md:left-0 md:bottom-0 bg-gray-800 w-full p-4">
-              <p className="text-white">Delivery Fee:</p>
+              <p className="flex flex-wrap gap-4 text-base text-white">
+                Delivery Fee:{" "}
+                <span className="ml-auto">{commaSeparatedPrice(getPriceByLga(address.lga))}</span>
+              </p>
               <h4 className="flex flex-wrap gap-4 text-base text-white">
                 Total{" "}
                 <span className="ml-auto">
@@ -228,7 +245,6 @@ const Checkout = () => {
                 <h3 className="text-base text-gray-800 mb-4">
                   Shipping Address
                 </h3>
-
                 <Dialog>
                   <DialogTrigger>
                     <Button
@@ -417,12 +433,16 @@ const Checkout = () => {
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
-              <div>Delivery Fee: {getPriceByLga(address.lga)}</div>
+              <div className="font-semibold my-2">
+                Delivery Fee: {commaSeparatedPrice(getPriceByLga(address.lga))}{" "}
+                to <span className="uppercase">{address.lga}</span>
+              </div>
               <div className="flex gap-4 max-md:flex-col mt-8">
                 <Button
                   type="button"
                   className="rounded-md px-6 py-3 w-full text-sm tracking-wide max-md:order-1"
                   variant="secondary"
+                  onClick={() => navigate("/cart")}
                 >
                   <MoveLeft />
                   Return to Cart
@@ -430,6 +450,7 @@ const Checkout = () => {
                 <Button
                   type="button"
                   className="rounded-md px-6 py-3 w-full text-sm tracking-wide"
+                  disabled={cartItems.length < 1}
                   onClick={handleCheckout}
                 >
                   {mutation.isPending ? (
