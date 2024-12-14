@@ -17,8 +17,6 @@ import ProductPage from "./components/product-page/ProductPage";
 import Category from "./pages/Category/Category";
 import Section from "./pages/Section/Section";
 
-import Orders from "./pages/Orders/Orders";
-
 import User from "./pages/User/User";
 import Cart from "./pages/Cart/Cart";
 import Checkout from "./pages/Checkout/Checkout";
@@ -33,7 +31,6 @@ function App() {
   // Github pages configuration completed
   const dispatch = useDispatch();
   // TO do:
-  //  - Find a way to separate delivery fee from total amount ie set delivery fee's
   //  - Make alias unique to each user
   //  - Use tinymce for product description setup
   //  - Keep track and use product's quantity in product page, instead of cartCount
@@ -41,6 +38,7 @@ function App() {
   //  - In user's, if there was an error getting user from hook, display error messageor just keep loading
   //  - Pagination for orders
   //  - Sign up link in homepage foor user's not logged in
+  //  - New order is not saving in DB yet, check webhook
 
   const cartItems = useSelector((state) => state.cart.cartItems);
 
@@ -59,7 +57,7 @@ function App() {
             <Route path="/category/:categoryName" element={<Category />} />
             <Route path="/section/:sectionName" element={<Section />} />
             <Route
-              path="user/*"
+              path="/user/*"
               element={
                 <ProtectedRoute>
                   <User />

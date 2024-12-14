@@ -146,7 +146,6 @@ const Cart = () => {
               </TableFooter>
             </Table>
 
-            {/* <Separator className="my-6" /> */}
           </div>
 
           {/* Checkout and Voucher Section */}

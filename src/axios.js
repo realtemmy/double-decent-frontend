@@ -1,8 +1,11 @@
 import axios from "axios";
 import { toast } from "sonner";
 
+// handle 403 (I think) for expired token
+
 const axiosService = axios.create({
-  baseURL: "https://double-decent-server.onrender.com/api/v1/",
+  // baseURL: "https://double-decent-server.onrender.com/api/v1/",
+  baseURL: "http://localhost:5000/api/v1/",
   headers: { "Content-Type": "application/json" },
 });
 

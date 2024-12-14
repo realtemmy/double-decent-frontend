@@ -14,5 +14,5 @@ export const getPriceByLga = (lga) => {
   } else {
     price = 1000;
   }
-  return commaSeparatedPrice(price);
+  return price;
 };

@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import {
   Accordion,
   AccordionContent,
@@ -124,14 +126,11 @@ function MainLayout() {
                 </div>
 
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="border-none outline-none">
-                    <Button
-                      className="capitalize border-none"
-                      variant="secondary"
-                    >
-                      <User />
-                      {user.name}
-                    </Button>
+                  <DropdownMenuTrigger className="border-none outline-none bg-transparent">
+                      <Avatar>
+                        <AvatarImage src={user.photo || "https://github.com/shadcn.png"} />
+                        <AvatarFallback>{user.name[0]}</AvatarFallback>
+                      </Avatar>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -164,6 +163,13 @@ function MainLayout() {
                   className="text-slate-700 font-semibold hover:text-slate-600 hover:underline"
                 >
                   Login
+                </Link>
+                |
+                <Link
+                  to="/register"
+                  className="text-slate-700 font-semibold hover:text-slate-600 hover:underline"
+                >
+                  Register
                 </Link>
               </>
             )}
