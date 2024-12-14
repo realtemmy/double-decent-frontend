@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Routes, Route, Outlet } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,6 +9,7 @@ import { House, LogOut, Settings, ShoppingBasket, User2 } from "lucide-react";
 import UserProfile from "@/components/user-profile/UserProfile";
 import Orders from "../Orders/Orders";
 import UserAddress from "@/components/user-address/UserAddress";
+import OrderPage from "@/components/Order/OrderPage";
 
 import useUser from "@/hooks/use-user";
 
@@ -20,6 +20,7 @@ const User = () => {
         <Route path="/" element={<UserRoutes />}>
           <Route path="profile" element={<UserProfile />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="orders/:orderId" element={<OrderPage />} /> 
           <Route path="address" element={<UserAddress />} />
         </Route>
       </Routes>
@@ -40,9 +41,9 @@ const UserRoutes = () => {
                 <Avatar className="h-20 w-20">
                   <AvatarImage
                     src={user.photo || "https://github.com/shadcn.png"}
-                    alt="@shadcn"
+                    alt="user photo"
                   />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarFallback>{user.name[0].toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <h4 className="mt-2 capitalize">{user.name}</h4>
               </center>

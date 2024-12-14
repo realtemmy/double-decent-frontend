@@ -16,6 +16,7 @@ import {
   Ellipsis,
   Eye,
   Hourglass,
+  Loader2,
   RefreshCcw,
   Trash2,
   Truck,
@@ -51,9 +52,11 @@ const Orders = () => {
   const [currentPage, setCurrentPage] = useState(1);
   // Get all orders
   const { isLoading, data, error } = useQuery({
-    queryKey: ["orders", activeTab],
+    queryKey: ["orders", activeTab, currentPage],
     queryFn: async () => {
-      const response = await axiosService.get(`/order?type=${activeTab}&page=${currentPage}`);
+      const response = await axiosService.get(
+        `/order?type=${activeTab}&page=${currentPage}`
+      );
       return response.data;
     },
   });
@@ -61,7 +64,6 @@ const Orders = () => {
   const handlePageChange = (currentPage) => {
     setCurrentPage(currentPage);
   };
-  console.log(data);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -76,38 +78,54 @@ const Orders = () => {
     return `${day}, ${weekday} ${month} ${year}`;
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  // console.log(data);
+  
+
   if (error) return <div>Error: {error.message}</div>;
   return (
     <>
-      {" "}
       <Tabs defaultValue="all" className="mx-1">
-        <TabsList className="grid w-full grid-cols-5 gap-1">
-          <TabsTrigger value="all" onClick={() => setActiveTab("all")}>
-            All
-          </TabsTrigger>
-          <TabsTrigger value="paid" onClick={() => setActiveTab("paid")}>
-            Paid
-          </TabsTrigger>
-          <TabsTrigger
-            value="confirmed"
-            onClick={() => setActiveTab("confirmed")}
-          >
-            Confirmed
-          </TabsTrigger>
-          <TabsTrigger
-            value="delivered"
-            onClick={() => setActiveTab("delivered")}
-          >
-            Delivered
-          </TabsTrigger>
-          <TabsTrigger
-            value="cancelled"
-            onClick={() => setActiveTab("cancelled")}
-          >
-            Cancelled
-          </TabsTrigger>
-        </TabsList>
+        <ScrollArea className="whitespace-nowrap">
+          <TabsList className="grid w-full grid-cols-5 justify-between min-w-96">
+            <TabsTrigger
+              value="all"
+              onClick={() => setActiveTab("all")}
+              className="mx-1 text-xs sm:text-sm"
+            >
+              All
+            </TabsTrigger>
+            <TabsTrigger
+              value="paid"
+              onClick={() => setActiveTab("paid")}
+              className="mx-1 text-xs sm:text-sm"
+            >
+              Paid
+            </TabsTrigger>
+            <TabsTrigger
+              value="confirmed"
+              onClick={() => setActiveTab("confirmed")}
+              className="mx-1 text-xs sm:text-sm"
+            >
+              Confirmed
+            </TabsTrigger>
+            <TabsTrigger
+              value="delivered"
+              onClick={() => setActiveTab("delivered")}
+              className="mx-1 text-xs sm:text-sm"
+            >
+              Delivered
+            </TabsTrigger>
+            <TabsTrigger
+              value="cancelled"
+              onClick={() => setActiveTab("cancelled")}
+              className="mx-1 text-xs sm:text-sm"
+            >
+              Cancelled
+            </TabsTrigger>
+          </TabsList>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+
         <TabsContent value={activeTab}>
           <ScrollArea className="w-full whitespace-nowrap">
             <Table>
@@ -121,10 +139,20 @@ const Orders = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.data.length === 0 ? (
-                  <div>No orders yet in {activeTab}</div>
+                {isLoading ? (
+                  <TableCell colSpan={5}>
+                    <div className="w-full flex items-center justify-center">
+                      <Loader2 className="animate-spin text-center block" />
+                    </div>
+                  </TableCell>
+                ) : data.data?.length === 0 ? (
+                  <TableCell colSpan={5}>
+                    <div className="text-center text-lg text-slate-600 font-medium">
+                      No orders yet in this section.
+                    </div>
+                  </TableCell>
                 ) : (
-                  data.data.map((order, index) => (
+                  data.data?.map((order, index) => (
                     <TableRow key={index}>
                       <TableCell className="font-medium text-xs">
                         {order._id}
@@ -199,14 +227,14 @@ const Orders = () => {
                   ))
                 )}
               </TableBody>
-              {/* <TableFooter>
+              <TableFooter>
                 <TableRow>
                   <TableCell colSpan={4} className="font-semibold">
                     Total
                   </TableCell>
                   <TableCell className="text-right">$2,500.00</TableCell>
                 </TableRow>
-              </TableFooter> */}
+              </TableFooter>
             </Table>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>

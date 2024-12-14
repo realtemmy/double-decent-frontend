@@ -37,7 +37,7 @@ const PaginationButton = ({ data, onPageChange }) => {
               aria-label="Go to previous page"
               disabled={!hasPrevPage}
               onClick={() => hasPrevPage && onPageChange(currentPage - 1)}
-              className={hasPrevPage ? "cursor-pointer" : "cursor-not-allowed"}
+              className={hasPrevPage ? "cursor-pointer" : "hidden"}
             />
           </PaginationItem>
 
@@ -76,7 +76,7 @@ const PaginationButton = ({ data, onPageChange }) => {
               aria-label="Go to next page"
               disabled={!hasNextPage}
               onClick={() => hasNextPage && onPageChange(currentPage + 1)}
-              className={hasNextPage ? "cursor-pointer" : "cursor-not-allowed"}
+              className={hasNextPage ? "cursor-pointer" : "hidden"}
             />
           </PaginationItem>
         </PaginationContent>
