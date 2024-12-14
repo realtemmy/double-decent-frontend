@@ -116,7 +116,7 @@ const Checkout = () => {
       cartItems,
       phone: user.phone,
       email: user.email,
-      address: address || mapAddress.address,
+      address: address.address || mapAddress.address,
       deliveryFee: getPriceByLga(address.lga),
     });
   };
