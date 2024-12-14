@@ -127,18 +127,27 @@ function MainLayout() {
 
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border-none outline-none bg-transparent">
-                      <Avatar>
-                        <AvatarImage src={user.photo || "https://github.com/shadcn.png"} />
-                        <AvatarFallback>{user.name[0]}</AvatarFallback>
-                      </Avatar>
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage
+                        src={user.photo || "https://github.com/shadcn.png"}
+                      />
+                      <AvatarFallback>
+                        {user.name[0].toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="cursor-pointer">
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      onClick={() => navigate("/user/profile")}
+                    >
                       Profile
                     </DropdownMenuItem>
-                    <DropdownMenuItem>Orders</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/user/address")}>
+                      Orders
+                    </DropdownMenuItem>
                     <DropdownMenuItem>Delivery address</DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">
                       Logout
@@ -327,7 +336,7 @@ function MainLayout() {
               >
                 <CircleHelp size={20} /> FAQ
               </Link>
-              <DropdownMenu>
+              <DropdownMenu >
                 <DropdownMenuTrigger className="border-none outline-none">
                   <Button
                     className="capitalize border-none"
@@ -337,15 +346,19 @@ function MainLayout() {
                     {user.name}&#39;s Account
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
+                <DropdownMenuContent className="w-52">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="cursor-pointer"
-                    onClick={() => navigate("/user")}
+                    onClick={() => navigate("/user/profile")}
                   >
-                    User
+                    Profile
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/user/address")}>
+                    Orders
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>Delivery address</DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer">
                     Logout
                   </DropdownMenuItem>
