@@ -37,6 +37,8 @@ import useUser from "@/hooks/use-user";
 import axiosService from "@/axios";
 
 import Spinner from "../Spinner/Spinner";
+import Logo from "../Logo/Logo";
+import defaultUser from "./../../assets/default.jpg"
 
 function MainLayout() {
   const navigate = useNavigate("");
@@ -104,6 +106,9 @@ function MainLayout() {
   return (
     <>
       {isLoading && <Spinner />}
+      <div className="w-full">
+        <Logo />
+      </div>
       <header className="flex justify-between h-20 w-full shrink-0 items-center px-4 md:px-6">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
@@ -119,7 +124,7 @@ function MainLayout() {
                   <Input
                     type="text"
                     className="w-full text-xs max-w-md m-auto"
-                    placeholder="Search for groceries, accessories and more..."
+                    // placeholder="Search for groceries, accessories and more..."
                     onChange={(event) => setSearch(event.target.value)}
                     onKeyDown={handleKeyDown}
                   />
@@ -128,9 +133,7 @@ function MainLayout() {
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border-none outline-none bg-transparent">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage
-                        src={user.photo || "https://github.com/shadcn.png"}
-                      />
+                      <AvatarImage src={user.photo || defaultUser} />
                       <AvatarFallback>
                         {user.name[0].toUpperCase()}
                       </AvatarFallback>
@@ -336,7 +339,7 @@ function MainLayout() {
               >
                 <CircleHelp size={20} /> FAQ
               </Link>
-              <DropdownMenu >
+              <DropdownMenu>
                 <DropdownMenuTrigger className="border-none outline-none">
                   <Button
                     className="capitalize border-none"

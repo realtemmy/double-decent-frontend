@@ -34,3 +34,9 @@
 - Checkout design by [Readymadeui](https://readymadeui.com/)
 - Flowbite
 - Shadcn
+
+#### Lighthouse results
+- Performance - 98 
+- Accessibility - 88
+- Best practices - 100
+- SEO - 67
