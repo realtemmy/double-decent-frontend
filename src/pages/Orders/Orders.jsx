@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
@@ -48,6 +49,7 @@ import { Button } from "@/components/ui/button";
 import PaginationButton from "@/components/Pagination/Pagination";
 
 const Orders = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   // Get all orders
@@ -153,7 +155,7 @@ const Orders = () => {
                   </TableCell>
                 ) : (
                   data.data?.map((order, index) => (
-                    <TableRow key={index}>
+                    <TableRow key={index} onClick={() => navigate(`/user/orders/${order._id}`)}>
                       <TableCell className="font-medium text-xs">
                         {order._id}
                       </TableCell>
