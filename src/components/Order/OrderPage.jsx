@@ -1,15 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import OrderTracking from "../order-tracking/OrderTracking";
 
 import useUser from "@/hooks/use-user";
 
@@ -30,54 +23,27 @@ const OrderPage = () => {
   console.log(data);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <Skeleton className="w-full h-[100px] bg-gray-200 my-1" />
+        <Skeleton className="w-full h-[100px] bg-gray-200 my-1" />
+        <Skeleton className="w-full h-[100px] bg-gray-200 my-1" />
+      </>
+    );
   }
   if (error) {
     return <div>There was an error fetching data: {error.message}</div>;
   }
   return (
     <>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="flex gap-2 col-span-2 sm:col-span-1 md:col-span-1">
-          <Input placeholder="Search by order ID" />
-          <Button>Search</Button>
-        </div>
-        <div className="flex justify-evenly col-span-2 sm:col-span-1">
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="paid">Paid</SelectItem>
-              <SelectItem value="confirmed">Confirmed</SelectItem>
-              <SelectItem value="delivered">Delivered</SelectItem>
-              <SelectItem value="cancelled">Cancelled</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Duration" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="today">Today</SelectItem>
-              <SelectItem value="7 days">Last 7 days</SelectItem>
-              <SelectItem value="30 days">Last month</SelectItem>
-              <SelectItem value="6 months">Last 6 months</SelectItem>
-              <SelectItem value="1 year">Last year</SelectItem>
-              <SelectItem value="all">All time</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
       <section className="bg-white py-8 antialiased dark:bg-gray-900">
         <form className="mx-4">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-            Order - <span className="text-base">{orderId}</span>
-          </h2>
-          <div>
-            <div>Status</div>
+          <div className="w-full justify-between items-start flex sm:flex-row flex-col gap-3">
+            <h3 className="text-gray-900 text-lg font-semibold font-manrope leading-9">
+              Order ID: <span className="text-sm">{orderId}</span>
+            </h3>
           </div>
-
+          <OrderTracking status={data.status} />
           <div className="mt-6 space-y-4 border-b border-t border-gray-200 py-8 dark:border-gray-700 sm:mt-8">
             <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
               Billing & Delivery information
@@ -93,14 +59,24 @@ const OrderPage = () => {
                 <span className="capitalize">{data.address}</span>
               </dd>
             </dl>
-            <dl>
-              <dt className="text-base font-medium text-gray-900 dark:text-white">
-                Payment method
-              </dt>
-              <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
-                {data.paymentMode} / {data.paymentChannel}
-              </dd>
-            </dl>
+            <div className="grid grid-cols-2">
+              <dl className="col-span-2 md:col-span-1">
+                <dt className="text-base font-medium text-gray-900 dark:text-white">
+                  Payment method
+                </dt>
+                <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                  {data.paymentMode} / {data.paymentChannel}
+                </dd>
+              </dl>
+              <dl className="col-span-2 md:col-span-1">
+                <dt className="text-base font-medium text-gray-900 dark:text-white">
+                  TransactionId
+                </dt>
+                <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                  {data.transactionId}
+                </dd>
+              </dl>
+            </div>
           </div>
 
           <div className="mt-6 sm:mt-8">

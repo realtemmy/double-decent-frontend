@@ -116,9 +116,9 @@ function MainLayout() {
               </Button>
             </SheetTrigger>
             <div className="lg:hidden ms-2 flex justify-between items-center w-full my-2">
-              <div>
+              <Link to="/">
                 <Logo />
-              </div>
+              </Link>
               <Input
                 type="text"
                 className="hidden md:block w-full max-w-lg mx-2"
@@ -308,10 +308,10 @@ function MainLayout() {
             </SheetContent>
           </Sheet>
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-2">
           <Input
             type="text"
-            className="md:hidden w-full max-w-lg mx-2"
+            className="md:hidden w-full max-w-lg mx-2 text-xs"
             placeholder="Search for groceries, accessories and more..."
             onChange={(event) => setSearch(event.target.value)}
             onKeyDown={handleKeyDown}
