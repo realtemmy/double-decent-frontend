@@ -47,6 +47,8 @@ import OrderDetails from "@/components/order-details/OrderDetails";
 import { Button } from "@/components/ui/button";
 
 import PaginationButton from "@/components/Pagination/Pagination";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Orders = () => {
   const navigate = useNavigate();
@@ -86,6 +88,38 @@ const Orders = () => {
   if (error) return <div>Error: {error.message}</div>;
   return (
     <>
+      <div className="grid grid-cols-2 gap-4 my-4">
+        <div className="flex gap-2 col-span-2 sm:col-span-1 md:col-span-1 mx-1">
+          <Input placeholder="Search by order ID" />
+          <Button>Search</Button>
+        </div>
+        <div className="flex justify-evenly gap-2 col-span-2 sm:col-span-1">
+          <Select className="col-span-2">
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="paid">Paid</SelectItem>
+              <SelectItem value="confirmed">Confirmed</SelectItem>
+              <SelectItem value="delivered">Delivered</SelectItem>
+              <SelectItem value="cancelled">Cancelled</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select className="col-span-2">
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Duration" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="today">Today</SelectItem>
+              <SelectItem value="7 days">Last 7 days</SelectItem>
+              <SelectItem value="30 days">Last month</SelectItem>
+              <SelectItem value="6 months">Last 6 months</SelectItem>
+              <SelectItem value="1 year">Last year</SelectItem>
+              <SelectItem value="all">All time</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
       <Tabs defaultValue="all" className="mx-1">
         <ScrollArea className="whitespace-nowrap">
           <TabsList className="grid w-full grid-cols-5 justify-between min-w-96">
@@ -155,7 +189,10 @@ const Orders = () => {
                   </TableCell>
                 ) : (
                   data.data?.map((order, index) => (
-                    <TableRow key={index} onClick={() => navigate(`/user/orders/${order._id}`)}>
+                    <TableRow
+                      key={index}
+                      onClick={() => navigate(`/user/orders/${order._id}`)}
+                    >
                       <TableCell className="font-medium text-xs">
                         {order._id}
                       </TableCell>

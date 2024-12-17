@@ -56,7 +56,8 @@ function App() {
   //  - Set max width for display of the entire app
   //  - In user's, if there was an error getting user from hook, display error messageor just keep loading
   //  - Keep track of payment, delivered, cancelled and completed date for order
-  //  - Find away to keep track and save of delivery fees in order and not in product and maybe alias title
+  //  - Find away to keep track and save of delivery fees in order and not in product and maybe alias title\
+  //  - Add date to order tracking stuff
 
   return (
     <>
