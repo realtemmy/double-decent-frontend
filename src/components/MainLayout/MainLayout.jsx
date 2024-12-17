@@ -38,7 +38,7 @@ import axiosService from "@/axios";
 
 import Spinner from "../Spinner/Spinner";
 import Logo from "../Logo/Logo";
-import defaultUser from "./../../assets/default.jpg"
+import defaultUser from "./../../assets/default.jpg";
 
 function MainLayout() {
   const navigate = useNavigate("");
@@ -106,220 +106,223 @@ function MainLayout() {
   return (
     <>
       {isLoading && <Spinner />}
-      <div className="w-full">
-        <Logo />
-      </div>
-      <header className="flex justify-between h-20 w-full shrink-0 items-center px-4 md:px-6">
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="lg:hidden">
-              <MenuIcon className="h-6 w-6" />
-              <span className="sr-only">Toggle navigation menu</span>
-            </Button>
-          </SheetTrigger>
-          <div className="flex items-center gap-1 md:gap-4 lg:hidden w-full">
-            {user ? (
-              <>
-                <div className="relative w-full flex-1 ms-2 sm:m-auto">
-                  <Input
-                    type="text"
-                    className="w-full text-xs max-w-md m-auto"
-                    // placeholder="Search for groceries, accessories and more..."
-                    onChange={(event) => setSearch(event.target.value)}
-                    onKeyDown={handleKeyDown}
-                  />
-                </div>
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="border-none outline-none bg-transparent">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.photo || defaultUser} />
-                      <AvatarFallback>
-                        {user.name[0].toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={() => navigate("/user/profile")}
+      <header className="h-fit w-full shrink-0 items-center px-4 md:px-6">
+        <div className="flex items-center">
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" className="lg:hidden">
+                <MenuIcon className="h-6 w-6" />
+                <span className="sr-only">Toggle navigation menu</span>
+              </Button>
+            </SheetTrigger>
+            <div className="lg:hidden ms-2 flex justify-between items-center w-full my-2">
+              <div>
+                <Logo />
+              </div>
+              <Input
+                type="text"
+                className="hidden md:block w-full max-w-lg mx-2"
+                placeholder="Search for groceries, accessories and more..."
+                onChange={(event) => setSearch(event.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              <div className="flex items-center gap-4">
+                {user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="border-none outline-none bg-transparent">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={user.photo || defaultUser} />
+                        <AvatarFallback>
+                          {user?.name ? user.name[0].toUpperCase() : "?"}
+                        </AvatarFallback>
+                      </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={() => navigate("/user/profile")}
+                      >
+                        Profile
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => navigate("/user/address")}
+                      >
+                        Orders
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>Delivery Address</DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        // onClick={handleLogout}
+                      >
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      className="text-slate-700 font-semibold hover:text-slate-600 hover:underline text-sm"
                     >
-                      Profile
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate("/user/address")}>
-                      Orders
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>Delivery address</DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer">
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
-            ) : (
-              <>
-                <div className="relative w-full flex-1 ms-2 sm:m-auto">
-                  <Input
-                    type="text"
-                    className="w-full text-xs max-w-md m-auto"
-                    placeholder="Search for groceries, accessories and more..."
-                    onChange={(event) => setSearch(event.target.value)}
-                    onKeyDown={handleKeyDown}
-                    // style={{}}
-                  />
+                      Login
+                    </Link>
+                    <Link
+                      to="/register"
+                      className="text-slate-700 font-semibold hover:text-slate-600 hover:underline text-sm"
+                    >
+                      Signup
+                    </Link>
+                  </>
+                )}
+                <div
+                  className="relative cursor-pointer"
+                  onClick={handleCartNavigate}
+                >
+                  <ShoppingCart color="orange" />
+                  <sup className="absolute -top-1 -right-1 text-white font-semibold bg-orange-500 border p-1 py-2 rounded-full min-w-[20px] text-center">
+                    {cartCount}
+                  </sup>
                 </div>
-                <Link
-                  to="/login"
-                  className="text-slate-700 font-semibold hover:text-slate-600 hover:underline"
-                >
-                  Login
-                </Link>
-                |
-                <Link
-                  to="/register"
-                  className="text-slate-700 font-semibold hover:text-slate-600 hover:underline"
-                >
-                  Register
-                </Link>
-              </>
-            )}
-
-            <div
-              className="relative cursor-pointer"
-              onClick={handleCartNavigate}
-            >
-              <ShoppingCart color="orange" />{" "}
-              <sup className="absolute -top-1 -right-1 text-white font-semibold bg-orange-500 border p-1 py-2 rounded-full">
-                {cartCount}
-              </sup>
+              </div>
             </div>
-          </div>
 
-          <SheetContent side="left" className="px-0">
-            <ScrollArea className="h-[calc(100vh-20px)] rounded-md mt-1 pb-3">
-              <Link to="/" className="mr-6 hidden lg:flex">
-                <MountainIcon className="h-6 w-6" />
-                <span className="sr-only">Acme Inc</span>
-              </Link>
+            {/* Sidebar content */}
+            <SheetContent side="left" className="px-0">
+              <ScrollArea className="h-[calc(100vh-20px)] rounded-md mt-1 pb-3">
+                <Link to="/" className="mr-6 hidden lg:flex">
+                  <MountainIcon className="h-6 w-6" />
+                  <span className="sr-only">Acme Inc</span>
+                </Link>
 
-              {user && (
-                <div className="grid gap-2 py-6 w-full">
+                {user && (
+                  <div className="grid gap-2 py-6 w-full">
+                    <h4
+                      className="text-white px-3 font-semibold text-lg py-1 capitalize hover:cursor-pointer"
+                      style={{
+                        backgroundColor: "#C74E00",
+                      }}
+                    >
+                      {user.name}&#39;s account
+                    </h4>
+                    <div className="ms-4">
+                      <Link
+                        to="/user/profile"
+                        className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1"
+                        onClick={() => setOpen(false)}
+                      >
+                        <span>User profile</span>
+                        <ChevronRight size={20} />
+                      </Link>
+                      <Link
+                        to="/user/orders"
+                        className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1"
+                        onClick={() => setOpen(false)}
+                      >
+                        <span>Order history</span>
+                        <ChevronRight size={20} />
+                      </Link>
+                      <Link
+                        to="/user/address"
+                        className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1"
+                        onClick={() => setOpen(false)}
+                      >
+                        <span>Delivery address</span>
+                        <ChevronRight size={20} />
+                      </Link>
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid gap-2 py- w-full">
                   <h4
-                    className="text-white px-3 font-semibold text-lg py-1 capitalize hover:cursor-pointer"
+                    className="text-white px-1 font-semibold text-xl py-1 hover:cursor-pointer"
                     style={{
                       backgroundColor: "#C74E00",
                     }}
                   >
-                    {user.name}&#39;s account
+                    Categories
                   </h4>
-                  <div className="ms-4">
-                    <Link
-                      to="/user/profile"
-                      className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1"
-                      onClick={() => setOpen(false)}
-                    >
-                      <span>User profile</span>
-                      <ChevronRight size={20} />
-                    </Link>
-                    <Link
-                      to="/user/orders"
-                      className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1"
-                      onClick={() => setOpen(false)}
-                    >
-                      <span>Order history</span>
-                      <ChevronRight size={20} />
-                    </Link>
-                    <Link
-                      to="/user/address"
-                      className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1"
-                      onClick={() => setOpen(false)}
-                    >
-                      <span>Delivery address</span>
-                      <ChevronRight size={20} />
-                    </Link>
-                  </div>
+                  <Accordion
+                    type="single"
+                    collapsible
+                    onValueChange={handleChange}
+                    className="px-3 m-0"
+                  >
+                    {categories.map((category, index) => (
+                      <AccordionItem value={category.id} key={index}>
+                        <AccordionTrigger className="capitalize">
+                          {category.name}
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          {secLoading ? (
+                            <div>Loading...</div>
+                          ) : sections.length === 0 ? (
+                            <div>No section under category</div>
+                          ) : (
+                            sections.map((section) => (
+                              <Link
+                                key={section._id}
+                                to={`/section/${section.slug}`}
+                                onClick={handleClose}
+                                className="hover:underline hover:text-slate-600 capitalize block py-1"
+                              >
+                                {section.name}
+                              </Link>
+                            ))
+                          )}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
                 </div>
-              )}
-
-              <div className="grid gap-2 py- w-full">
-                <h4
-                  className="text-white px-1 font-semibold text-xl py-1 hover:cursor-pointer"
+                <Link
+                  to="/help"
+                  className="px-3 font-semibold my-2 text-lg py-1 capitalize block hover:cursor-pointer text-white hover:text-white"
                   style={{
                     backgroundColor: "#C74E00",
                   }}
                 >
-                  Categories
-                </h4>
-                <Accordion
-                  type="single"
-                  collapsible
-                  onValueChange={handleChange}
-                  className="px-3 m-0"
+                  Help
+                </Link>
+                <Link
+                  to="/help"
+                  className="px-3 font-semibold my-2 text-lg py-1 capitalize block hover:cursor-pointer text-white hover:text-white"
+                  style={{
+                    backgroundColor: "#C74E00",
+                  }}
                 >
-                  {categories.map((category, index) => (
-                    <AccordionItem value={category.id} key={index}>
-                      <AccordionTrigger className="capitalize">
-                        {category.name}
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        {secLoading ? (
-                          <div>Loading...</div>
-                        ) : sections.length === 0 ? (
-                          <div>No section under category</div>
-                        ) : (
-                          sections.map((section) => (
-                            <Link
-                              key={section._id}
-                              to={`/section/${section.slug}`}
-                              onClick={handleClose}
-                              className="hover:underline hover:text-slate-600 capitalize block py-1"
-                            >
-                              {section.name}
-                            </Link>
-                          ))
-                        )}
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              </div>
-              <Link
-                to="/help"
-                className="px-3 font-semibold my-2 text-lg py-1 capitalize block hover:cursor-pointer text-white hover:text-white"
-                style={{
-                  backgroundColor: "#C74E00",
-                }}
-              >
-                Help
-              </Link>
-              <Link
-                to="/help"
-                className="px-3 font-semibold my-2 text-lg py-1 capitalize block hover:cursor-pointer text-white hover:text-white"
-                style={{
-                  backgroundColor: "#C74E00",
-                }}
-              >
-                FAQ
-              </Link>
-              <Link
-                to="/contact-us"
-                className="px-3 font-semibold my-2 text-lg py-1 capitalize block hover:cursor-pointer text-white hover:text-white"
-                style={{
-                  backgroundColor: "#C74E00",
-                }}
-              >
-                Contact us
-              </Link>
-            </ScrollArea>
-          </SheetContent>
-        </Sheet>
+                  FAQ
+                </Link>
+                <Link
+                  to="/contact-us"
+                  className="px-3 font-semibold my-2 text-lg py-1 capitalize block hover:cursor-pointer text-white hover:text-white"
+                  style={{
+                    backgroundColor: "#C74E00",
+                  }}
+                >
+                  Contact us
+                </Link>
+              </ScrollArea>
+            </SheetContent>
+          </Sheet>
+        </div>
+        <div className="flex justify-center">
+          <Input
+            type="text"
+            className="md:hidden w-full max-w-lg mx-2"
+            placeholder="Search for groceries, accessories and more..."
+            onChange={(event) => setSearch(event.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
 
+        {/* Desktop */}
         <nav className="hidden lg:grid grid-cols-[150px_1fr_1fr] w-full">
           <Link to="/" className="mr-6 hidden lg:flex">
-            <MountainIcon className="h-6 w-6" />
-            <span className="sr-only">Acme Inc</span>
+            <Logo className="h-6 w-6" />
+            <span className="sr-only">Double decent</span>
           </Link>
           <div className="relative w-full flex-1">
             <Input
@@ -398,6 +401,15 @@ function MainLayout() {
               >
                 Sign up
               </Link>
+              <div
+                className="relative cursor-pointer"
+                onClick={handleCartNavigate}
+              >
+                <ShoppingCart color="orange" />{" "}
+                <sup className="absolute -top-1 -right-1 text-white font-semibold bg-orange-500 border p-1 py-2 rounded-full">
+                  {cartCount}
+                </sup>
+              </div>
             </div>
           )}
         </nav>
