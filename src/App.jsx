@@ -49,6 +49,15 @@ function App() {
     dispatch(calculateTotal());
   }, [cartItems, dispatch]);
 
+  // TO do:
+  //  - Make alias unique to each user
+  //  - Use tinymce for product description setup
+  //  - Keep track and use product's quantity in product page, instead of cartCount
+  //  - Set max width for display of the entire app
+  //  - In user's, if there was an error getting user from hook, display error messageor just keep loading
+  //  - Keep track of payment, delivered, cancelled and completed date for order
+  //  - Find away to keep track and save of delivery fees in order and not in product and maybe alias title
+
   return (
     <>
       <Routes>
@@ -94,12 +103,4 @@ function App() {
 
 export default App;
 
-// TO do:
-//  - Make alias unique to each user
-//  - Use tinymce for product description setup
-//  - Keep track and use product's quantity in product page, instead of cartCount
-//  - Set max width for display of the entire app
-//  - In user's, if there was an error getting user from hook, display error messageor just keep loading
-//  - Pagination for orders
-//  - Sign up link in homepage foor user's not logged in
-//  - New order is not saving in DB yet, check webhook
+
