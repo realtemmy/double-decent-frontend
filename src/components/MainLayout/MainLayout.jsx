@@ -319,7 +319,7 @@ function MainLayout() {
         </div>
 
         {/* Desktop */}
-        <nav className="hidden lg:grid grid-cols-[150px_1fr_1fr] w-full">
+        <nav className="hidden lg:grid grid-cols-[150px_1fr_1fr] items-center w-full">
           <Link to="/" className="mr-6 hidden lg:flex">
             <Logo className="h-6 w-6" />
             <span className="sr-only">Double decent</span>

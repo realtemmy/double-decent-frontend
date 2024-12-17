@@ -58,7 +58,7 @@ const Hero = () => {
         {categories.map((category, index) => (
           <Link
             key={index}
-            to="/"
+            to={`/category/${category.slug}`}
             className="flex items-center md:justify-center h-10 hover:text-gray-900 dark:hover:text-white capitalize font-semibold text-xl"
           >
             {category.name}
