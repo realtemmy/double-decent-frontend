@@ -1,11 +1,16 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Button } from "../ui/button";
-
+import { clearCart } from "@/redux/cart/cartSlice";
 
 const CheckoutSuccess = () => {
-    // Clear the cart after a successful order
-    const cartItems = useSelector(state => state.cart.cartItems)
+  // Get reference from the url query
+  const dispatch = useDispatch();
+  // Clear the cart after a successful order
+  useEffect(() => {
+    dispatch(clearCart());
+  }, [dispatch]);
   return (
     <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
       <div className="mx-auto max-w-2xl px-4 2xl:px-0">
@@ -78,11 +83,10 @@ const CheckoutSuccess = () => {
           >
             Return to shopping
           </Link>
-
         </div>
       </div>
     </section>
   );
-}
+};
 
-export default CheckoutSuccess
+export default CheckoutSuccess;

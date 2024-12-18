@@ -7,7 +7,7 @@ import {
   User,
 } from "lucide-react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
@@ -42,6 +42,7 @@ import defaultUser from "./../../assets/default.jpg";
 
 function MainLayout() {
   const navigate = useNavigate("");
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const { cartCount } = useSelector((state) => state.cart);
   const [categoryId, setCategoryId] = useState("");
@@ -95,6 +96,12 @@ function MainLayout() {
     if (event.key === "Enter") {
       navigate(`/products?search=${search.replace(" ", "-")}`);
     }
+  };
+
+  const handleLogout = () => {
+    queryClient.invalidateQueries(["user"]);
+    localStorage.removeItem("token");
+    navigate("/");
   };
 
   if (isLoading) {
@@ -154,7 +161,7 @@ function MainLayout() {
                       <DropdownMenuItem>Delivery Address</DropdownMenuItem>
                       <DropdownMenuItem
                         className="cursor-pointer"
-                        // onClick={handleLogout}
+                        onClick={handleLogout}
                       >
                         Logout
                       </DropdownMenuItem>
@@ -361,11 +368,16 @@ function MainLayout() {
                   >
                     Profile
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/user/address")}>
+                  <DropdownMenuItem onClick={() => navigate("/user/orders")}>
                     Orders
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Delivery address</DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer">
+                  <DropdownMenuItem onClick={() => navigate("/user/address")}>
+                    Delivery address
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="cursor-pointer bg-red-50 text-red-700"
+                    onClick={handleLogout}
+                  >
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
