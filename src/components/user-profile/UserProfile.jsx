@@ -1,10 +1,22 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { CameraIcon, Loader2 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Card,
   CardContent,
@@ -24,6 +36,7 @@ import axiosService from "@/axios";
 const UserProfile = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+
   const { data: user = null } = useUser();
   const [profile, setProfile] = useState({
     name: user?.name || "",
@@ -39,19 +52,41 @@ const UserProfile = () => {
     }
   }, [user]);
 
+  const [photo, setPhoto] = useState(null);
+  const [open, setOpen] = useState(false);
 
   const passwordMutation = useMutation({
     mutationFn: async (passwordField) => {
-      console.log(passwordField);
-
       await axiosService.patch("/user/update-password", passwordField);
     },
-
     onSuccess: () => {
       toast.success("Password updated successfully");
       localStorage.removeItem("token");
       navigate("/login");
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(["user"]);
+    },
+  });
+  const photoMutation = useMutation({
+    mutationFn: async () => {
+      const formData = new FormData();
+      formData.append("photo", photo);
+      const response = await axiosService.patch("/user/upload-user-image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response);
+    },
+    onSuccess: () => {
+      toast.success("Profile photo updated successfully.");
+      queryClient.invalidateQueries(["user"])
+      setOpen(false);
+    },
+    onError: (error) => {
+      toast.error(
+        error.message || "There was an error uploading profile photo"
+      );
+      setOpen(false);
     },
   });
 
@@ -85,9 +120,89 @@ const UserProfile = () => {
     passwordMutation.mutate(passwordField);
   };
 
+  const handleImageUpload = () => {
+    photoMutation.mutate();
+  };
 
   return (
     <div className="px-2">
+      <div className="flex md:hidden gap-4 items-center flex-col justify-center my-2">
+        <div className="w-fit relative">
+          <Avatar className="h-20 w-20 block">
+            <AvatarImage src={user.photo} />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <span className="absolute bottom-3 -right-1 cursor-pointer">
+            <CameraIcon />
+          </span>
+        </div>
+        <div className="flex gap-4">
+          <Dialog open={open && !!photo} onOpenChange={setOpen}>
+            <DialogTrigger>
+              <div className="relative">
+                <Button>Change Photo</Button>
+                <input
+                  type="file"
+                  className="absolute w-full left-0 opacity-0"
+                  onChange={(event) => setPhoto(event.target.files[0])}
+                />
+              </div>
+            </DialogTrigger>
+            <DialogContent className="max-w-[400px] max-h-[500px]">
+              <DialogHeader>
+                <DialogDescription>
+                  <div className="text-center flex items-center justify-center">
+                    {photo && (
+                      <img
+                        src={URL.createObjectURL(photo)}
+                        alt="preview image"
+                        className="w-full max-w-[400px] max-h-[400px] rounded"
+                      />
+                    )}
+                  </div>
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button type="submit" onClick={handleImageUpload}>
+                  {photoMutation.isPending ? (
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="animate-spin" />
+                      <span>
+                        <i>Loading</i>
+                      </span>
+                    </div>
+                  ) : (
+                    "Upload image"
+                  )}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog>
+            <DialogTrigger>
+              <Button variant="secondary">View Photo</Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-[400px] max-h-[500px]">
+              <DialogHeader>
+                <DialogDescription>
+                  <img
+                    src={user.photo}
+                    className="w-full max-w-[400px] max-h-[400px] rounded"
+                    alt="user photo"
+                  />
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="sm:justify-start">
+                <DialogClose asChild>
+                  <Button type="button">Close</Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
+
       <Tabs defaultValue="account">
         <TabsList className="grid w-full grid-cols-2 gap-1">
           <TabsTrigger value="account">Account</TabsTrigger>
