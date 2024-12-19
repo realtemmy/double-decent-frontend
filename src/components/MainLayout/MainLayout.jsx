@@ -147,38 +147,101 @@ function MainLayout() {
               />
               <div className="flex items-center gap-4">
                 {user ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className="border-none outline-none bg-transparent">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={user.photo || defaultUser} />
-                        <AvatarFallback>
-                          {user?.name ? user.name[0].toUpperCase() : "?"}
-                        </AvatarFallback>
-                      </Avatar>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        className="cursor-pointer"
-                        onClick={() => navigate("/user/profile")}
-                      >
-                        Profile
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => navigate("/user/address")}
-                      >
-                        Orders
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>Delivery Address</DropdownMenuItem>
-                      <DropdownMenuItem
-                        className="cursor-pointer"
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  // <DropdownMenu>
+                  //   <DropdownMenuTrigger className="border-none outline-none bg-transparent">
+                  //     <Avatar className="h-8 w-8">
+                  //       <AvatarImage src={user.photo || defaultUser} />
+                  //       <AvatarFallback>
+                  //         {user?.name ? user.name[0].toUpperCase() : "?"}
+                  //       </AvatarFallback>
+                  //     </Avatar>
+                  //   </DropdownMenuTrigger>
+                  //   <DropdownMenuContent>
+                  //     <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  //     <DropdownMenuSeparator />
+                  //     <DropdownMenuItem
+                  //       className="cursor-pointer"
+                  //       onClick={() => navigate("/user/profile")}
+                  //     >
+                  //       Profile
+                  //     </DropdownMenuItem>
+                  //     <DropdownMenuItem
+                  //       onClick={() => navigate("/user/address")}
+                  //     >
+                  //       Orders
+                  //     </DropdownMenuItem>
+                  //     <DropdownMenuItem>Delivery Address</DropdownMenuItem>
+                  //     <DropdownMenuItem
+                  //       className="cursor-pointer"
+                  //       onClick={handleLogout}
+                  //     >
+                  //       Logout
+                  //     </DropdownMenuItem>
+                  //   </DropdownMenuContent>
+                  // </DropdownMenu>
+                  <Dialog open={dialOpen} onOpenChange={setDialOpen}>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className="border-none outline-none">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={user.photo || defaultUser} />
+                          <AvatarFallback>
+                            {user?.name ? user.name[0].toUpperCase() : "?"}
+                          </AvatarFallback>
+                        </Avatar>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-52">
+                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="cursor-pointer"
+                          onClick={() => navigate("/user/profile")}
+                        >
+                          Profile
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => navigate("/user/orders")}
+                        >
+                          Orders
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => navigate("/user/address")}
+                        >
+                          Delivery address
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="focus:bg-red-100 bg-red-50">
+                          <DialogTrigger asChild className="w-full">
+                            <span className="flex cursor-pointer items-center">
+                              <LogOut color="red" />
+                              <span className="text-red-700 hover:text-red-600 ml-2">
+                                Logout
+                              </span>
+                            </span>
+                          </DialogTrigger>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>
+                          Are you sure you want to Logout?
+                        </DialogTitle>
+                        <DialogDescription>
+                          This will clear your session, you will be logged out
+                          and redirected to the login page.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DialogFooter className="flex justify-end gap-4 mt-4">
+                        <Button
+                          type="submit"
+                          variant="destructive"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 ) : (
                   <>
                     <Link
@@ -387,40 +450,37 @@ function MainLayout() {
                     <DropdownMenuItem onClick={() => navigate("/user/address")}>
                       Delivery address
                     </DropdownMenuItem>
-
-                    {/* <DialogTrigger className="flex p-2 w-full bg-red-100 rounded"> */}
-                      <DropdownMenuItem className="focus:bg-red-100 cursor-pointer">
-                        <DialogTrigger>
+                    <DropdownMenuItem className="focus:bg-red-100 bg-red-50">
+                      <DialogTrigger asChild className="w-full">
+                        <span className="flex cursor-pointer items-center">
                           <LogOut color="red" />
-                        <span className="text-red-700 hover:text-red-600">
-                          Logout
+                          <span className="text-red-700 hover:text-red-600 ml-2">
+                            Logout
+                          </span>
                         </span>
-                        </DialogTrigger>
-                        
-                      </DropdownMenuItem>
-                    {/* </DialogTrigger> */}
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>
-                          Are you sure you want to Logout?
-                        </DialogTitle>
-                        <DialogDescription>
-                          This will clear your session, you will be logged out
-                          and redirected to login page.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <DialogFooter>
-                        <Button
-                          type="submit"
-                          variant="destructive"
-                          onClick={handleLogout}
-                        >
-                          Logout
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
+                      </DialogTrigger>
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
+
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Are you sure you want to Logout?</DialogTitle>
+                    <DialogDescription>
+                      This will clear your session, you will be logged out and
+                      redirected to the login page.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter className="flex justify-end gap-4 mt-4">
+                    <Button
+                      type="submit"
+                      variant="destructive"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
               </Dialog>
 
               <div
