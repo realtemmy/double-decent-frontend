@@ -58,6 +58,8 @@ function App() {
   //  - Find away to keep track and save of delivery fees in order and not in product and maybe alias title\
   //  - Add date to order tracking stuff
   //  - In updating user's photo, first delete the prev one if there exist
+  //  - Filtering in order - date, search etc
+  //  - Designcheckout success page
 
   return (
     <>
@@ -103,5 +105,3 @@ function App() {
 }
 
 export default App;
-
-

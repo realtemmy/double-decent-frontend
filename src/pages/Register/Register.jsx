@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -11,6 +11,10 @@ import { toast } from "sonner";
 import { GoogleLogin } from "@react-oauth/google";
 
 const Register = () => {
+  useEffect(() => {
+    document.title = "Register";
+  }, []);
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [formFields, setFormFields] = useState({
@@ -60,9 +64,6 @@ const Register = () => {
     }
     mutation.mutate(formFields);
   };
-
-
-
 
   const responseMessage = async (response) => {
     console.log(response);

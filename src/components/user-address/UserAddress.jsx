@@ -42,6 +42,9 @@ import useUser from "@/hooks/use-user";
 import axiosService from "@/axios";
 
 const UserAddress = () => {
+  useEffect(() => {
+    document.title = "User | Address"
+  }, [])
   const queryClient = useQueryClient();
   const { data: user } = useUser();
 

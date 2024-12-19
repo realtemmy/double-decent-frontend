@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,10 @@ import ProductList from "@/components/product-list/ProductList";
 const Cart = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    document.title = "Cart"
+  }, [])
 
   const { cartItems, totalPrice } = useSelector((state) => state.cart);
 
