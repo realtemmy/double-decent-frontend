@@ -1,5 +1,5 @@
-import { useEffect, Suspense, lazy, useTransition } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Toaster } from "./components/ui/sonner";
 import { calculateTotal } from "./redux/cart/cartSlice";
@@ -21,7 +21,6 @@ import Checkout from "./pages/Checkout/Checkout";
 import CheckoutSuccess from "./components/checkout-success/CheckoutSuccess";
 import NotFound from "./pages/NotFound/NotFound";
 import FAQ from "./pages/FAQ/FAQ";
-import Spinner from "./components/Spinner/Spinner";
 
 // const Register = lazy(() => import("./pages/Register/Register"));
 // const ForgotPassword = lazy(() =>
@@ -58,6 +57,7 @@ function App() {
   //  - Keep track of payment, delivered, cancelled and completed date for order
   //  - Find away to keep track and save of delivery fees in order and not in product and maybe alias title\
   //  - Add date to order tracking stuff
+  //  - In updating user's photo, first delete the prev one if there exist
 
   return (
     <>

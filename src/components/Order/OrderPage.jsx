@@ -20,7 +20,7 @@ const OrderPage = () => {
     },
   });
 
-  console.log(data);
+  // console.log(data);
 
   if (isLoading) {
     return (
@@ -123,7 +123,7 @@ const OrderPage = () => {
                     </dt>
                     <dd className="text-base font-medium text-gray-900 dark:text-white">
                       {/* Remember to remove delivery fee */}
-                      {commaSeparatedPrice(data.totalAmount - 500)}
+                      {commaSeparatedPrice(data.totalAmount - data.deliveryFee)}
                     </dd>
                   </dl>
 
@@ -132,7 +132,7 @@ const OrderPage = () => {
                       Store Pickup / Delivery
                     </dt>
                     <dd className="text-base font-medium text-gray-900 dark:text-white">
-                      {commaSeparatedPrice(500)}
+                      {commaSeparatedPrice(data.deliveryFee)}
                     </dd>
                   </dl>
 

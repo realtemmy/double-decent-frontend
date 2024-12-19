@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   ChevronRight,
   CircleHelp,
+  LogOut,
   Search,
   ShoppingCart,
   User,
@@ -31,6 +32,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import Footer from "../Footer/Footer";
 import useUser from "@/hooks/use-user";
@@ -44,6 +54,7 @@ function MainLayout() {
   const navigate = useNavigate("");
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+  const [dialOpen, setDialOpen] = useState(false);
   const { cartCount } = useSelector((state) => state.cart);
   const [categoryId, setCategoryId] = useState("");
   const [search, setSearch] = useState("");
@@ -99,9 +110,10 @@ function MainLayout() {
   };
 
   const handleLogout = () => {
-    queryClient.invalidateQueries(["user"]);
+    setDialOpen(false);
+    queryClient.removeQueries(["user"]);
     localStorage.removeItem("token");
-    navigate("/");
+    navigate("/login");
   };
 
   if (isLoading) {
@@ -349,39 +361,68 @@ function MainLayout() {
               >
                 <CircleHelp size={20} /> FAQ
               </Link>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="border-none outline-none">
-                  <Button
-                    className="capitalize border-none"
-                    variant="secondary"
-                  >
-                    <User />
-                    {user.name}&#39;s Account
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-52">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    className="cursor-pointer"
-                    onClick={() => navigate("/user/profile")}
-                  >
-                    Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/user/orders")}>
-                    Orders
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/user/address")}>
-                    Delivery address
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className="cursor-pointer bg-red-50 text-red-700"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Dialog open={dialOpen} onOpenChange={setDialOpen}>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="border-none outline-none">
+                    <Button
+                      className="capitalize border-none"
+                      variant="secondary"
+                    >
+                      <User />
+                      {user.name}&#39;s Account
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-52">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      onClick={() => navigate("/user/profile")}
+                    >
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/user/orders")}>
+                      Orders
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/user/address")}>
+                      Delivery address
+                    </DropdownMenuItem>
+
+                    {/* <DialogTrigger className="flex p-2 w-full bg-red-100 rounded"> */}
+                      <DropdownMenuItem className="focus:bg-red-100 cursor-pointer">
+                        <DialogTrigger>
+                          <LogOut color="red" />
+                        <span className="text-red-700 hover:text-red-600">
+                          Logout
+                        </span>
+                        </DialogTrigger>
+                        
+                      </DropdownMenuItem>
+                    {/* </DialogTrigger> */}
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>
+                          Are you sure you want to Logout?
+                        </DialogTitle>
+                        <DialogDescription>
+                          This will clear your session, you will be logged out
+                          and redirected to login page.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <Button
+                          type="submit"
+                          variant="destructive"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </Dialog>
+
               <div
                 className="relative cursor-pointer"
                 onClick={handleCartNavigate}
