@@ -8,8 +8,10 @@ const CheckoutSuccess = () => {
   // Get reference from the url query
   const dispatch = useDispatch();
   // Clear the cart after a successful order
+
   useEffect(() => {
     dispatch(clearCart());
+    document.title = "Checkout success";
   }, [dispatch]);
   return (
     <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">

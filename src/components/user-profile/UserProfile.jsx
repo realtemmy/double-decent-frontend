@@ -14,7 +14,6 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
@@ -34,6 +33,10 @@ import useUser from "@/hooks/use-user";
 import axiosService from "@/axios";
 
 const UserProfile = () => {
+
+  useEffect(() => {
+document.title = "User | Profile"
+  }, [])
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 

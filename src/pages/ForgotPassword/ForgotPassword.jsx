@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2, MailCheck } from "lucide-react";
 import {
@@ -16,13 +16,15 @@ import { toast } from "sonner";
 import axios from "axios";
 
 const ForgotPassword = () => {
+  useEffect(() => {
+    document.title = "Forgot Password";
+  }, []);
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const mutation = useMutation({
     mutationFn: async (email) => {
       const response = await axios.post(
         "https://double-decent-server.onrender.com/api/v1/user/forgotPassword",
-        // "http://localhost:5000/api/v1/user/forgotPassword",
         email
       );
       return response.data;

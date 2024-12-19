@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
@@ -11,6 +11,12 @@ import Spinner from "@/components/Spinner/Spinner";
 
 const Category = () => {
   const { categoryName } = useParams();
+
+
+  useEffect(() => {
+    document.title = `Category | ${categoryName.replace("-", " ")}`
+  }, [])
+
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, error } = useQuery({
     queryKey: ["category", categoryName, currentPage],

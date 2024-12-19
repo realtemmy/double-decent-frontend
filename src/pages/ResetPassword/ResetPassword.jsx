@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -12,6 +12,10 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 
 const ResetPassword = () => {
+  useEffect(() => {
+    document.title = "Reset Password";
+  }, []);
+
   const { token } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -24,7 +28,6 @@ const ResetPassword = () => {
     mutationFn: async (fields) => {
       const response = await axios.patch(
         `https://double-decent-server.onrender.com/api/v1/user/resetPassword/${token}`,
-        // `http://localhost:5000/api/v1/user/resetPassword/${token}`,
         fields
       );
       return response.data;

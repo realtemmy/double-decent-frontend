@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -6,6 +7,9 @@ import {
 } from "@/components/ui/accordion";
 
 const FAQ = () => {
+  useEffect(() => {
+    document.title = "FAQ"
+  },[])
   return (
     <div className="mx-auto max-w-2xl">
       <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>

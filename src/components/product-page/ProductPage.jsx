@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +18,7 @@ import axiosService from "@/axios";
 
 const ProductPage = () => {
   const dispatch = useDispatch();
-  const { cartCount } = useSelector((state) => state.cart);
+  // const { cartCount } = useSelector((state) => state.cart);
   const { productId } = useParams();
   const {
     data: product,
@@ -31,6 +32,10 @@ const ProductPage = () => {
     },
   });
 
+  useEffect(() => {
+    document.title = `Product | ${product?.name}`;
+  }, [product?.name]);
+
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
     toast.success(`${product.name} added to cart.`);
@@ -39,7 +44,7 @@ const ProductPage = () => {
   const handleIncrementCount = () => {
     dispatch(incrementCount(product._id));
   };
-  const handleDecrementCount = (productId) => {
+  const handleDecrementCount = () => {
     dispatch(decrementCount(product._id));
   };
 
@@ -58,7 +63,6 @@ const ProductPage = () => {
   }
 
   return (
-
     <>
       <section className="py-8 bg-white md:py-16 dark:bg-gray-900 antialiased">
         <div className="max-w-screen-xl px-4 mx-auto 2xl:px-0">

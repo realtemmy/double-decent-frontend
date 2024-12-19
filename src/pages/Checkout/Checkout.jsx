@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +41,9 @@ import axiosService from "@/axios";
 import { Input } from "@/components/ui/input";
 
 const Checkout = () => {
+  useEffect(() => {
+    document.title = "Checkout";
+  }, []);
   const { cartItems, totalPrice } = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const [coords, setCoords] = useState(null);
@@ -188,7 +191,9 @@ const Checkout = () => {
             <div className="md:absolute md:left-0 md:bottom-0 bg-gray-800 w-full p-4">
               <p className="flex flex-wrap gap-4 text-base text-white">
                 Delivery Fee:{" "}
-                <span className="ml-auto">{commaSeparatedPrice(getPriceByLga(address.lga))}</span>
+                <span className="ml-auto">
+                  {commaSeparatedPrice(getPriceByLga(address.lga))}
+                </span>
               </p>
               <h4 className="flex flex-wrap gap-4 text-base text-white">
                 Total{" "}

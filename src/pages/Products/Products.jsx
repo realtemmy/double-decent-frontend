@@ -1,24 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import { Checkbox } from "@/components/ui/checkbox";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -45,6 +36,10 @@ import { Button } from "@/components/ui/button";
 import { ListFilter } from "lucide-react";
 
 const Products = () => {
+  useEffect(() => {
+    document.title = "Products";
+  }, []);
+
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [categories, setCategories] = useState([]);
