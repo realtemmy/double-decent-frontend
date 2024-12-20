@@ -55,11 +55,10 @@ function App() {
   //  - Set max width for display of the entire app
   //  - In user's, if there was an error getting user from hook, display error messageor just keep loading
   //  - Keep track of payment, delivered, cancelled and completed date for order
-  //  - Find away to keep track and save of delivery fees in order and not in product and maybe alias title\
-  //  - Add date to order tracking stuff
   //  - In updating user's photo, first delete the prev one if there exist
   //  - Filtering in order - date, search etc
-  //  - Designcheckout success page
+  //  - Design checkout success page
+  //  - Edit address
 
   return (
     <>
@@ -88,8 +87,8 @@ function App() {
             }
           />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/checkout-success" element={<CheckoutSuccess />} />
         </Route>
-        <Route path="/checkout-success" element={<CheckoutSuccess />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

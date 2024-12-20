@@ -147,38 +147,6 @@ function MainLayout() {
               />
               <div className="flex items-center gap-4">
                 {user ? (
-                  // <DropdownMenu>
-                  //   <DropdownMenuTrigger className="border-none outline-none bg-transparent">
-                  //     <Avatar className="h-8 w-8">
-                  //       <AvatarImage src={user.photo || defaultUser} />
-                  //       <AvatarFallback>
-                  //         {user?.name ? user.name[0].toUpperCase() : "?"}
-                  //       </AvatarFallback>
-                  //     </Avatar>
-                  //   </DropdownMenuTrigger>
-                  //   <DropdownMenuContent>
-                  //     <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  //     <DropdownMenuSeparator />
-                  //     <DropdownMenuItem
-                  //       className="cursor-pointer"
-                  //       onClick={() => navigate("/user/profile")}
-                  //     >
-                  //       Profile
-                  //     </DropdownMenuItem>
-                  //     <DropdownMenuItem
-                  //       onClick={() => navigate("/user/address")}
-                  //     >
-                  //       Orders
-                  //     </DropdownMenuItem>
-                  //     <DropdownMenuItem>Delivery Address</DropdownMenuItem>
-                  //     <DropdownMenuItem
-                  //       className="cursor-pointer"
-                  //       onClick={handleLogout}
-                  //     >
-                  //       Logout
-                  //     </DropdownMenuItem>
-                  //   </DropdownMenuContent>
-                  // </DropdownMenu>
                   <Dialog open={dialOpen} onOpenChange={setDialOpen}>
                     <DropdownMenu>
                       <DropdownMenuTrigger className="border-none outline-none">
