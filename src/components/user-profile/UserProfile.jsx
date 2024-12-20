@@ -31,6 +31,7 @@ import { toast } from "sonner";
 import useUser from "@/hooks/use-user";
 
 import axiosService from "@/axios";
+import defaultUser from "./../../assets/default.jpg"
 
 const UserProfile = () => {
 
@@ -132,7 +133,7 @@ document.title = "User | Profile"
       <div className="flex md:hidden gap-4 items-center flex-col justify-center my-2">
         <div className="w-fit relative">
           <Avatar className="h-20 w-20 block">
-            <AvatarImage src={user.photo} />
+            <AvatarImage src={user.photo || defaultUser} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <span className="absolute bottom-3 -right-1 cursor-pointer">
@@ -190,7 +191,7 @@ document.title = "User | Profile"
               <DialogHeader>
                 <DialogDescription>
                   <img
-                    src={user.photo}
+                    src={user.photo || defaultUser}
                     className="w-full max-w-[400px] max-h-[400px] rounded"
                     alt="user photo"
                   />

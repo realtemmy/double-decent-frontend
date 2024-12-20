@@ -29,6 +29,7 @@ import UserProfile from "@/components/user-profile/UserProfile";
 import Orders from "../Orders/Orders";
 import UserAddress from "@/components/user-address/UserAddress";
 import OrderPage from "@/components/Order/OrderPage";
+import defaultUser from "./../../assets/default.jpg"
 
 import useUser from "@/hooks/use-user";
 import { Input } from "@/components/ui/input";
@@ -100,7 +101,7 @@ const UserRoutes = () => {
               <center className="relative">
                 <Avatar className="h-20 w-20 relative">
                   <AvatarImage
-                    src={user.photo || "https://github.com/shadcn.png"}
+                    src={user.photo || defaultUser}
                     alt="user photo"
                   />
                   <AvatarFallback>{user.name[0].toUpperCase()}</AvatarFallback>
