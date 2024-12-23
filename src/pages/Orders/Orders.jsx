@@ -24,7 +24,7 @@ import {
   X,
 } from "lucide-react";
 import axiosService from "@/axios";
-import { commaSeparatedPrice } from "@/utils/helperFunctions";
+import { commaSeparatedPrice, formatDate } from "@/utils/helperFunctions";
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
@@ -48,12 +48,18 @@ import { Button } from "@/components/ui/button";
 
 import PaginationButton from "@/components/Pagination/Pagination";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Orders = () => {
   useEffect(() => {
-    document.title  = "Orders"
-  }, [])
+    document.title = "Orders";
+  }, []);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,21 +78,9 @@ const Orders = () => {
     setCurrentPage(currentPage);
   };
 
-  function formatDate(dateString) {
-    const date = new Date(dateString);
 
-    // Extract the day, month, weekday, and year
-    const day = date.getDate(); // Day of the month
-    const month = date.toLocaleString("en-US", { month: "short" }); // Short month name (e.g., Jan, Feb)
-    const weekday = date.toLocaleString("en-US", { weekday: "short" }); // Short weekday name (e.g., Mon, Tue)
-    const year = date.getFullYear(); // Year
-
-    // Combine the parts into the desired format
-    return `${day}, ${weekday} ${month} ${year}`;
-  }
 
   // console.log(data);
-  
 
   if (error) return <div>Error: {error.message}</div>;
   return (
@@ -213,16 +207,21 @@ const Orders = () => {
                             ? "bg-green-50 text-green-500"
                             : "bg-yellow-50 text-yellow-500"
                         } `}
+                        style={{
+                          margin: "4px 0"
+                        }}
                       >
-                        {order.status === "paid" ? (
-                          <Hourglass size={15} />
-                        ) : order.status === "delivered" ? (
-                          <Check size={15} />
-                        ) : order.status === "cancelled" ? (
-                          <X />
-                        ) : (
-                          <Truck size={15} />
-                        )}
+                        <span>
+                          {order.status === "paid" ? (
+                            <Hourglass size={15} />
+                          ) : order.status === "delivered" ? (
+                            <Check size={15} />
+                          ) : order.status === "cancelled" ? (
+                            <X size={15} />
+                          ) : (
+                            <Truck size={15} />
+                          )}
+                        </span>
                         <span className="ms-1">{order.status}</span>
                       </TableCell>
                       <TableCell className="text-right">

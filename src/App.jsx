@@ -60,6 +60,9 @@ function App() {
   //  - Design checkout success page
   //  - Edit address
 
+
+  // - Ensure CSP is effective against XSS attacks
+
   return (
     <>
       <Routes>
