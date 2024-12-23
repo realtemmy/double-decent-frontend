@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -55,30 +56,48 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import debounce from "lodash.debounce";
 
 const Orders = () => {
   useEffect(() => {
     document.title = "Orders";
   }, []);
+
+
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [duration, setDuration] = useState("");
+
+
+  const debouncedSearch = useMemo(() => debounce(setSearchParams, 300), []);
+useEffect(() => {
+  debouncedSearch({ search });
+  return () => debouncedSearch.cancel();
+}, [search, debouncedSearch]);
+
   // Get all orders
   const { isLoading, data, error } = useQuery({
-    queryKey: ["orders", activeTab, currentPage],
+    queryKey: ["orders", activeTab, currentPage, duration],
     queryFn: async () => {
       const response = await axiosService.get(
-        `/order?type=${activeTab}&page=${currentPage}`
+        `/order?type=${activeTab}&page=${currentPage}&duration=${duration}`
       );
       return response.data;
     },
   });
 
-  const handlePageChange = (currentPage) => {
-    setCurrentPage(currentPage);
-  };
+   const handlePageChange = (page) => {
+     setCurrentPage(page);
+   };
 
-
+   const handleDurationChange = (value) => {
+    console.log(value);
+    
+     setDuration(value);
+   };
 
   // console.log(data);
 
@@ -87,8 +106,12 @@ const Orders = () => {
     <>
       <div className="grid grid-cols-2 gap-4 my-4">
         <div className="flex gap-2 col-span-2 sm:col-span-1 md:col-span-1 mx-1">
-          <Input placeholder="Search by order ID" />
-          <Button>Search</Button>
+          <Input
+            placeholder="Search by order ID"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
+          <Button onClick={() => debouncedSearch({ search })}>Search</Button>
         </div>
         <div className="flex justify-evenly gap-2 col-span-2 sm:col-span-1">
           <Select className="col-span-2">
@@ -96,23 +119,20 @@ const Orders = () => {
               <SelectValue placeholder="Filter" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="paid">Paid</SelectItem>
-              <SelectItem value="confirmed">Confirmed</SelectItem>
-              <SelectItem value="delivered">Delivered</SelectItem>
-              <SelectItem value="cancelled">Cancelled</SelectItem>
+              <SelectItem value="ascending">Ascending</SelectItem>
+              <SelectItem value="decending">Descending</SelectItem>
             </SelectContent>
           </Select>
-          <Select className="col-span-2">
+          <Select onValueChange={handleDurationChange}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Duration" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="today">Today</SelectItem>
-              <SelectItem value="7 days">Last 7 days</SelectItem>
-              <SelectItem value="30 days">Last month</SelectItem>
-              <SelectItem value="6 months">Last 6 months</SelectItem>
-              <SelectItem value="1 year">Last year</SelectItem>
-              <SelectItem value="all">All time</SelectItem>
+              <SelectItem value="1">Today</SelectItem>
+              <SelectItem value="7">Last 7 days</SelectItem>
+              <SelectItem value="30">Last month</SelectItem>
+              <SelectItem value="180">Last 6 months</SelectItem>
+              <SelectItem value="365">Last year</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -120,41 +140,22 @@ const Orders = () => {
       <Tabs defaultValue="all" className="mx-1">
         <ScrollArea className="whitespace-nowrap">
           <TabsList className="grid w-full grid-cols-5 justify-between min-w-96">
-            <TabsTrigger
-              value="all"
-              onClick={() => setActiveTab("all")}
-              className="mx-1 text-xs sm:text-sm"
-            >
-              All
-            </TabsTrigger>
-            <TabsTrigger
-              value="paid"
-              onClick={() => setActiveTab("paid")}
-              className="mx-1 text-xs sm:text-sm"
-            >
-              Paid
-            </TabsTrigger>
-            <TabsTrigger
-              value="confirmed"
-              onClick={() => setActiveTab("confirmed")}
-              className="mx-1 text-xs sm:text-sm"
-            >
-              Confirmed
-            </TabsTrigger>
-            <TabsTrigger
-              value="delivered"
-              onClick={() => setActiveTab("delivered")}
-              className="mx-1 text-xs sm:text-sm"
-            >
-              Delivered
-            </TabsTrigger>
-            <TabsTrigger
-              value="cancelled"
-              onClick={() => setActiveTab("cancelled")}
-              className="mx-1 text-xs sm:text-sm"
-            >
-              Cancelled
-            </TabsTrigger>
+            {[
+              { value: "all", label: "All" },
+              { value: "paid", label: "Paid" },
+              { value: "confirmed", label: "Confirmed" },
+              { value: "delivered", label: "Delivered" },
+              { value: "cancelled", label: "Cancelled" },
+            ].map((tab) => (
+              <TabsTrigger
+                key={tab.value}
+                value={tab.value}
+                onClick={() => setActiveTab(tab.value)}
+                className="mx-1 text-xs sm:text-sm"
+              >
+                {tab.label}
+              </TabsTrigger>
+            ))}
           </TabsList>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
@@ -190,7 +191,7 @@ const Orders = () => {
                       key={index}
                       onClick={() => navigate(`/user/orders/${order._id}`)}
                     >
-                      <TableCell className="font-medium text-xs">
+                      <TableCell className="font-medium text-xs truncate max-w-[150px]">
                         {order._id}
                       </TableCell>
                       <TableCell>{formatDate(order.createdAt)}</TableCell>
@@ -208,7 +209,7 @@ const Orders = () => {
                             : "bg-yellow-50 text-yellow-500"
                         } `}
                         style={{
-                          margin: "4px 0"
+                          margin: "4px 0",
                         }}
                       >
                         <span>
