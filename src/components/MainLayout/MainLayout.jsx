@@ -63,8 +63,6 @@ function MainLayout() {
 
   const {
     data: user = null,
-    error: userError,
-    isLoading: userLoading,
   } = useUser();
 
   // console.log("User: ", user);
