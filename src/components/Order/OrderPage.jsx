@@ -20,7 +20,7 @@ const OrderPage = () => {
     },
   });
 
-  // console.log(data);
+  console.log(data);
 
   if (isLoading) {
     return (
@@ -43,7 +43,42 @@ const OrderPage = () => {
               Order ID: <span className="text-sm">{orderId}</span>
             </h3>
           </div>
-          <OrderTracking status={data.status} />
+          <OrderTracking status={data.status} statusDates={data.statusDates} />
+          {data.status === "cancelled" && (
+            <div className="mt-6 space-y-4 border-b border-t border-gray-200 py-8 dark:border-gray-700 sm:mt-8">
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Refunds
+              </h4>
+
+              <div className="grid grid-cols-3">
+                <dl className="col-span-3 md:col-span-1">
+                  <dt className="text-base font-medium text-gray-900 dark:text-white">
+                    Refund reference
+                  </dt>
+                  <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                    {data.refund.refundReference || "test1234"}
+                  </dd>
+                </dl>
+                <dl className="col-span-3 md:col-span-1">
+                  <dt className="text-base font-medium text-gray-900 dark:text-white">
+                    Amount
+                  </dt>
+                  <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                    {commaSeparatedPrice(data.refund.amount)}
+                  </dd>
+                </dl>
+                <dl className="col-span-3 md:col-span-1">
+                  <dt className="text-base font-medium text-gray-900 dark:text-white">
+                    Refund status
+                  </dt>
+                  <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400 capitalize">
+                    {data.refund.status}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          )}
+
           <div className="mt-6 space-y-4 border-b border-t border-gray-200 py-8 dark:border-gray-700 sm:mt-8">
             <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
               Billing & Delivery information
@@ -55,12 +90,12 @@ const OrderPage = () => {
               </dt>
               <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
                 <span className="capitalize">{user?.name || "Guest"}</span> -{" "}
-                {data.phone || user.phone},{" "}
+                {data.phone || user.phone} -{" "}
                 <span className="capitalize">{data.address}</span>
               </dd>
             </dl>
-            <div className="grid grid-cols-2">
-              <dl className="col-span-2 md:col-span-1">
+            <div className="grid grid-cols-3">
+              <dl className="col-span-3 md:col-span-1">
                 <dt className="text-base font-medium text-gray-900 dark:text-white">
                   Payment method
                 </dt>
@@ -68,12 +103,20 @@ const OrderPage = () => {
                   {data.paymentMode} / {data.paymentChannel}
                 </dd>
               </dl>
-              <dl className="col-span-2 md:col-span-1">
+              <dl className="col-span-3 md:col-span-1">
                 <dt className="text-base font-medium text-gray-900 dark:text-white">
                   TransactionId
                 </dt>
                 <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
                   {data.transactionId}
+                </dd>
+              </dl>
+              <dl className="col-span-3 md:col-span-1">
+                <dt className="text-base font-medium text-gray-900 dark:text-white">
+                  Transaction reference
+                </dt>
+                <dd className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                  {data.transactionReference}
                 </dd>
               </dl>
             </div>

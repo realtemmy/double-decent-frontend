@@ -16,3 +16,15 @@ export const getPriceByLga = (lga) => {
   }
   return price;
 };
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+
+  // Extract the day, month, weekday, and year
+  const day = date.getDate(); // Day of the month
+  const month = date.toLocaleString("en-US", { month: "short" }); // Short month name (e.g., Jan, Feb)
+  const weekday = date.toLocaleString("en-US", { weekday: "short" }); // Short weekday name (e.g., Mon, Tue)
+  const year = date.getFullYear(); // Year
+
+  // Combine the parts into the desired format
+  return `${day}, ${weekday} ${month} ${year}`;
+};

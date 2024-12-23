@@ -95,7 +95,7 @@ const UserRoutes = () => {
   return (
     <>
       <div className="grid grid-cols-[300px_1fr] gap-4">
-        <Card className="w-full col-span-3 sm:col-span-1 h-fit hidden md:block ms-2">
+        <Card className="w-full col-span-3 sm:col-span-1 h-fit hidden md:block ms-2 ">
           <CardHeader>
             <CardTitle>
               <center className="relative">
