@@ -17,6 +17,9 @@
 - Back to login after reseting password?
 - Filter on products and user set to fixed
 
+- Ensure CSP is effective against XSS attacks
+
+
 ### Status for delivery
 
 - Paid (blue) - Payment is successful, but order has not been confirmed by the store
