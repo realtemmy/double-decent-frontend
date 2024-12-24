@@ -102,6 +102,7 @@ const Login = () => {
                 <Label htmlFor="password">Password</Label>
                 <Link
                   to="/forgot-password"
+                  title="Go to forgot password"
                   className="ml-auto inline-block text-sm underline"
                 >
                   Forgot your password?
@@ -130,7 +131,7 @@ const Login = () => {
           </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link to="/register" className="underline">
+            <Link to="/register" className="underline" title="Go to sign up">
               Sign up
             </Link>
           </div>

@@ -40,6 +40,7 @@ const ProductList = ({ title, slug, categoryId }) => {
           <Link
             className="text-orange-500 font-semibold underline hover:text-orange-400"
             to={slug}
+            title={title || "Other products"}
           >
             see more
           </Link>

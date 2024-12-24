@@ -100,6 +100,7 @@ const ForgotPassword = () => {
                 Go back to{" "}
                 <Link
                   to="/login"
+                  title="Go to Login page"
                   className="text-orange-500 hover:text-orange-400 font-medium"
                 >
                   Login

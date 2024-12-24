@@ -159,7 +159,7 @@ const Checkout = () => {
                 {cartItems.length === 0 ? (
                   <div className="text-white">
                     No item in cart yet,{" "}
-                    <Link to="/products" className="text-lg underline">
+                    <Link to="/products" className="text-lg underline" title="Back to products">
                       continue shopping
                     </Link>
                   </div>
@@ -340,15 +340,15 @@ const Checkout = () => {
                 >
                   {user.location.length === 0 ? (
                     <div className="text-center pb-2">
-                      No address set yet, set address
+                      No address set yet? 
                       <Link
-                        to="/user"
-                        variant="link"
+                        to="/user/address"
+                        title="Set address for user"
                         className="p-1 text-orange-500 hover:underline hover:text-orange-400"
                       >
-                        here
-                      </Link>{" "}
-                      or use{" "}
+                        set address
+                      </Link>
+                      or use 
                       <Button
                         variant="secondary"
                         className="rounded border"

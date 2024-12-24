@@ -33,25 +33,17 @@ const OrderDetails = ({ order }) => {
                   <TableRow key={index}>
                     <TableCell className="whitespace-nowrap py-4">
                       <div className="flex items-center gap-4">
+                        <span className="flex aspect-square w-10 h-10 shrink-0 items-center hover:text-slate-600">
+                          <img
+                            className="h-auto w-full max-h-full"
+                            src={product.image}
+                            alt={`${product.name} image`}
+                            title={`Product -${product.name}`}
+                          />
+                        </span>
                         <Link
                           to={`/product/${product._id}`}
-                          className="flex aspect-square w-10 h-10 shrink-0 items-center hover:text-slate-600"
-                        >
-                          <img
-                            className="h-auto w-full max-h-full dark:hidden"
-                            src={product.image}
-                            alt={`${product.name} image`}
-                            title={`Product -${product.name} dark`}
-                          />
-                          <img
-                            className="hidden h-auto w-full max-h-full dark:block"
-                            src={product.image}
-                            alt={`${product.name} image`}
-                            title={`Product -${product.name} light`}
-                          />
-                        </Link>
-                        <Link
-                          // to={`/product/${product.id}`}
+                          title={`Get ${product.name} now`}
                           className="hover:underline hover:text-slate-600"
                         >
                           {product.name}

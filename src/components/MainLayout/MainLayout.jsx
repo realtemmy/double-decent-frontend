@@ -129,7 +129,7 @@ function MainLayout() {
               </Button>
             </SheetTrigger>
             <div className="lg:hidden ms-2 flex justify-between items-center w-full my-2">
-              <Link to="/">
+              <Link to="/" title="Logo image">
                 <Logo />
               </Link>
               <Input
@@ -209,11 +209,13 @@ function MainLayout() {
                     <Link
                       to="/login"
                       className="text-slate-700 font-semibold hover:text-slate-600 hover:underline text-sm"
+                      title="Login route"
                     >
                       Login
                     </Link>
                     <Link
                       to="/register"
+                      title="Register route"
                       className="text-slate-700 font-semibold hover:text-slate-600 hover:underline text-sm"
                     >
                       Signup
@@ -235,7 +237,11 @@ function MainLayout() {
             {/* Sidebar content */}
             <SheetContent side="left" className="px-0">
               <ScrollArea className="h-[calc(100vh-20px)] rounded-md mt-1 pb-3">
-                <Link to="/" className="mr-6 hidden lg:flex">
+                <Link
+                  to="/"
+                  className="mr-6 hidden lg:flex"
+                  title="Menu mountain Icon"
+                >
                   <MountainIcon className="h-6 w-6" />
                   <span className="sr-only">Acme Inc</span>
                 </Link>
@@ -253,6 +259,7 @@ function MainLayout() {
                     <div className="ms-4">
                       <Link
                         to="/user/profile"
+                        title="User profile route"
                         className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1"
                         onClick={() => setOpen(false)}
                       >
@@ -261,6 +268,7 @@ function MainLayout() {
                       </Link>
                       <Link
                         to="/user/orders"
+                        title="Orders route"
                         className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1"
                         onClick={() => setOpen(false)}
                       >
@@ -269,6 +277,7 @@ function MainLayout() {
                       </Link>
                       <Link
                         to="/user/address"
+                        title="Address route"
                         className="flex justify-between items-center me-4 hover:text-slate-700 text-slate-900 my-2 px-1"
                         onClick={() => setOpen(false)}
                       >
@@ -310,6 +319,7 @@ function MainLayout() {
                                 key={section._id}
                                 to={`/section/${section.slug}`}
                                 onClick={handleClose}
+                                title={`Explore the ${section.name} section`}
                                 className="hover:underline hover:text-slate-600 capitalize block py-1"
                               >
                                 {section.name}
@@ -323,6 +333,7 @@ function MainLayout() {
                 </div>
                 <Link
                   to="/help"
+                  title="Help route"
                   className="px-3 font-semibold my-2 text-lg py-1 capitalize block hover:cursor-pointer text-white hover:text-white"
                   style={{
                     backgroundColor: "#C74E00",
@@ -332,6 +343,7 @@ function MainLayout() {
                 </Link>
                 <Link
                   to="/help"
+                  title="FAQ route"
                   className="px-3 font-semibold my-2 text-lg py-1 capitalize block hover:cursor-pointer text-white hover:text-white"
                   style={{
                     backgroundColor: "#C74E00",
@@ -341,6 +353,7 @@ function MainLayout() {
                 </Link>
                 <Link
                   to="/contact-us"
+                  title="Contact us route"
                   className="px-3 font-semibold my-2 text-lg py-1 capitalize block hover:cursor-pointer text-white hover:text-white"
                   style={{
                     backgroundColor: "#C74E00",
@@ -364,7 +377,7 @@ function MainLayout() {
 
         {/* Desktop */}
         <nav className="hidden lg:grid grid-cols-[150px_1fr_1fr] items-center w-full">
-          <Link to="/" className="mr-6 hidden lg:flex">
+          <Link to="/" className="mr-6 hidden lg:flex" title="Logo image">
             <Logo className="h-6 w-6" />
             <span className="sr-only">Double decent</span>
           </Link>
@@ -382,6 +395,7 @@ function MainLayout() {
             <div className="text-right flex items-center gap-4 justify-end">
               <Link
                 to="/faq"
+                title="FAQ route"
                 className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
               >
                 <CircleHelp size={20} /> FAQ
@@ -466,12 +480,14 @@ function MainLayout() {
 
               <Link
                 to="/login"
+                title="Login route"
                 className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
               >
                 Login
               </Link>
               <Link
                 to="/register"
+                title="Registration route"
                 className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
               >
                 Sign up

@@ -15,7 +15,7 @@ const Product = ({ product }) => {
   }
   return (
     <div className="group relative w-full max-w-[200px] overflow-hidden">
-      <Link to={`/product/${product._id}`}>
+      <Link to={`/product/${product._id}`} title={`Product -${product.name}`}>
         <img
           alt={product.name}
           src={product.image || "/path/to/fallback-image.jpg"}

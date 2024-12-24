@@ -83,7 +83,11 @@ const Cart = () => {
                     className="text-center border col-span-full w-full p-4 text-xl italic"
                   >
                     No item in cart yet,{" "}
-                    <Link to="/products" className="text-lg underline">
+                    <Link
+                      to="/products"
+                      className="text-lg underline"
+                      title="continue shopping"
+                    >
                       continue shopping
                     </Link>
                   </TableCell>
@@ -93,7 +97,10 @@ const Cart = () => {
                       <TableRow key={index}>
                         <TableCell className="whitespace-nowr">
                           <div className="flex items-center gap-1 md:gap-4">
-                            <Link to={`/product/${item._id}`}>
+                            <Link
+                              to={`/product/${item._id}`}
+                              title={`Product -${item.name}`}
+                            >
                               <img
                                 src={item.image}
                                 alt={item.name}
@@ -104,6 +111,7 @@ const Cart = () => {
                             <div>
                               <Link
                                 to={`/product/${item._id}`}
+                                title={`Product -${item.name}`}
                                 className="text-xs sm:text-sm lg:text-base font-medium hover:underline capitalize"
                               >
                                 {item.name}
@@ -190,7 +198,8 @@ const Cart = () => {
                 <p className="mt-4 text-center text-sm text-gray-500">
                   or
                   <Link
-                    to="/"
+                    to="/products"
+                    title="Back to products"
                     className="font-medium text-blue-600 hover:underline dark:text-blue-500"
                   >
                     Continue Shopping

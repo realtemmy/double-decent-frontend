@@ -25,9 +25,7 @@ const CategoryPreview = () => {
   return (
     <div>
       <div className="mx-auto max-w-7xl">
-        {
-          isLoading && <Spinner />
-        }
+        {isLoading && <Spinner />}
         <div className="mx-auto">
           <h2 className="text-xl font-semibold my-2 text-gray-900">
             Shop from our collections -
@@ -46,9 +44,9 @@ const CategoryPreview = () => {
                   <h3 className="mt-6 text-sm text-gray-500 text-center">
                     <Link
                       to={`/category/${category.slug}`}
-                      className="hover:text-gray-700 capitalize"
+                      className="hover:text-gray-700 capitalize relative block"
+                      title={`Explore the ${category.name} category`}
                     >
-                      <span className="absolute inset-0" />
                       {category.name}
                     </Link>
                   </h3>
@@ -60,7 +58,7 @@ const CategoryPreview = () => {
           </ScrollArea>
         </div>
       </div>
-      <div >
+      <div>
         {categories.map((category, index) => (
           <ProductList
             categoryId={category._id}

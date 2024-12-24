@@ -147,7 +147,11 @@ const OrderPage = () => {
                               title={`Product - ${product.name}`}
                             />
                           </div>
-                          <Link href="#" className="hover:underline capitalize">
+                          <Link
+                            to={`/product/${product._id}`}
+                            className="hover:underline capitalize"
+                            title={product.name}
+                          >
                             {product.name}
                           </Link>
                         </div>
