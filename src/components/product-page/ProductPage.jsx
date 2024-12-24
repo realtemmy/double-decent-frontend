@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,17 +36,20 @@ const ProductPage = () => {
     document.title = `Product | ${product?.name}`;
   }, [product?.name]);
 
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-    toast.success(`${product.name} added to cart.`);
-  };
+  const handleAddToCart = useCallback(
+    (product) => {
+      dispatch(addToCart(product));
+      toast.success(`${product.name} added to cart.`);
+    },
+    [dispatch]
+  );
 
-  const handleIncrementCount = () => {
+  const handleIncrementCount = useCallback(() => {
     dispatch(incrementCount(product._id));
-  };
-  const handleDecrementCount = () => {
+  }, [dispatch, product?._id]);
+  const handleDecrementCount = useCallback(() => {
     dispatch(decrementCount(product._id));
-  };
+  }, [dispatch, product?._id]);
 
   if (isLoading) {
     return (

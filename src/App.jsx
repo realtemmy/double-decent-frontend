@@ -54,7 +54,7 @@ function App() {
   //  - Keep track and use product's quantity in product page, instead of cartCount
   //  - Set max width for display of the entire app
   //  - In user's, if there was an error getting user from hook, display error message or just keep loading
-  //  - In updating user's photo, first delete the prev one if there exist
+  //  - In updating user's photo, first delete the prev one if there exist and loader in updating user's profile
   //  - Filtering in order - date, search etc
   //  - Edit address
 

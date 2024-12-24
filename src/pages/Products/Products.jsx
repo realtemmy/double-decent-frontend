@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
@@ -47,7 +47,7 @@ const Products = () => {
   const [searchParams] = useSearchParams();
   const search = searchParams.get("search");
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = useCallback(() => setOpen(!open), [open]);
 
   const {
     data = [],
@@ -75,9 +75,9 @@ const Products = () => {
     },
   });
 
-  const handlePageChange = (currentPage) => {
+  const handlePageChange = useCallback((currentPage) => {
     setCurrentPage(currentPage);
-  };
+  }, []);
 
   const handleCategoryChange = (checked, categoryId) => {
     setCategories((prevCategories) => {

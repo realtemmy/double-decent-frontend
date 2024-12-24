@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   ChevronRight,
   CircleHelp,
@@ -59,13 +59,9 @@ function MainLayout() {
   const [categoryId, setCategoryId] = useState("");
   const [search, setSearch] = useState("");
 
-  const handleClose = () => setOpen(false);
+  const handleClose = useCallback(() => setOpen(false), []);
 
-  const {
-    data: user = null,
-  } = useUser();
-
-  // console.log("User: ", user);
+  const { data: user = null } = useUser();
 
   const {
     isLoading,
@@ -94,12 +90,12 @@ function MainLayout() {
     enabled: !!categoryId,
   });
 
-  const handleChange = (value) => {
+  const handleChange = useCallback((value) => {
     setCategoryId(value);
-  };
-  const handleCartNavigate = () => {
+  }, []);
+  const handleCartNavigate = useCallback(() => {
     navigate("/cart");
-  };
+  }, [navigate]);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -107,12 +103,12 @@ function MainLayout() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     setDialOpen(false);
     queryClient.removeQueries(["user"]);
     localStorage.removeItem("token");
     navigate("/login");
-  };
+  }, [navigate, queryClient]);
 
   if (isLoading) {
     return <div>Loading...</div>;

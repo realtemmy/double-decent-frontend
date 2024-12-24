@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axiosService from "@/axios";
@@ -12,8 +12,8 @@ const Section = () => {
   const { sectionName } = useParams();
 
   useEffect(() => {
-    document.title = `"Section | ${sectionName.replace("-", "")}`;
-  });
+    document.title = `Section | ${sectionName.replace("-", "")}`;
+  }, [sectionName]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, error } = useQuery({
@@ -24,9 +24,9 @@ const Section = () => {
       ),
   });
 
-  const handlePageChange = (currentPage) => {
+  const handlePageChange = useCallback((currentPage) => {
     setCurrentPage(currentPage);
-  };
+  }, []);
 
   if (error) {
     return (

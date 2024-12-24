@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { CameraIcon, Loader2 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -31,13 +31,12 @@ import { toast } from "sonner";
 import useUser from "@/hooks/use-user";
 
 import axiosService from "@/axios";
-import defaultUser from "./../../assets/default.jpg"
+import defaultUser from "./../../assets/default.jpg";
 
 const UserProfile = () => {
-
   useEffect(() => {
-document.title = "User | Profile"
-  }, [])
+    document.title = "User | Profile";
+  }, []);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -74,16 +73,20 @@ document.title = "User | Profile"
     mutationFn: async () => {
       const formData = new FormData();
       formData.append("photo", photo);
-      const response = await axiosService.patch("/user/upload-user-image", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axiosService.patch(
+        "/user/upload-user-image",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       console.log(response);
     },
     onSuccess: () => {
       toast.success("Profile photo updated successfully.");
-      queryClient.invalidateQueries(["user"])
+      queryClient.invalidateQueries(["user"]);
       setOpen(false);
     },
     onError: (error) => {
@@ -124,9 +127,9 @@ document.title = "User | Profile"
     passwordMutation.mutate(passwordField);
   };
 
-  const handleImageUpload = () => {
+  const handleImageUpload = useCallback(() => {
     photoMutation.mutate();
-  };
+  }, [photoMutation]);
 
   return (
     <div className="px-2">

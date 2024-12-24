@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -76,7 +76,7 @@ const Checkout = () => {
     },
   });
 
-  const getCurrentLocation = () => {
+  const getCurrentLocation = useCallback(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -93,7 +93,7 @@ const Checkout = () => {
     } else {
       toast.error("Geolocation is not supported by your browser.");
     }
-  };
+  }, []);
 
   const mutation = useMutation({
     mutationFn: async (data) => {
@@ -109,7 +109,7 @@ const Checkout = () => {
     },
   });
 
-  const handleCheckout = () => {
+  const handleCheckout = useCallback(() => {
     if (!user.email || !(address || mapAddress?.address) || !user.phone) {
       console.log(user.email, address, mapAddress?.address, user.phone);
 
@@ -122,7 +122,18 @@ const Checkout = () => {
       address: address.address || mapAddress.address,
       deliveryFee: getPriceByLga(address.lga),
     });
-  };
+  }, [
+    address,
+    cartItems,
+    user.email,
+    user.phone,
+    mapAddress?.address,
+    mutation,
+  ]);
+
+  const handleAddressChange = useCallback((value) => {
+    setAddress(value);
+  }, []);
 
   if (userLoading) {
     return (
@@ -131,10 +142,6 @@ const Checkout = () => {
       </div>
     );
   }
-
-  const handleAddressChange = (value) => {
-    setAddress(value);
-  };
 
   return (
     <div className="font-[sans-serif] bg-white">
