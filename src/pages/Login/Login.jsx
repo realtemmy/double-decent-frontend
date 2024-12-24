@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,12 +14,8 @@ import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 
 const Login = () => {
-  useEffect(() => {
-    document.title = "Login";
-  }, []);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
   const [formField, setFormField] = useState({ email: "", password: "" });
 
   const mutation = useMutation({
@@ -75,6 +72,14 @@ const Login = () => {
   }, []);
   return (
     <div className="flex w-full h-screen items-center justify-center">
+      <Helmet>
+        <title>Login</title>
+        <meta
+          name="description"
+          content="Login page for Double decent Superstores"
+        />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl text-center">Welcome back</CardTitle>

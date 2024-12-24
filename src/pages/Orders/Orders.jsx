@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -59,10 +60,6 @@ import {
 import debounce from "lodash.debounce";
 
 const Orders = () => {
-  useEffect(() => {
-    document.title = "Orders";
-  }, []);
-
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
@@ -100,6 +97,14 @@ const Orders = () => {
   if (error) return <div>Error: {error.message}</div>;
   return (
     <>
+      <Helmet>
+        <title>Orders</title>
+        <meta
+          name="description"
+          content="Orders page for Double Decent Superstores"
+        />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       <div className="grid grid-cols-2 gap-4 my-4">
         <div className="flex gap-2 col-span-2 sm:col-span-1 md:col-span-1 mx-1">
           <Input

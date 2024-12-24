@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
@@ -12,10 +13,6 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 
 const ResetPassword = () => {
-  useEffect(() => {
-    document.title = "Reset Password";
-  }, []);
-
   const { token } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -61,6 +58,14 @@ const ResetPassword = () => {
   };
   return (
     <div className="flex w-full h-screen items-center justify-center">
+      <Helmet>
+        <title>Reset Password</title>
+        <meta
+          name="description"
+          content="Reset password page for Double Decent Superstores"
+        />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl text-center my-2">

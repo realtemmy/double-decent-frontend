@@ -1,8 +1,8 @@
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-
-import { slugTitleToString } from "@/utils/helperFunctions";
+import { Helmet } from "react-helmet";
+import { slugTitleToString, capitalizeFirstLetter } from "@/utils/helperFunctions";
 
 import axiosService from "@/axios";
 import PaginationButton from "@/components/Pagination/Pagination";
@@ -11,11 +11,6 @@ import Spinner from "@/components/Spinner/Spinner";
 
 const Category = () => {
   const { categoryName } = useParams();
-
-
-  useEffect(() => {
-    document.title = `Category | ${categoryName.replace("-", " ")}`
-  }, [categoryName])
 
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, error } = useQuery({
@@ -40,6 +35,19 @@ const Category = () => {
   }
   return (
     <div className="bg-white">
+      <Helmet>
+        <title>
+          {capitalizeFirstLetter(categoryName.replace("-", " "))} - Category
+        </title>
+        <meta
+          name="description"
+          content={`${capitalizeFirstLetter(
+            categoryName.replace("-", " ")
+          )} category page for Double Decent Superstore`}
+        />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
+
       {isLoading && <Spinner />}
       <div className="mx-auto max-w-2xl px-4 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
         <h2 className="text-3xl font-bold tracking-tight text-slate-700 text-center mb-4 capitalize">

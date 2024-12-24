@@ -1,11 +1,16 @@
-import { useEffect } from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 const NotFound = () => {
-  useEffect(() => {
-    document.title = "Not FOund";
-  }, []);
   return (
     <>
+      <Helmet>
+        <title>Not Found</title>
+        <meta
+          name="description"
+          content="404 not found page for Double Decent Superstores"
+        />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
         <div className="text-center">
           <p className="text-base font-semibold text-indigo-600">404</p>

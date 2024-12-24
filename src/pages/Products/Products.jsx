@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet";
 
 import { Checkbox } from "@/components/ui/checkbox";
-
 import { Card, CardContent } from "@/components/ui/card";
 
 import {
@@ -36,10 +36,7 @@ import { Button } from "@/components/ui/button";
 import { ListFilter } from "lucide-react";
 
 const Products = () => {
-  useEffect(() => {
-    document.title = "Products";
-  }, []);
-
+  const currentUrl = window.location.href;
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [categories, setCategories] = useState([]);
@@ -62,7 +59,7 @@ const Products = () => {
         )}&limit=20&search=${search}`
       ),
   });
-  
+
   const {
     data: cats = [],
     isLoading: catLoading,
@@ -98,6 +95,14 @@ const Products = () => {
 
   return (
     <div className="bg-white grid grid-cols-1 md:grid-cols-[300px_1fr] gap- mx-2">
+      <Helmet>
+        <title>Products</title>
+        <meta
+          name="description"
+          content="Products page for Double Decent superstore"
+        />
+        <link rel="canonical" href={currentUrl} />
+      </Helmet>
       {(isLoading || catLoading) && <Spinner />}
       <div className="md:hidden w-full">
         <Sheet open={open} onOpenChange={setOpen}>

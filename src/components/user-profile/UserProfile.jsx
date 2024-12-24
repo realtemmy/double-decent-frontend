@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import { CameraIcon, Loader2 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -34,9 +35,6 @@ import axiosService from "@/axios";
 import defaultUser from "./../../assets/default.jpg";
 
 const UserProfile = () => {
-  useEffect(() => {
-    document.title = "User | Profile";
-  }, []);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -133,6 +131,14 @@ const UserProfile = () => {
 
   return (
     <div className="px-2">
+      <Helmet>
+        <title>User Profile</title>
+        <meta
+          name="description"
+          content="User Profile page for Double Decent Superstores"
+        />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       <div className="flex md:hidden gap-4 items-center flex-col justify-center my-2">
         <div className="w-fit relative">
           <Avatar className="h-20 w-20 block">

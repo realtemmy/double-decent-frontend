@@ -1,8 +1,12 @@
-import { useEffect, useCallback } from "react";
+import { useCallback } from "react";
+import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { useDispatch, useSelector } from "react-redux";
-import { commaSeparatedPrice } from "@/utils/helperFunctions";
+import { useDispatch } from "react-redux";
+import {
+  capitalizeFirstLetter,
+  commaSeparatedPrice,
+} from "@/utils/helperFunctions";
 import { Button } from "../ui/button";
 
 import {
@@ -18,7 +22,7 @@ import axiosService from "@/axios";
 
 const ProductPage = () => {
   const dispatch = useDispatch();
-  // const { cartCount } = useSelector((state) => state.cart);
+  const currentUrl = window.location.href;
   const { productId } = useParams();
   const {
     data: product,
@@ -31,10 +35,6 @@ const ProductPage = () => {
       return response.data;
     },
   });
-
-  useEffect(() => {
-    document.title = `Product | ${product?.name}`;
-  }, [product?.name]);
 
   const handleAddToCart = useCallback(
     (product) => {
@@ -67,6 +67,11 @@ const ProductPage = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{capitalizeFirstLetter(product.name)} - Double decent</title>
+        <meta name="description" content={product.description} />
+        <link rel="canonical" href={currentUrl} />
+      </Helmet>
       <section className="py-8 bg-white md:py-16 dark:bg-gray-900 antialiased">
         <div className="max-w-screen-xl px-4 mx-auto 2xl:px-0">
           <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">

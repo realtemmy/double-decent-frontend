@@ -1,8 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
+import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axiosService from "@/axios";
-import { slugTitleToString } from "@/utils/helperFunctions";
+import {
+  capitalizeFirstLetter,
+  slugTitleToString,
+} from "@/utils/helperFunctions";
 
 import Product from "@/components/Product/Product";
 import PaginationButton from "@/components/Pagination/Pagination";
@@ -10,10 +14,6 @@ import Spinner from "@/components/Spinner/Spinner";
 
 const Section = () => {
   const { sectionName } = useParams();
-
-  useEffect(() => {
-    document.title = `Section | ${sectionName.replace("-", "")}`;
-  }, [sectionName]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, error } = useQuery({
@@ -37,6 +37,16 @@ const Section = () => {
   }
   return (
     <div className="bg-white">
+      <Helmet>
+        <title>{capitalizeFirstLetter(sectionName.replace("-", " "))} - Section</title>
+        <meta
+          name="description"
+          content={`${capitalizeFirstLetter(
+            sectionName.replace("-", " ")
+          )} section page for Double Decent Superstore`}
+        />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       {isLoading && <Spinner />}
       <div className="mx-auto max-w-2xl px-4 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
         <h2 className="text-3xl font-bold tracking-tight text-slate-700 text-center mb-8 capitalize">
