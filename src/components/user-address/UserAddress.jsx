@@ -298,10 +298,10 @@ const UserAddress = () => {
                       </DialogContent>
                     </Dialog>
                   </span>
-                  <h5 className="capitalize">
+                  <div className="capitalize">
                     <span className="font-semibold text-slate-700">Alias</span>:{" "}
                     {add.alias}
-                  </h5>
+                  </div>
                   <div className="capitalize">
                     <span className="font-semibold text-slate-700">Street</span>{" "}
                     : {add.street}

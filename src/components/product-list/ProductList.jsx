@@ -33,13 +33,14 @@ const ProductList = ({ title, slug, categoryId }) => {
   return (
     <div>
       <div className="flex items-center gap-2">
-        <h3 className="text-xl font-semibold tracking-tight capitalize text-gray-900 mx-2">
+        <h1 className="text-xl font-semibold tracking-tight capitalize text-gray-900 mx-2">
           {title && categoryId ? title: "Other products"}
-        </h3>
+        </h1>
         {slug && (
           <Link
             className="text-orange-500 font-semibold underline hover:text-orange-400"
             to={slug}
+            title={title || "Other products"}
           >
             see more
           </Link>

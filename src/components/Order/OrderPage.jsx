@@ -48,16 +48,16 @@ const OrderPage = () => {
       <section className="bg-white py-8 antialiased dark:bg-gray-900">
         <form className="mx-4">
           <div className="w-full justify-between items-start flex sm:flex-row flex-col gap-3">
-            <h3 className="text-gray-900 text-lg font-semibold font-manrope leading-9">
+            <h1 className="text-gray-900 text-lg font-semibold font-manrope leading-9">
               Order ID: <span className="text-sm">{orderId}</span>
-            </h3>
+            </h1>
           </div>
           <OrderTracking status={data.status} statusDates={data.statusDates} />
           {data.status === "cancelled" && (
             <div className="mt-6 space-y-4 border-b border-t border-gray-200 py-8 dark:border-gray-700 sm:mt-8">
-              <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Refunds
-              </h4>
+              </h2>
 
               <div className="grid grid-cols-3">
                 <dl className="col-span-3 md:col-span-1">
@@ -89,9 +89,9 @@ const OrderPage = () => {
           )}
 
           <div className="mt-6 space-y-4 border-b border-t border-gray-200 py-8 dark:border-gray-700 sm:mt-8">
-            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               Billing & Delivery information
-            </h4>
+            </h3>
 
             <dl>
               <dt className="text-base font-medium text-gray-900 dark:text-white">
@@ -147,7 +147,11 @@ const OrderPage = () => {
                               title={`Product - ${product.name}`}
                             />
                           </div>
-                          <Link href="#" className="hover:underline capitalize">
+                          <Link
+                            to={`/product/${product._id}`}
+                            className="hover:underline capitalize"
+                            title={product.name}
+                          >
                             {product.name}
                           </Link>
                         </div>
@@ -164,9 +168,9 @@ const OrderPage = () => {
               </table>
             </div>
             <div className="mt-4 space-y-6">
-              <h4 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                 Order summary
-              </h4>
+              </h2>
 
               <div className="space-y-4">
                 <div className="space-y-2">

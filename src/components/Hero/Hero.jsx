@@ -35,11 +35,7 @@ const Hero = () => {
           <p className="max-w-2xl text-gray-500 dark:text-gray-400 md:mb-12 md:text-lg mb-3 lg:mb-5 lg:text-xl">
             Don&apos;t Wait - Limited Stock at Unbeatable Prices!
           </p>
-          <Button
-          onClick={() => navigate("/products")}
-          >
-            Shop Now
-          </Button>
+          <Button onClick={() => navigate("/products")}>Shop Now</Button>
         </div>
         <div className="hidden md:col-span-5 md:mt-0 md:flex">
           <img
@@ -62,6 +58,7 @@ const Hero = () => {
             key={index}
             to={`/category/${category.slug}`}
             className="flex items-center md:justify-center h-10 hover:text-gray-900 dark:hover:text-white capitalize font-semibold text-xl"
+            title={`Explore the ${category.name} category`}
           >
             {category.name}
           </Link>

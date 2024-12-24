@@ -159,7 +159,7 @@ const Checkout = () => {
                 {cartItems.length === 0 ? (
                   <div className="text-white">
                     No item in cart yet,{" "}
-                    <Link to="/products" className="text-lg underline">
+                    <Link to="/products" className="text-lg underline" title="Back to products">
                       continue shopping
                     </Link>
                   </div>
@@ -175,9 +175,9 @@ const Checkout = () => {
                         />
                       </div>
                       <div className="w-full">
-                        <h3 className="text-base text-white capitalize">
+                        <h1 className="text-base text-white capitalize">
                           {item.name}
-                        </h3>
+                        </h1>
                         <ul className="text-xs text-gray-300 space-y-2 mt-2">
                           <li>
                             Price
@@ -210,23 +210,23 @@ const Checkout = () => {
                   {commaSeparatedPrice(getPriceByLga(address.lga))}
                 </span>
               </p>
-              <h4 className="flex flex-wrap gap-4 text-base text-white">
+              <h2 className="flex flex-wrap gap-4 text-base text-white">
                 Total{" "}
                 <span className="ml-auto">
                   {commaSeparatedPrice(totalPrice)}
                 </span>
-              </h4>
+              </h2>
             </div>
           </div>
         </div>
 
         <div className="max-w-4xl w-full h-max rounded-md px-4 py-8 sticky top-0">
-          <h2 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-2xl font-bold text-gray-800">
             Complete your order
-          </h2>
+          </h1>
           <form className="mt-8">
             <div>
-              <h3 className="text-base text-gray-800 mb-4">Personal Details</h3>
+              <h2 className="text-base text-gray-800 mb-4">Personal Details</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <Input
@@ -340,15 +340,15 @@ const Checkout = () => {
                 >
                   {user.location.length === 0 ? (
                     <div className="text-center pb-2">
-                      No address set yet, set address
+                      No address set yet? 
                       <Link
-                        to="/user"
-                        variant="link"
+                        to="/user/address"
+                        title="Set address for user"
                         className="p-1 text-orange-500 hover:underline hover:text-orange-400"
                       >
-                        here
-                      </Link>{" "}
-                      or use{" "}
+                        set address
+                      </Link>
+                      or use 
                       <Button
                         variant="secondary"
                         className="rounded border"
@@ -374,9 +374,9 @@ const Checkout = () => {
                           htmlFor={`option-${index}`}
                           className="text-base"
                         >
-                          <h5 className="font-semibold text-slate-600">
+                          <div className="font-semibold text-slate-600">
                             {location.alias} - {location.street}
-                          </h5>
+                          </div>
                           <p>{location.address}</p>
                           <p className="text-sm text-slate-500">
                             {location.state}, {location.lga}

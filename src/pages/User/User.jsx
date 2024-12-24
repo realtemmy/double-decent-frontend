@@ -156,7 +156,7 @@ const UserRoutes = () => {
                     </DialogContent>
                   </Dialog>
                 </div>
-                <h4 className="mt-2 capitalize">{user.name}</h4>
+                <h1 className="mt-2 capitalize">{user.name}</h1>
               </center>
             </CardTitle>
           </CardHeader>

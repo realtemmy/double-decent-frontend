@@ -62,9 +62,9 @@ const Cart = () => {
       </Helmet>
       <section className="bg-white py-6 dark:bg-gray-900">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
             Cart
-          </h2>
+          </h1>
 
           <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
             {/* Cart Items */}
@@ -83,7 +83,11 @@ const Cart = () => {
                     className="text-center border col-span-full w-full p-4 text-xl italic"
                   >
                     No item in cart yet,{" "}
-                    <Link to="/products" className="text-lg underline">
+                    <Link
+                      to="/products"
+                      className="text-lg underline"
+                      title="continue shopping"
+                    >
                       continue shopping
                     </Link>
                   </TableCell>
@@ -93,7 +97,10 @@ const Cart = () => {
                       <TableRow key={index}>
                         <TableCell className="whitespace-nowr">
                           <div className="flex items-center gap-1 md:gap-4">
-                            <Link to={`/product/${item._id}`}>
+                            <Link
+                              to={`/product/${item._id}`}
+                              title={`Product -${item.name}`}
+                            >
                               <img
                                 src={item.image}
                                 alt={item.name}
@@ -104,6 +111,7 @@ const Cart = () => {
                             <div>
                               <Link
                                 to={`/product/${item._id}`}
+                                title={`Product -${item.name}`}
                                 className="text-xs sm:text-sm lg:text-base font-medium hover:underline capitalize"
                               >
                                 {item.name}
@@ -174,7 +182,7 @@ const Cart = () => {
             {/* Checkout and Voucher Section */}
             <div className="space-y-6">
               <div className="rounded-md border p-6 dark:border-gray-700 dark:bg-gray-800">
-                <h4 className="text-lg font-semibold">Cart summary</h4>
+                <h1 className="text-lg font-semibold">Cart summary</h1>
                 <Separator className="my-4" />
                 <p className="text-slate-600">
                   Delivery price will be added after your delivery address is
@@ -190,7 +198,8 @@ const Cart = () => {
                 <p className="mt-4 text-center text-sm text-gray-500">
                   or
                   <Link
-                    to="/"
+                    to="/products"
+                    title="Back to products"
                     className="font-medium text-blue-600 hover:underline dark:text-blue-500"
                   >
                     Continue Shopping

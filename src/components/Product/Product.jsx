@@ -15,7 +15,7 @@ const Product = ({ product }) => {
   }
   return (
     <div className="group relative w-full max-w-[200px] overflow-hidden">
-      <Link to={`/product/${product._id}`}>
+      <Link to={`/product/${product._id}`} title={`Product -${product.name}`}>
         <img
           alt={product.name}
           src={product.image || "/path/to/fallback-image.jpg"}
@@ -27,11 +27,11 @@ const Product = ({ product }) => {
 
       <div className="mt-4 flex justify-between items-start">
         <div className="max-w-[150px] overflow-hidden">
-          <h3 className="text-sm text-gray-700">
+          <h1 className="text-sm text-gray-700">
             <span className="block truncate text-ellipsis whitespace-nowrap capitalize">
               {product.name}
             </span>
-          </h3>
+          </h1>
           <p className="text-sm font-medium text-gray-900">
             {commaSeparatedPrice(product.price)}
           </p>
