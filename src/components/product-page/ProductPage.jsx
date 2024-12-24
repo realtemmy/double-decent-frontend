@@ -86,9 +86,9 @@ const ProductPage = () => {
 
             <div className="mt-6 sm:mt-8 lg:mt-0">
               <div className="flex gap-8 font-semibold text-slate-600 items-center">
-                <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white capitalize">
+                <h2 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white capitalize">
                   {product.name}
-                </h1>
+                </h2>
                 <div>
                   Brand: <span>{product.brand}</span>
                 </div>
