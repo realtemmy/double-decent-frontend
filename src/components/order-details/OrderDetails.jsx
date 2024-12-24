@@ -11,9 +11,9 @@ const OrderDetails = ({ order }) => {
     <section>
       <div>
         <div className="mt-6 space-y-4 border-b border-t border-gray-200 py-2 dark:border-gray-700 sm:mt-8">
-          <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
             Billing & Delivery information
-          </h4>
+          </h1>
           <dl>
             <dt className="text-base font-medium text-gray-900 dark:text-white">
               Delivery address
@@ -62,9 +62,9 @@ const OrderDetails = ({ order }) => {
 
           {/* Order Summary */}
           <div className="mt-4 space-y-6">
-            <h4 className="text-xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
               Order summary
-            </h4>
+            </h2>
             <div className="space-y-2">
               <dl className="flex justify-between">
                 <dt className="text-gray-500 dark:text-gray-400">

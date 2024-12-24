@@ -14,7 +14,7 @@ const FAQ = () => {
         <meta name="description" content="Frequently Asked Questions page for Double decent superstore" />
         <link rel="canonical" href={window.location.href} />
       </Helmet>
-      <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
+      <h1 className="text-2xl font-bold">Frequently Asked Questions</h1>
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
           <AccordionTrigger>

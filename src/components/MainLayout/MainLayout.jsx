@@ -248,14 +248,14 @@ function MainLayout() {
 
                 {user && (
                   <div className="grid gap-2 py-6 w-full">
-                    <h4
+                    <h1
                       className="text-white px-3 font-semibold text-lg py-1 capitalize hover:cursor-pointer"
                       style={{
                         backgroundColor: "#C74E00",
                       }}
                     >
                       {user.name}&#39;s account
-                    </h4>
+                    </h1>
                     <div className="ms-4">
                       <Link
                         to="/user/profile"
@@ -289,14 +289,14 @@ function MainLayout() {
                 )}
 
                 <div className="grid gap-2 py- w-full">
-                  <h4
+                  <h2
                     className="text-white px-1 font-semibold text-xl py-1 hover:cursor-pointer"
                     style={{
                       backgroundColor: "#C74E00",
                     }}
                   >
                     Categories
-                  </h4>
+                  </h2>
                   <Accordion
                     type="single"
                     collapsible

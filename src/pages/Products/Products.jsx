@@ -286,9 +286,9 @@ const Products = () => {
         </CardContent>
       </Card>
       <div>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-800 mb-8">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-800 mb-8">
           Products catalogue
-        </h2>
+        </h1>
         <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(120px,1fr))] m-auto px-2">
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

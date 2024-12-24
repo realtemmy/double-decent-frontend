@@ -62,9 +62,9 @@ const Cart = () => {
       </Helmet>
       <section className="bg-white py-6 dark:bg-gray-900">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
             Cart
-          </h2>
+          </h1>
 
           <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
             {/* Cart Items */}
@@ -182,7 +182,7 @@ const Cart = () => {
             {/* Checkout and Voucher Section */}
             <div className="space-y-6">
               <div className="rounded-md border p-6 dark:border-gray-700 dark:bg-gray-800">
-                <h4 className="text-lg font-semibold">Cart summary</h4>
+                <h1 className="text-lg font-semibold">Cart summary</h1>
                 <Separator className="my-4" />
                 <p className="text-slate-600">
                   Delivery price will be added after your delivery address is

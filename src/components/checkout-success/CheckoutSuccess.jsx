@@ -30,9 +30,9 @@ const CheckoutSuccess = () => {
           <div>
             <CircleCheckBig size={70} color="orange" />
           </div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl mb-2">
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl mb-2">
             Thanks for your order!
-          </h2>
+          </h1>
           <p className="text-gray-500 dark:text-gray-400 mb-6 md:mb-8">
             Your order will be processed within 24 hours during working days. We
             will notify you by email once your order is ready for delivery.

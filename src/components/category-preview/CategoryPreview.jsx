@@ -27,9 +27,9 @@ const CategoryPreview = () => {
       <div className="mx-auto max-w-7xl">
         {isLoading && <Spinner />}
         <div className="mx-auto">
-          <h2 className="text-xl font-semibold my-2 text-gray-900">
+          <h1 className="text-xl font-semibold my-2 text-gray-900">
             Shop from our collections -
-          </h2>
+          </h1>
 
           <ScrollArea className="w-full whitespace-nowrap rounded-md px-4 sm:px-6 lg:px-8 bg-gray-100">
             <div className="flex justify-between gap-1 flex-wrap max-w-2xl py-10 sm:py-16 lg:max-w-none lg:py-20">
@@ -41,7 +41,7 @@ const CategoryPreview = () => {
                     className="w-24 h-auto rounded-lg bg-white object-cover"
                     title={`Category - ${category.name}`}
                   />
-                  <h3 className="mt-6 text-sm text-gray-500 text-center">
+                  <h2 className="mt-6 text-sm text-gray-500 text-center">
                     <Link
                       to={`/category/${category.slug}`}
                       className="hover:text-gray-700 capitalize relative block"
@@ -49,7 +49,7 @@ const CategoryPreview = () => {
                     >
                       {category.name}
                     </Link>
-                  </h3>
+                  </h2>
                 </div>
               ))}
             </div>
