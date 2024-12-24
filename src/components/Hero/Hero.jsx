@@ -35,7 +35,12 @@ const Hero = () => {
           <p className="max-w-2xl text-gray-500 dark:text-gray-400 md:mb-12 md:text-lg mb-3 lg:mb-5 lg:text-xl">
             Don&apos;t Wait - Limited Stock at Unbeatable Prices!
           </p>
-          <Button onClick={() => navigate("/products")}>Shop Now</Button>
+          <Button
+            onClick={() => navigate("/products")}
+            className="bg-orange-500 text-white hover:bg-orange-600"
+          >
+            Shop Now
+          </Button>
         </div>
         <div className="hidden md:col-span-5 md:mt-0 md:flex">
           <img
