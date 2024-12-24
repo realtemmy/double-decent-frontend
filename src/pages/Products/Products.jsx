@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
@@ -47,7 +47,7 @@ const Products = () => {
   const [searchParams] = useSearchParams();
   const search = searchParams.get("search");
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = useCallback(() => setOpen(!open), [open]);
 
   const {
     data = [],
@@ -62,7 +62,7 @@ const Products = () => {
         )}&limit=20&search=${search}`
       ),
   });
-
+  
   const {
     data: cats = [],
     isLoading: catLoading,
@@ -75,9 +75,9 @@ const Products = () => {
     },
   });
 
-  const handlePageChange = (currentPage) => {
+  const handlePageChange = useCallback((currentPage) => {
     setCurrentPage(currentPage);
-  };
+  }, []);
 
   const handleCategoryChange = (checked, categoryId) => {
     setCategories((prevCategories) => {
@@ -95,8 +95,6 @@ const Products = () => {
       </div>
     );
   }
-
-  // console.log(cats);
 
   return (
     <div className="bg-white grid grid-cols-1 md:grid-cols-[300px_1fr] gap- mx-2">

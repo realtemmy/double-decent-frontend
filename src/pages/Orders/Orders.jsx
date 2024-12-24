@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -63,7 +63,6 @@ const Orders = () => {
     document.title = "Orders";
   }, []);
 
-
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
@@ -71,12 +70,11 @@ const Orders = () => {
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [duration, setDuration] = useState("");
 
-
   const debouncedSearch = useMemo(() => debounce(setSearchParams, 300), []);
-useEffect(() => {
-  debouncedSearch({ search });
-  return () => debouncedSearch.cancel();
-}, [search, debouncedSearch]);
+  useEffect(() => {
+    debouncedSearch({ search });
+    return () => debouncedSearch.cancel();
+  }, [search, debouncedSearch]);
 
   // Get all orders
   const { isLoading, data, error } = useQuery({
@@ -89,17 +87,15 @@ useEffect(() => {
     },
   });
 
-   const handlePageChange = (page) => {
-     setCurrentPage(page);
-   };
+  const handlePageChange = useCallback((page) => {
+    setCurrentPage(page);
+  }, []);
 
-   const handleDurationChange = (value) => {
+  const handleDurationChange = useCallback((value) => {
     console.log(value);
-    
-     setDuration(value);
-   };
 
-  // console.log(data);
+    setDuration(value);
+  }, []);
 
   if (error) return <div>Error: {error.message}</div>;
   return (

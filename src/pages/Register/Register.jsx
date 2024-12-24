@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -65,25 +65,28 @@ const Register = () => {
     mutation.mutate(formFields);
   };
 
-  const responseMessage = async (response) => {
-    console.log(response);
-    if (response.credential) {
-      const { data } = await axios.post(
-        "https://double-decent-server.onrender.com/api/v1/user/google",
-        { token: response.credential } // Send token to the server
-      );
-      queryClient.setQueryData(["user"], data.data);
-      toast.success("Login successful");
-      localStorage.setItem("token", data.token);
-      navigate("/");
-      console.log(data);
-    } else {
-      console.error("No credential found in response.");
-    }
-  };
-  const errorMessage = (error) => {
+  const responseMessage = useCallback(
+    async (response) => {
+      console.log(response);
+      if (response.credential) {
+        const { data } = await axios.post(
+          "https://double-decent-server.onrender.com/api/v1/user/google",
+          { token: response.credential } // Send token to the server
+        );
+        queryClient.setQueryData(["user"], data.data);
+        toast.success("Login successful");
+        localStorage.setItem("token", data.token);
+        navigate("/");
+        console.log(data);
+      } else {
+        console.error("No credential found in response.");
+      }
+    },
+    [navigate, queryClient]
+  );
+  const errorMessage = useCallback((error) => {
     toast.error(error.message || "There was an error signing with google.");
-  };
+  }, []);
 
   return (
     <div className="flex w-full h-screen items-center justify-center">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, Suspense, lazy} from "react";
 import { useNavigate } from "react-router-dom";
 import { Routes, Route, Outlet } from "react-router-dom";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -24,21 +24,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-import UserProfile from "@/components/user-profile/UserProfile";
-import Orders from "../Orders/Orders";
-import UserAddress from "@/components/user-address/UserAddress";
-import OrderPage from "@/components/Order/OrderPage";
-import defaultUser from "./../../assets/default.jpg"
-
-import useUser from "@/hooks/use-user";
 import { Input } from "@/components/ui/input";
-import axiosService from "@/axios";
 import { toast } from "sonner";
+
+import defaultUser from "./../../assets/default.jpg";
+import useUser from "@/hooks/use-user";
+import axiosService from "@/axios";
+import Spinner from "@/components/Spinner/Spinner";
+
+const UserProfile = lazy(() => import("@/components/user-profile/UserProfile"));
+const Orders = lazy(() => import("../Orders/Orders"))
+const UserAddress = lazy(() => import("@/components/user-address/UserAddress"))
+const OrderPage = lazy(() => import("@/components/Order/OrderPage"));
 
 const User = () => {
   return (
-    <div>
+    <Suspense fallback={<Spinner />}>
       <Routes>
         <Route path="/" element={<UserRoutes />}>
           <Route path="profile" element={<UserProfile />} />
@@ -47,7 +48,7 @@ const User = () => {
           <Route path="address" element={<UserAddress />} />
         </Route>
       </Routes>
-    </div>
+    </Suspense>
   );
 };
 
@@ -58,11 +59,11 @@ const UserRoutes = () => {
   const [image, setImage] = useState(null);
   const [open, setOpen] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     queryClient.removeQueries(["user"]);
     localStorage.removeItem("token");
     navigate("/login");
-  };
+  }, [navigate, queryClient]);
 
   const imageMutation = useMutation({
     mutationFn: async () => {
@@ -88,9 +89,9 @@ const UserRoutes = () => {
     },
   });
 
-  const handleImageUpload = () => {
+  const handleImageUpload = useCallback(() => {
     imageMutation.mutate();
-  };
+  }, [imageMutation]);
 
   return (
     <>
@@ -107,7 +108,11 @@ const UserRoutes = () => {
                   <AvatarFallback>{user.name[0].toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div className="absolute bottom-7 right-1/3 cursor-pointer">
-                  <Dialog open={open && !!image} onOpenChange={setOpen} className="p-0">
+                  <Dialog
+                    open={open && !!image}
+                    onOpenChange={setOpen}
+                    className="p-0"
+                  >
                     <DialogTrigger>
                       <Camera size={24} className="w-auto h-auto" />
                       <Input
@@ -197,7 +202,8 @@ const UserRoutes = () => {
                 <DialogHeader>
                   <DialogTitle>Are you sure you want to Logout?</DialogTitle>
                   <DialogDescription>
-                    This will clear your session, you will be logged out and redirected to login page.
+                    This will clear your session, you will be logged out and
+                    redirected to login page.
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>

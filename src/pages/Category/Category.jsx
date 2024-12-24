@@ -15,7 +15,7 @@ const Category = () => {
 
   useEffect(() => {
     document.title = `Category | ${categoryName.replace("-", " ")}`
-  }, [])
+  }, [categoryName])
 
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, error } = useQuery({

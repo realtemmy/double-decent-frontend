@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
@@ -30,20 +30,29 @@ const Cart = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    document.title = "Cart"
-  }, [])
+    document.title = "Cart";
+  }, []);
 
   const { cartItems, totalPrice } = useSelector((state) => state.cart);
 
-  const handleRemoveFromCart = (itemId) => {
-    dispatch(removeFromCart(itemId));
-  };
-  const handleIncrementCount = (itemId) => {
-    dispatch(incrementCount(itemId));
-  };
-  const handleDecrementCount = (itemId) => {
-    dispatch(decrementCount(itemId));
-  };
+  const handleRemoveFromCart = useCallback(
+    (itemId) => {
+      dispatch(removeFromCart(itemId));
+    },
+    [dispatch]
+  );
+  const handleIncrementCount = useCallback(
+    (itemId) => {
+      dispatch(incrementCount(itemId));
+    },
+    [dispatch]
+  );
+  const handleDecrementCount = useCallback(
+    (itemId) => {
+      dispatch(decrementCount(itemId));
+    },
+    [dispatch]
+  );
   return (
     <section className="bg-white py-6 dark:bg-gray-900">
       <div className="container mx-auto px-4">
@@ -67,7 +76,10 @@ const Cart = () => {
                   colSpan={3}
                   className="text-center border col-span-full w-full p-4 text-xl italic"
                 >
-                  No item in cart yet, <Link to="/products" className="text-lg underline">continue shopping</Link>
+                  No item in cart yet,{" "}
+                  <Link to="/products" className="text-lg underline">
+                    continue shopping
+                  </Link>
                 </TableCell>
               ) : (
                 <TableBody>
@@ -150,7 +162,6 @@ const Cart = () => {
                 </TableRow>
               </TableFooter>
             </Table>
-
           </div>
 
           {/* Checkout and Voucher Section */}
@@ -162,7 +173,11 @@ const Cart = () => {
                 Delivery price will be added after your delivery address is
                 filled at the checkout
               </p>
-              <Button className="w-full" onClick={() => navigate("/checkout")}>
+              <Button
+                className="w-full"
+                onClick={() => navigate("/checkout")}
+                disabled={cartItems.length === 0}
+              >
                 Proceed to Checkout
               </Button>
               <p className="mt-4 text-center text-sm text-gray-500">
@@ -179,7 +194,10 @@ const Cart = () => {
         </div>
       </div>
       <section className="mt-10 mx-4">
-        <ProductList title={"Similar products"} categoryId={cartItems[0]?.category}/>
+        <ProductList
+          title={"Similar products"}
+          categoryId={cartItems[0]?.category}
+        />
       </section>
     </section>
   );
