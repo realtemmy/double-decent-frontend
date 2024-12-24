@@ -34,15 +34,15 @@ const ProductList = ({ title, slug, categoryId }) => {
     <div>
       <div className="flex items-center gap-2">
         <h1 className="text-xl font-semibold tracking-tight capitalize text-gray-900 mx-2">
-          {title && categoryId ? title: "Other products"}
+          {title && categoryId ? title : "Other products"}
         </h1>
         {slug && (
           <Link
             className="text-orange-500 font-semibold underline hover:text-orange-400"
             to={slug}
-            title={title || "Other products"}
+            title={`Learn more about ${title || "our products"}`}
           >
-            see more
+            Learn more about {title || "our products"}
           </Link>
         )}
       </div>
@@ -51,7 +51,7 @@ const ProductList = ({ title, slug, categoryId }) => {
       <ScrollArea className="bg-white w-full p-4">
         <div className="flex justify- gap-2">
           {products.map((product) => (
-            <div key={product._id}  className="w-32">
+            <div key={product._id} className="w-32">
               <Product product={product} />
             </div>
           ))}
