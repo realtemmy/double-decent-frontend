@@ -62,7 +62,7 @@ const Products = () => {
         )}&limit=20&search=${search}`
       ),
   });
-
+  
   const {
     data: cats = [],
     isLoading: catLoading,
@@ -95,8 +95,6 @@ const Products = () => {
       </div>
     );
   }
-
-  // console.log(cats);
 
   return (
     <div className="bg-white grid grid-cols-1 md:grid-cols-[300px_1fr] gap- mx-2">

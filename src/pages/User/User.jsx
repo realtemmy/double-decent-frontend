@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, Suspense, lazy} from "react";
 import { useNavigate } from "react-router-dom";
 import { Routes, Route, Outlet } from "react-router-dom";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -24,21 +24,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-import UserProfile from "@/components/user-profile/UserProfile";
-import Orders from "../Orders/Orders";
-import UserAddress from "@/components/user-address/UserAddress";
-import OrderPage from "@/components/Order/OrderPage";
-import defaultUser from "./../../assets/default.jpg";
-
-import useUser from "@/hooks/use-user";
 import { Input } from "@/components/ui/input";
-import axiosService from "@/axios";
 import { toast } from "sonner";
+
+import defaultUser from "./../../assets/default.jpg";
+import useUser from "@/hooks/use-user";
+import axiosService from "@/axios";
+import Spinner from "@/components/Spinner/Spinner";
+
+const UserProfile = lazy(() => import("@/components/user-profile/UserProfile"));
+const Orders = lazy(() => import("../Orders/Orders"))
+const UserAddress = lazy(() => import("@/components/user-address/UserAddress"))
+const OrderPage = lazy(() => import("@/components/Order/OrderPage"));
 
 const User = () => {
   return (
-    <div>
+    <Suspense fallback={<Spinner />}>
       <Routes>
         <Route path="/" element={<UserRoutes />}>
           <Route path="profile" element={<UserProfile />} />
@@ -47,7 +48,7 @@ const User = () => {
           <Route path="address" element={<UserAddress />} />
         </Route>
       </Routes>
-    </div>
+    </Suspense>
   );
 };
 
