@@ -164,6 +164,7 @@ const UserProfile = () => {
                         src={URL.createObjectURL(photo)}
                         alt="preview image"
                         className="w-full max-w-[400px] max-h-[400px] rounded"
+                        title="User preview image"
                       />
                     )}
                   </div>
@@ -197,6 +198,7 @@ const UserProfile = () => {
                     src={user.photo || defaultUser}
                     className="w-full max-w-[400px] max-h-[400px] rounded"
                     alt="user photo"
+                    title="User photo"
                   />
                 </DialogDescription>
               </DialogHeader>

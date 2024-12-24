@@ -92,6 +92,7 @@ const Cart = () => {
                               src={item.image}
                               alt={item.name}
                               className="h-10 w-10 min-w-10 rounded-md"
+                              title={`Product - ${item.name}`}
                             />
                           </Link>
                           <div>

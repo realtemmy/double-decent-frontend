@@ -135,6 +135,7 @@ const OrderPage = () => {
                               className="h-auto w-full max-h-full"
                               src={product.image}
                               alt="imac image"
+                              title={`Product - ${product.name}`}
                             />
                           </div>
                           <Link href="#" className="hover:underline capitalize">

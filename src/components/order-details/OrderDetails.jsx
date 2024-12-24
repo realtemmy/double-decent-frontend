@@ -41,11 +41,13 @@ const OrderDetails = ({ order }) => {
                             className="h-auto w-full max-h-full dark:hidden"
                             src={product.image}
                             alt={`${product.name} image`}
+                            title={`Product -${product.name} dark`}
                           />
                           <img
                             className="hidden h-auto w-full max-h-full dark:block"
                             src={product.image}
                             alt={`${product.name} image`}
+                            title={`Product -${product.name} light`}
                           />
                         </Link>
                         <Link
@@ -58,7 +60,7 @@ const OrderDetails = ({ order }) => {
                     </TableCell>
                     <TableCell>{`x${product.quantity}`}</TableCell>
                     <TableCell className="text-right font-bold">
-                     {commaSeparatedPrice(product.price)}
+                      {commaSeparatedPrice(product.price)}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -82,9 +84,7 @@ const OrderDetails = ({ order }) => {
               </dl>
               <dl className="flex justify-between">
                 <dt className="text-gray-500 dark:text-gray-400">Discount</dt>
-                <dd className="text-base font-medium text-green-500">
-                  -0.00
-                </dd>
+                <dd className="text-base font-medium text-green-500">-0.00</dd>
               </dl>
               <dl className="flex justify-between">
                 <dt className="text-gray-500 dark:text-gray-400">
@@ -102,7 +102,9 @@ const OrderDetails = ({ order }) => {
               </dl>
               <dl className="flex justify-between border-t pt-2">
                 <dt className="text-lg font-bold">Total</dt>
-                <dd className="text-lg font-bold">{commaSeparatedPrice(totalAmount)}</dd>
+                <dd className="text-lg font-bold">
+                  {commaSeparatedPrice(totalAmount)}
+                </dd>
               </dl>
             </div>
           </div>

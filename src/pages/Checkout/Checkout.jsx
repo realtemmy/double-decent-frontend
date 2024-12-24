@@ -164,6 +164,8 @@ const Checkout = () => {
                         <img
                           src={item.image}
                           className="w-full object-contain"
+                          alt={item.name}
+                          title={`Product - ${item.name}`}
                         />
                       </div>
                       <div className="w-full">
