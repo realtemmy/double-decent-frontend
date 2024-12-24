@@ -35,8 +35,22 @@
 - Flowbite
 - Shadcn
 
+## Optimization
+
 #### Lighthouse results
+* Initial values
 - Performance - 98 
 - Accessibility - 88
 - Best practices - 100
 - SEO - 67
+[Lighthose initial result](./assets/Screenshot%202024-12-24%20201523.png)
+
+
+* After using Helmet on all pages
+- Performance - 97 
+- Accessibility - 88
+- Best practices - 100
+- SEO - 77
+[Lighthouse result after Helmet](./assets//Screenshot%202024-12-24%20203331.png)
+
+- * Increment in SEO and a drop in Perfomance 
