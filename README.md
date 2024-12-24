@@ -61,3 +61,10 @@
 - [Lighthouse result after Helmet](./assets//Screenshot%202024-12-24%20203331.png)
 
 * - Increment in SEO and a drop in Perfomance
+
+- - After adding title to all links and sorting h items orderly
+
+* Performance - 98
+* Accessibility - 90
+* Best practices - 100
+* SEO - 77
