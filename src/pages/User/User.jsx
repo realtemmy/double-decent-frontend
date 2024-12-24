@@ -133,6 +133,7 @@ const UserRoutes = () => {
                                 src={URL.createObjectURL(image)}
                                 alt="preview image"
                                 className="w-full max-w-[400px] max-h-[400px] rounded"
+                                title="User photo"
                               />
                             )}
                           </div>

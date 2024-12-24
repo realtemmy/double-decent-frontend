@@ -40,7 +40,8 @@ const CategoryPreview = () => {
                   <img
                     alt={category.name}
                     src={category.image}
-                    className="w-24 h-auto rounded-lg bg-white object-cover "
+                    className="w-24 h-auto rounded-lg bg-white object-cover"
+                    title={`Category - ${category.name}`}
                   />
                   <h3 className="mt-6 text-sm text-gray-500 text-center">
                     <Link

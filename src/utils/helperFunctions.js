@@ -28,3 +28,8 @@ export const formatDate = (dateString) => {
   // Combine the parts into the desired format
   return `${day}, ${weekday} ${month} ${year}`;
 };
+
+export const capitalizeFirstLetter = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+

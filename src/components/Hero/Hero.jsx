@@ -46,11 +46,13 @@ const Hero = () => {
             className="dark:hidden"
             src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/girl-shopping-list.svg"
             alt="shopping illustration"
+            title="Hero image light"
           />
           <img
             className="hidden dark:block"
             src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/girl-shopping-list-dark.svg"
             alt="shopping illustration"
+            title="Hero image dark"
           />
         </div>
       </div>

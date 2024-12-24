@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -11,10 +12,6 @@ import { toast } from "sonner";
 import { GoogleLogin } from "@react-oauth/google";
 
 const Register = () => {
-  useEffect(() => {
-    document.title = "Register";
-  }, []);
-
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [formFields, setFormFields] = useState({
@@ -90,6 +87,14 @@ const Register = () => {
 
   return (
     <div className="flex w-full h-screen items-center justify-center">
+      <Helmet>
+        <title>Register</title>
+        <meta
+          name="description"
+          content="Registration page for Double Decent Superstores"
+        />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl text-center my-4">

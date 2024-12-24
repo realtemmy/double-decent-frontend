@@ -21,6 +21,7 @@ const Product = ({ product }) => {
           src={product.image || "/path/to/fallback-image.jpg"}
           className="aspect-square w-full rounded-md cursor-pointer bg-gray-200 object-cover"
           loading="lazy"
+          title={`Product -${product.name}`}
         />
       </Link>
 

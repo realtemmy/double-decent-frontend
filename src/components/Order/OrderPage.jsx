@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import OrderTracking from "../order-tracking/OrderTracking";
@@ -36,6 +37,14 @@ const OrderPage = () => {
   }
   return (
     <>
+      <Helmet>
+        <title>{`Order - ${orderId}`}</title>
+        <meta
+          name="description"
+          content={`Order ${orderId} for Double decent superstores`}
+        />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       <section className="bg-white py-8 antialiased dark:bg-gray-900">
         <form className="mx-4">
           <div className="w-full justify-between items-start flex sm:flex-row flex-col gap-3">
@@ -135,6 +144,7 @@ const OrderPage = () => {
                               className="h-auto w-full max-h-full"
                               src={product.image}
                               alt="imac image"
+                              title={`Product - ${product.name}`}
                             />
                           </div>
                           <Link href="#" className="hover:underline capitalize">

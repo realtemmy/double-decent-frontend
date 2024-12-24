@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
+import { Helmet } from "react-helmet";
 import { useSelector } from "react-redux";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -41,9 +42,6 @@ import axiosService from "@/axios";
 import { Input } from "@/components/ui/input";
 
 const Checkout = () => {
-  useEffect(() => {
-    document.title = "Checkout";
-  }, []);
   const { cartItems, totalPrice } = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const [coords, setCoords] = useState(null);
@@ -145,6 +143,14 @@ const Checkout = () => {
 
   return (
     <div className="font-[sans-serif] bg-white">
+      <Helmet>
+        <title>Checkout - Double decent</title>
+        <meta
+          name="description"
+          content="Checkout page for Double decent superstores"
+        />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       <div className="flex max-sm:flex-col gap-12 max-lg:gap-4 h-full">
         <div className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 sm:h-screen sm:sticky sm:top-0 lg:min-w-[370px] sm:min-w-[300px]">
           <div className="relative h-full">
@@ -164,6 +170,8 @@ const Checkout = () => {
                         <img
                           src={item.image}
                           className="w-full object-contain"
+                          alt={item.name}
+                          title={`Product - ${item.name}`}
                         />
                       </div>
                       <div className="w-full">

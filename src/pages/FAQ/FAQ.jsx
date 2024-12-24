@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Helmet } from "react-helmet";
 import {
   Accordion,
   AccordionContent,
@@ -7,11 +7,13 @@ import {
 } from "@/components/ui/accordion";
 
 const FAQ = () => {
-  useEffect(() => {
-    document.title = "FAQ"
-  },[])
   return (
     <div className="mx-auto max-w-2xl">
+      <Helmet>
+        <title>FAQ - Double Decent</title>
+        <meta name="description" content="Frequently Asked Questions page for Double decent superstore" />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
