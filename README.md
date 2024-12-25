@@ -68,3 +68,10 @@
 * Accessibility - 90
 * Best practices - 100
 * SEO - 77
+
+- "'Background and foreground colors do not have a sufficient contrast ratio.' fix for Accessibility" commit fix
+
+* Performance - 97
+* Accessibility - 95
+* Best practices - 100
+* SEO - 92
