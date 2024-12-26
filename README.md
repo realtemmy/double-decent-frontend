@@ -14,8 +14,9 @@
 - In updating user's photo, first delete the prev one if there exist and loader in updating user's profile
 - Filtering in order - date, search etc
 - Edit address
-- Back to login after reseting password?
 - Filter on products and user set to fixed
+
+* Get/Have access to all customers from paystack in admin
 
 - Ensure CSP is effective against XSS attacks
 
