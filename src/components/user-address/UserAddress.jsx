@@ -25,20 +25,9 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { Button } from "../ui/button";
-import { Edit, Loader, Plus, Trash2 } from "lucide-react";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { Textarea } from "../ui/textarea";
+import { Loader, Plus, Trash2 } from "lucide-react";
 
+import AddressDialog from "../address-dialog/AddressDialog";
 import useUser from "@/hooks/use-user";
 import axiosService from "@/axios";
 
@@ -48,8 +37,8 @@ const UserAddress = () => {
 
   const [open, setOpen] = useState(false);
   const [delOpen, setDelOpen] = useState(false);
-  const [state, setState] = useState("");
-  const [lga, setLga] = useState("");
+  const [editOpen, setEditOpen] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
   const [addressField, setAddressField] = useState({
     alias: "",
@@ -86,17 +75,17 @@ const UserAddress = () => {
     },
   });
 
-  const handleAddressSubmit = () => {
+  const handleAddressSubmit = (addressField) => {
     if (
       addressField.alias === "" ||
       addressField.street === "" ||
-      state === "" ||
-      lga === "" ||
+      addressField.state === "" ||
+      addressField.lga === "" ||
       addressField.address === ""
     ) {
       return toast.warning("All fields are required");
     }
-    addressMutation.mutate({ ...addressField, lga, state });
+    addressMutation.mutate(addressField);
   };
 
   const handleAddressDelete = useCallback(
@@ -121,110 +110,27 @@ const UserAddress = () => {
           <CardTitle>Address</CardTitle>
           <CardDescription className="flex justify-between items-center">
             <div>
-              Update your delivery address here. Click save when you&apos;re done.
+              Update your delivery address here. Click save when you&apos;re
+              done.
             </div>
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Button size="sm" type="button">
-                        <Plus />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Add address</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Add address</DialogTitle>
-                  <DialogDescription className="text-start">
-                    <section className="grid grid-cols-2 items-baseline gap-2 space-y-2">
-                      <div className="space-y-1 col-span-2 md:col-span-1">
-                        <Label htmlFor="alias">Alias</Label>
-                        <Input
-                          id="alias"
-                          placeholder="eg Home, Work etc"
-                          name="alias"
-                          onChange={handleSetAddress}
-                          value={addressField.alias}
-                        />
-                      </div>
-                      <div className="space-y-1 col-span-2 md:col-span-1">
-                        <Label htmlFor="street">Street</Label>
-                        <Input
-                          id="street"
-                          defaultValue="123 Main St"
-                          name="street"
-                          onChange={handleSetAddress}
-                          value={addressField.street}
-                        />
-                      </div>
-                      <div className="space-y-1 col-span-2 md:col-span-1">
-                        <Select
-                          onValueChange={(value) => setState(value)}
-                          name="state"
-                          value={state}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select state" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>States</SelectLabel>
-                              <SelectItem value="lagos" selected>
-                                Lagos state
-                              </SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-1 col-span-2 md:col-span-1">
-                        <Select
-                          onValueChange={(lga) => setLga(lga)}
-                          name="lga"
-                          value={lga}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Choose LGA" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>LGA</SelectLabel>
-                              <SelectItem value="ikorodu">Ikorodu</SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-1 col-span-2">
-                        <Label htmlFor="address">Full address</Label>
-                        <Textarea
-                          id="address"
-                          placeholder="9, NBC road, Ebute, Ikorodu, Lagos State."
-                          name="address"
-                          onChange={handleSetAddress}
-                          value={addressField.address}
-                        />
-                      </div>
-                    </section>
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <Button type="submit" onClick={handleAddressSubmit}>
-                    {addressMutation.isPending ? (
-                      <div className="flex items-center">
-                        <Loader /> <i>Loading...</i>
-                      </div>
-                    ) : (
-                      "Save Address"
-                    )}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button size="sm" type="button" onClick={() => setOpen(true)}>
+                    <Plus />
                   </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Add address</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <AddressDialog
+              isOpen={open}
+              onClose={setOpen}
+              onSubmit={handleAddressSubmit}
+              isLoading={addressMutation.isPending}
+            />
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -242,16 +148,21 @@ const UserAddress = () => {
                   key={index}
                 >
                   <span className="absolute right-2 cursor-pointer flex gap-2 items-center">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Edit size={18} color="orange" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Edit Address</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        setSelectedAddress(add); // Set the selected address
+                        setEditOpen(true); // Open the dialog
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    <AddressDialog
+                      isOpen={editOpen}
+                      onClose={setEditOpen}
+                      initialData={selectedAddress}
+                      // isLoading={}
+                    />
 
                     <Dialog open={delOpen} onOpenChange={setDelOpen}>
                       <DialogTrigger>
@@ -324,12 +235,7 @@ const UserAddress = () => {
               ))}
             </section>
           )}
-          {/* <ScrollBar orientation="horizontal" />
-                  </ScrollArea> */}
         </CardContent>
-        {/* <CardFooter>
-                  <Button onClick={handleAddressSubmit}>Save address</Button>
-                </CardFooter> */}
       </Card>
     </>
   );

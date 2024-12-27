@@ -14,7 +14,7 @@ const ForgotPassword = lazy(() =>
 );
 const Login = lazy(() => import("./pages/Login/Login"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword/ResetPassword"));
-const Home = lazy(() => import("./pages/Home/Home"));
+const  Home = lazy(() => import("./pages/Home/Home"));
 const Products = lazy(() => import("./pages/Products/Products"));
 const ProductPage = lazy(() => import("./components/product-page/ProductPage"));
 const Category = lazy(() => import("./pages/Category/Category"));
