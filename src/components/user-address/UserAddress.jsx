@@ -25,7 +25,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { Button } from "../ui/button";
-import { Loader, Plus, Trash2 } from "lucide-react";
+import { Edit, Loader, Plus, Trash2 } from "lucide-react";
 
 import AddressDialog from "../address-dialog/AddressDialog";
 import useUser from "@/hooks/use-user";
@@ -148,15 +148,23 @@ const UserAddress = () => {
                   key={index}
                 >
                   <span className="absolute right-2 cursor-pointer flex gap-2 items-center">
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        setSelectedAddress(add); // Set the selected address
-                        setEditOpen(true); // Open the dialog
-                      }}
-                    >
-                      Edit
-                    </Button>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Edit
+                            color="orange"
+                            size={18}
+                            onClick={() => {
+                              setSelectedAddress(add); // Set the selected address
+                              setEditOpen(true); // Open the dialog
+                            }}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Add to library</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                     <AddressDialog
                       isOpen={editOpen}
                       onClose={setEditOpen}
