@@ -26,7 +26,7 @@ const FAQ = () => {
           <AccordionTrigger>Do you give refunds?</AccordionTrigger>
           <AccordionContent>
             Yes. Orders cancelled before products are send out will get refunded
-            to the account that made payment
+            to the account that made payment in 7-8 working days by paystack.
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-3">

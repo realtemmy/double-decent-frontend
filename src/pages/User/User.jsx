@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, Suspense, lazy } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useCallback, Suspense, lazy, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Routes, Route, Outlet } from "react-router-dom";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import {
@@ -55,16 +55,21 @@ const User = () => {
 const UserRoutes = () => {
   const { data: user } = useUser();
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
   const [image, setImage] = useState(null);
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(() => {
-    return localStorage.getItem("activeTab") || "profile";
-  });
+  const [active, setActive] = useState("");
 
   useEffect(() => {
-    localStorage.setItem("activeTab", active);
-  }, [active]);
+    // Get the third part of the path (e.g., '/user/profile' -> 'profile')
+    const path = location.pathname.split("/")[2];
+    setActive(path || "profile");
+  }, [location]);
+
+  const handleNavigation = (tab, path) => {
+    navigate(path); // Navigate to the target route
+  };
 
   const handleLogout = useCallback(() => {
     queryClient.removeQueries(["user"]);
@@ -94,11 +99,6 @@ const UserRoutes = () => {
       setOpen(false);
     },
   });
-
-  const handleNavigation = (tab, path) => {
-    setActive(tab); // Update active state
-    navigate(path); // Navigate to the target route
-  };
 
   const handleImageUpload = useCallback(() => {
     imageMutation.mutate();
@@ -174,8 +174,8 @@ const UserRoutes = () => {
           <Separator className="w-11/12 m-auto my-4" />
           <CardContent className="p-0">
             <Button
-              className={`justify-start w-full rounded-none hover:bg-orange-100 ${
-                active === "profile" && "bg-orange-200 text-orange-500"
+              className={`justify-start w-full rounded-none hover:bg-orange-100 hover:text-orange-500 ${
+                active === "profile" ? "bg-orange-100 text-orange-500" : ""
               }`}
               variant="secondary"
               onClick={() => handleNavigation("profile", "/user/profile")}
@@ -184,8 +184,8 @@ const UserRoutes = () => {
               <span className="ms-2">Profile</span>
             </Button>
             <Button
-              className={`justify-start w-full rounded-none hover:bg-orange-100 ${
-                active === "address" && "bg-orange-200 text-orange-500"
+              className={`justify-start w-full rounded-none hover:bg-orange-100 hover:text-orange-500 ${
+                active === "address" ? "bg-orange-100 text-orange-500" : ""
               }`}
               variant="secondary"
               onClick={() => handleNavigation("address", "/user/address")}
@@ -194,15 +194,47 @@ const UserRoutes = () => {
               <span className="ms-2">Delivery Address</span>
             </Button>
             <Button
-              className={`justify-start w-full rounded-none hover:bg-orange-100 ${
-                active === "orders" && "bg-orange-200 text-orange-500"
+              className={`justify-start w-full rounded-none hover:bg-orange-100 hover:text-orange-500 ${
+                active === "orders" ? "bg-orange-100 text-orange-500" : ""
               }`}
               variant="secondary"
-              onClick={() => handleNavigation("orders", "/user/orders")}
+              onClick={() => navigate("/user/orders")}
             >
               <ShoppingBasket size={24} />
               <span className="ms-2">Order history</span>
             </Button>
+            <Button
+              className="justify-start w-full rounded-none hover:bg-orange-100 hover:text-orange-500"
+              variant="secondary"
+            >
+              <Settings size={24} />
+              <span className="ms-2">Security settings</span>
+            </Button>
+            <Separator className="my-3" />
+            <Dialog>
+              <DialogTrigger className="flex p-2 w-full bg-red-50">
+                <LogOut color="red" />
+                <span className="ms-2 text-red-700">Logout</span>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Are you sure you want to Logout?</DialogTitle>
+                  <DialogDescription>
+                    This will clear your session, you will be logged out and
+                    redirected to login page.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <Button
+                    type="submit"
+                    variant="destructive"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </CardContent>
         </Card>
         <div className="col-span-2 md:col-span-1">
