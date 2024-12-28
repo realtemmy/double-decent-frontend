@@ -42,8 +42,7 @@ const UserAddress = () => {
 
   const addressMutation = useMutation({
     mutationFn: async (fields) => {
-      const response = await axiosService.post("/user/address", fields);
-      return response.data;
+      await axiosService.post("/user/address", fields);
     },
     onSuccess: () => {
       toast.success("Address successfully added");
@@ -63,11 +62,7 @@ const UserAddress = () => {
   });
   const editAddressMutation = useMutation({
     mutationFn: async (fields) => {
-      const response = await axiosService.patch(
-        `/user/address/${selectedAddress._id}`,
-        fields
-      );
-      console.log(response);
+      await axiosService.patch(`/user/address/${selectedAddress._id}`, fields);
     },
     onSuccess: () => {
       toast.success("Address updated successfully.");
@@ -153,7 +148,7 @@ const UserAddress = () => {
               </p>
             </div>
           ) : (
-            <section className="flex gap-4 flex-wrap">
+            <section className="flex gap-4 flex-wrap items-center">
               {user.location.map((add, index) => (
                 <div
                   className="border p-2 rounded relative max-w-sm min-w-[200px]"
@@ -173,7 +168,7 @@ const UserAddress = () => {
                           />
                         </TooltipTrigger>
                         <TooltipContent>
-                          <p>Add to library</p>
+                          <p>Edit address</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>

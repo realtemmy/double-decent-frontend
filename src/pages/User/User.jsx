@@ -1,4 +1,4 @@
-import { useState, useCallback, Suspense, lazy} from "react";
+import { useState, useCallback, Suspense, lazy } from "react";
 import { useNavigate } from "react-router-dom";
 import { Routes, Route, Outlet } from "react-router-dom";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -33,8 +33,8 @@ import axiosService from "@/axios";
 import Spinner from "@/components/Spinner/Spinner";
 
 const UserProfile = lazy(() => import("@/components/user-profile/UserProfile"));
-const Orders = lazy(() => import("../Orders/Orders"))
-const UserAddress = lazy(() => import("@/components/user-address/UserAddress"))
+const Orders = lazy(() => import("../Orders/Orders"));
+const UserAddress = lazy(() => import("@/components/user-address/UserAddress"));
 const OrderPage = lazy(() => import("@/components/Order/OrderPage"));
 
 const User = () => {
@@ -69,12 +69,11 @@ const UserRoutes = () => {
     mutationFn: async () => {
       const formData = new FormData();
       formData.append("photo", image);
-      const response = axiosService.patch("/user/upload-user-image", formData, {
+      await axiosService.patch("/user/upload-user-image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response);
     },
     onSuccess: () => {
       toast.success("Profile photo updated successfully.");
