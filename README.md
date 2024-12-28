@@ -11,7 +11,6 @@
 - Set max width for display of the entire app
 - In user's, if there was an error getting user from hook, display error message or just keep loading
 - In updating user's photo, first delete the prev one if there exist and loader in updating user's profile
-- Filtering in order - date, search etc
 - Filter on products and user set to fixed
 
 * Get/Have access to all customers from paystack in admin

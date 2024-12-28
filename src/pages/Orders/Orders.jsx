@@ -63,22 +63,16 @@ const Orders = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [search, setSearch] = useState("");
+  const [searchId, setSearchId] = useState("");
   const [duration, setDuration] = useState("");
-
-  const debouncedSearch = useMemo(() => debounce(setSearchParams, 300), []);
-  useEffect(() => {
-    debouncedSearch({ search });
-    return () => debouncedSearch.cancel();
-  }, [search, debouncedSearch]);
 
   // Get all orders
   const { isLoading, data, error } = useQuery({
-    queryKey: ["orders", activeTab, currentPage, duration],
+    queryKey: ["orders", activeTab, currentPage, duration, searchId],
     queryFn: async () => {
       const response = await axiosService.get(
-        `/order?type=${activeTab}&page=${currentPage}&duration=${duration}`
+        `/order?type=${activeTab}&page=${currentPage}&duration=${duration}&id=${search}`
       );
       return response.data;
     },
@@ -89,8 +83,6 @@ const Orders = () => {
   }, []);
 
   const handleDurationChange = useCallback((value) => {
-    console.log(value);
-
     setDuration(value);
   }, []);
 
@@ -112,7 +104,7 @@ const Orders = () => {
             value={search}
             onChange={(event) => setSearch(event.target.value)}
           />
-          <Button onClick={() => debouncedSearch({ search })}>Search</Button>
+          <Button onClick={() => setSearchId(search)}>Search</Button>
         </div>
         <div className="flex justify-evenly gap-2 col-span-2 sm:col-span-1">
           <Select className="col-span-2">
