@@ -40,19 +40,6 @@ const UserAddress = () => {
   const [editOpen, setEditOpen] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
 
-  const [addressField, setAddressField] = useState({
-    alias: "",
-    street: "",
-    state: "",
-    lga: "",
-    address: "",
-  });
-
-  const handleSetAddress = (event) => {
-    const { name, value } = event.target;
-    setAddressField({ ...addressField, [name]: value });
-  };
-
   const addressMutation = useMutation({
     mutationFn: async (fields) => {
       const response = await axiosService.post("/user/address", fields);
@@ -72,6 +59,23 @@ const UserAddress = () => {
       toast.success("Address deleted successfully.");
       queryClient.invalidateQueries(["user"]);
       setDelOpen(false);
+    },
+  });
+  const editAddressMutation = useMutation({
+    mutationFn: async (fields) => {
+      const response = await axiosService.patch(
+        `/user/address/${selectedAddress._id}`,
+        fields
+      );
+      console.log(response);
+    },
+    onSuccess: () => {
+      toast.success("Address updated successfully.");
+      queryClient.invalidateQueries(["user"]);
+      setEditOpen(false);
+    },
+    onError: () => {
+      toast.error("There was an error updating address");
     },
   });
 
@@ -94,6 +98,13 @@ const UserAddress = () => {
       deleteAddressMutation.mutate(addressId);
     },
     [deleteAddressMutation]
+  );
+
+  const handleAddressEdit = useCallback(
+    (fields) => {
+      editAddressMutation.mutate(fields);
+    },
+    [editAddressMutation]
   );
   return (
     <>
@@ -125,6 +136,7 @@ const UserAddress = () => {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
+            {/* Create/Add address */}
             <AddressDialog
               isOpen={open}
               onClose={setOpen}
@@ -165,11 +177,13 @@ const UserAddress = () => {
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
+                    {/* Edit address */}
                     <AddressDialog
                       isOpen={editOpen}
                       onClose={setEditOpen}
                       initialData={selectedAddress}
-                      // isLoading={}
+                      isLoading={editAddressMutation.isPending}
+                      onSubmit={handleAddressEdit}
                     />
 
                     <Dialog open={delOpen} onOpenChange={setDelOpen}>
