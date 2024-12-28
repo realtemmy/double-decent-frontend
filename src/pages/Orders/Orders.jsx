@@ -162,7 +162,7 @@ const Orders = () => {
                   <TableHead>OrderID</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead>Price</TableHead>
-                  <TableHead className="text-center">Status</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

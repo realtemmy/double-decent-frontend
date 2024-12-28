@@ -38,11 +38,11 @@ const ProductList = ({ title, slug, categoryId }) => {
         </h1>
         {slug && (
           <Link
-            className="text-orange-500 font-semibold underline hover:text-orange-400"
+            className="text-orange-500 font-semibold underline hover:text-orange-400 capitalize text-sm"
             to={slug}
             title={`Learn more about ${title || "our products"}`}
           >
-            Learn more about {title || "our products"}
+            Explore {title || "our products"}
           </Link>
         )}
       </div>

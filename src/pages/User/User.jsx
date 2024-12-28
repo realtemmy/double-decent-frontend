@@ -1,5 +1,5 @@
-import { useState, useCallback, Suspense, lazy } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useCallback, Suspense, lazy, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Routes, Route, Outlet } from "react-router-dom";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import {
@@ -55,9 +55,21 @@ const User = () => {
 const UserRoutes = () => {
   const { data: user } = useUser();
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
   const [image, setImage] = useState(null);
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("");
+
+  useEffect(() => {
+    // Get the third part of the path (e.g., '/user/profile' -> 'profile')
+    const path = location.pathname.split("/")[2];
+    setActive(path || "profile");
+  }, [location]);
+
+  const handleNavigation = (tab, path) => {
+    navigate(path); // Navigate to the target route
+  };
 
   const handleLogout = useCallback(() => {
     queryClient.removeQueries(["user"]);
@@ -162,23 +174,29 @@ const UserRoutes = () => {
           <Separator className="w-11/12 m-auto my-4" />
           <CardContent className="p-0">
             <Button
-              className="justify-start w-full rounded-none hover:bg-orange-100 hover:text-orange-500"
+              className={`justify-start w-full rounded-none hover:bg-orange-100 hover:text-orange-500 ${
+                active === "profile" ? "bg-orange-100 text-orange-500" : ""
+              }`}
               variant="secondary"
-              onClick={() => navigate("/user/profile")}
+              onClick={() => handleNavigation("profile", "/user/profile")}
             >
               <User2 size={24} />
               <span className="ms-2">Profile</span>
             </Button>
             <Button
-              className="justify-start w-full rounded-none hover:bg-orange-100 hover:text-orange-500"
+              className={`justify-start w-full rounded-none hover:bg-orange-100 hover:text-orange-500 ${
+                active === "address" ? "bg-orange-100 text-orange-500" : ""
+              }`}
               variant="secondary"
-              onClick={() => navigate("/user/address")}
+              onClick={() => handleNavigation("address", "/user/address")}
             >
               <House size={24} />
               <span className="ms-2">Delivery Address</span>
             </Button>
             <Button
-              className="justify-start w-full rounded-none hover:bg-orange-100 hover:text-orange-500"
+              className={`justify-start w-full rounded-none hover:bg-orange-100 hover:text-orange-500 ${
+                active === "orders" ? "bg-orange-100 text-orange-500" : ""
+              }`}
               variant="secondary"
               onClick={() => navigate("/user/orders")}
             >
