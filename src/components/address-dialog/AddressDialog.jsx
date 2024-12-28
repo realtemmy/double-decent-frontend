@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   Dialog,
@@ -35,6 +35,13 @@ const AddressDialog = ({
       address: "",
     }
   );
+
+  useEffect(() => {
+    setAddressField({
+      ...initialData,
+    });
+  }, [initialData]);
+//   console.log(initialData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

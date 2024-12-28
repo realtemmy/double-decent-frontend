@@ -25,7 +25,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { Button } from "../ui/button";
-import { Loader, Plus, Trash2 } from "lucide-react";
+import { Edit, Loader, Plus, Trash2 } from "lucide-react";
 
 import AddressDialog from "../address-dialog/AddressDialog";
 import useUser from "@/hooks/use-user";
@@ -39,19 +39,6 @@ const UserAddress = () => {
   const [delOpen, setDelOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
-
-  const [addressField, setAddressField] = useState({
-    alias: "",
-    street: "",
-    state: "",
-    lga: "",
-    address: "",
-  });
-
-  const handleSetAddress = (event) => {
-    const { name, value } = event.target;
-    setAddressField({ ...addressField, [name]: value });
-  };
 
   const addressMutation = useMutation({
     mutationFn: async (fields) => {
@@ -74,6 +61,23 @@ const UserAddress = () => {
       setDelOpen(false);
     },
   });
+  const editAddressMutation = useMutation({
+    mutationFn: async (fields) => {
+      const response = await axiosService.patch(
+        `/user/address/${selectedAddress._id}`,
+        fields
+      );
+      console.log(response);
+    },
+    onSuccess: () => {
+      toast.success("Address updated successfully.");
+      queryClient.invalidateQueries(["user"]);
+      setEditOpen(false);
+    },
+    onError: () => {
+      toast.error("There was an error updating address");
+    },
+  });
 
   const handleAddressSubmit = (addressField) => {
     if (
@@ -94,6 +98,13 @@ const UserAddress = () => {
       deleteAddressMutation.mutate(addressId);
     },
     [deleteAddressMutation]
+  );
+
+  const handleAddressEdit = useCallback(
+    (fields) => {
+      editAddressMutation.mutate(fields);
+    },
+    [editAddressMutation]
   );
   return (
     <>
@@ -125,6 +136,7 @@ const UserAddress = () => {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
+            {/* Create/Add address */}
             <AddressDialog
               isOpen={open}
               onClose={setOpen}
@@ -148,20 +160,30 @@ const UserAddress = () => {
                   key={index}
                 >
                   <span className="absolute right-2 cursor-pointer flex gap-2 items-center">
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        setSelectedAddress(add); // Set the selected address
-                        setEditOpen(true); // Open the dialog
-                      }}
-                    >
-                      Edit
-                    </Button>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Edit
+                            color="orange"
+                            size={18}
+                            onClick={() => {
+                              setSelectedAddress(add); // Set the selected address
+                              setEditOpen(true); // Open the dialog
+                            }}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Add to library</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                    {/* Edit address */}
                     <AddressDialog
                       isOpen={editOpen}
                       onClose={setEditOpen}
                       initialData={selectedAddress}
-                      // isLoading={}
+                      isLoading={editAddressMutation.isPending}
+                      onSubmit={handleAddressEdit}
                     />
 
                     <Dialog open={delOpen} onOpenChange={setDelOpen}>
