@@ -42,6 +42,7 @@ const UserProfile = () => {
   const [profile, setProfile] = useState({
     name: user?.name || "",
     email: user?.email || "",
+    phone: user?.phone || "",
   });
 
   useEffect(() => {
@@ -49,6 +50,7 @@ const UserProfile = () => {
       setProfile({
         name: user.name,
         email: user.email,
+        phone: user.phone,
       });
     }
   }, [user]);
@@ -71,16 +73,11 @@ const UserProfile = () => {
     mutationFn: async () => {
       const formData = new FormData();
       formData.append("photo", photo);
-      const response = await axiosService.patch(
-        "/user/upload-user-image",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log(response);
+      await axiosService.patch("/user/upload-user-image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
     },
     onSuccess: () => {
       toast.success("Profile photo updated successfully.");
@@ -92,6 +89,18 @@ const UserProfile = () => {
         error.message || "There was an error uploading profile photo"
       );
       setOpen(false);
+    },
+  });
+
+  const profileMutation = useMutation({
+    mutationFn: async () => {
+      await axiosService.patch("/user/updateMe", profile);
+    },
+    onSuccess: () => {
+      toast.success("Profile successfully updated!");
+    },
+    onError: (error) => {
+      toast.error(error.message || "There was an error updating user's info.");
     },
   });
 
@@ -128,6 +137,10 @@ const UserProfile = () => {
   const handleImageUpload = useCallback(() => {
     photoMutation.mutate();
   }, [photoMutation]);
+
+  const handleProfileSubmit = useCallback(() => {
+    profileMutation.mutate();
+  }, [profileMutation]);
 
   return (
     <div className="px-2">
@@ -241,6 +254,7 @@ const UserProfile = () => {
                   onChange={handleProfileChange}
                 />
               </div>
+
               <div className="space-y-1">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -250,9 +264,29 @@ const UserProfile = () => {
                   onChange={handleProfileChange}
                 />
               </div>
+              <div className="space-y-1">
+                <Label htmlFor="name">Phone</Label>
+                <Input
+                  id="phone"
+                  name="phone"
+                  value={profile.phone}
+                  onChange={handleProfileChange}
+                />
+              </div>
             </CardContent>
             <CardFooter>
-              <Button>Save changes</Button>
+              <Button onClick={handleProfileSubmit}>
+                {profileMutation.isPending ? (
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="animate-spin" />
+                    <span>
+                      <i>Loading</i>
+                    </span>
+                  </div>
+                ) : (
+                  "Save changes"
+                )}
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>

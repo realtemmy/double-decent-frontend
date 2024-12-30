@@ -2,17 +2,19 @@ import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/redux/cart/cartSlice";
-import { commaSeparatedPrice } from "@/utils/helperFunctions";
+import {
+  commaSeparatedPrice,
+  capitalizeFirstLetter,
+} from "@/utils/helperFunctions";
 import { toast } from "sonner";
-
 
 import PropTypes from "prop-types";
 const Product = ({ product }) => {
   const dispatch = useDispatch();
   const handleAddToCart = () => {
     dispatch(addToCart(product));
-    toast.success(`${product.name} added to cart`);
-  }
+    toast.success(`${capitalizeFirstLetter(product.name)} added to cart`);
+  };
   return (
     <div className="group relative w-full max-w-[200px] overflow-hidden">
       <Link to={`/product/${product._id}`} title={`Product -${product.name}`}>
