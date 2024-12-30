@@ -41,7 +41,7 @@ const AddressDialog = ({
       ...initialData,
     });
   }, [initialData]);
-//   console.log(initialData);
+  //   console.log(initialData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -105,7 +105,7 @@ const AddressDialog = ({
           />
         </div>
         <DialogFooter>
-          <Button onClick={onClose} variant="outline">
+          <Button onClick={() => onClose(false)} variant="outline">
             Cancel
           </Button>
           <Button onClick={() => onSubmit(addressField)} disabled={isLoading}>
